@@ -1,4 +1,3 @@
-import { push } from 'core-js/fn/array';
 import Draggabilly from 'draggabilly';
 const dragg = () =>{
     
@@ -43,34 +42,6 @@ const dragg = () =>{
         });
     }
 
-
-
-    function GetDraggable (block) {   
-          // init Draggabillies
-            let draggPush;
-            draggPush = new Draggabilly( block, {
-                // options...
-              });
-              draggieBlocks.push(draggPush);
-              console.log(draggieBlocks);
-              /* console.log(draggie.position.x); */
-              draggieBlocks[0].on( 'eventName', function() {
-                console.log('eventName happened just once');
-              });
-              draggieBlocks[0].on( 'dragStart', function() {
-                console.log('dragStart');
-              });
-    }
-
-
-    function render(){
-        const newBlock = document.createElement('div');
-        newBlock.classList.add('calculation__block');
-        workTable.append(newBlock);
-        GetDraggable(newBlock);
-        
-    }
-
     function GetNewBlock () {
         blockBar.addEventListener('click', function(event) {
             const target = event.target;
@@ -81,16 +52,60 @@ const dragg = () =>{
         });
     }
 
-    function Snap(){
+    function render(){
+        const newBlock = document.createElement('div');
+        newBlock.classList.add('calculation__block');
+        workTable.append(newBlock);
+        GetDraggable(newBlock);
         
     }
 
+    function GetDraggable (block) {   
+        // init Draggabillies
+          let draggPush;
+          draggPush = new Draggabilly( block, {
+              // options...
+            });
+            draggieBlocks.push(draggPush);
+            addEventBlock(draggPush);
+  }
 
-    
+    function addEventBlock(draggBlock){
+        draggBlock.on( 'dragEnd', function(event) {
+            const target = event.target;
+            if(target && target.classList.contains('calculation__block')) {
+                console.log(this);}
+            console.log('dragStart');
+            snap(draggBlock);
+          });        
+    }
+
+    function snap(activeBlock) {
+        draggieBlocks.forEach((item, i)=>{
+            const snapBlock = draggieBlocks[i];
+            const dx = activeBlock.position.x - snapBlock.position.x;
+            console.log(snapBlock.position.y);
+
+            if(((dx) < 100) && ((dx) > 70)){
+                console.log(1654111111);
+                activeBlock.setPosition( (snapBlock.position.x + 70), (snapBlock.position.y));
+                console.log(activeBlock.position);
+                console.log(snapBlock.position);
+            }
+
+            if(((dx) > -100) && ((dx) < -70)){
+                console.log(1654111111);
+                activeBlock.setPosition( (snapBlock.position.x - 70), (snapBlock.position.y));
+                console.log(activeBlock.position);
+                console.log(snapBlock.position);
+            }
+        });
+    }
 
   /*   GetDraggable(); */
 /*     GetElement(); */
     GetNewBlock ();
+    console.log(draggieBlocks);
 
 
 };

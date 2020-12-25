@@ -2381,10 +2381,8 @@ window.addEventListener('DOMContentLoaded', function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
-!(function webpackMissingModule() { var e = new Error("Cannot find module 'core-js/fn/array'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-/* harmony import */ var draggabilly__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! draggabilly */ "./node_modules/draggabilly/draggabilly.js");
-/* harmony import */ var draggabilly__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(draggabilly__WEBPACK_IMPORTED_MODULE_2__);
-
+/* harmony import */ var draggabilly__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! draggabilly */ "./node_modules/draggabilly/draggabilly.js");
+/* harmony import */ var draggabilly__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(draggabilly__WEBPACK_IMPORTED_MODULE_1__);
 
 
 
@@ -2428,30 +2426,6 @@ var dragg = function dragg() {
     });
   }
 
-  function GetDraggable(block) {
-    // init Draggabillies
-    var draggPush;
-    draggPush = new draggabilly__WEBPACK_IMPORTED_MODULE_2___default.a(block, {// options...
-    });
-    draggieBlocks.push(draggPush);
-    console.log(draggieBlocks);
-    /* console.log(draggie.position.x); */
-
-    draggieBlocks[0].on('eventName', function () {
-      console.log('eventName happened just once');
-    });
-    draggieBlocks[0].on('dragStart', function () {
-      console.log('dragStart');
-    });
-  }
-
-  function render() {
-    var newBlock = document.createElement('div');
-    newBlock.classList.add('calculation__block');
-    workTable.append(newBlock);
-    GetDraggable(newBlock);
-  }
-
   function GetNewBlock() {
     blockBar.addEventListener('click', function (event) {
       var target = event.target;
@@ -2463,13 +2437,63 @@ var dragg = function dragg() {
     });
   }
 
-  function Snap() {}
+  function render() {
+    var newBlock = document.createElement('div');
+    newBlock.classList.add('calculation__block');
+    workTable.append(newBlock);
+    GetDraggable(newBlock);
+  }
+
+  function GetDraggable(block) {
+    // init Draggabillies
+    var draggPush;
+    draggPush = new draggabilly__WEBPACK_IMPORTED_MODULE_1___default.a(block, {// options...
+    });
+    draggieBlocks.push(draggPush);
+    addEventBlock(draggPush);
+  }
+
+  function addEventBlock(draggBlock) {
+    draggBlock.on('dragEnd', function (event) {
+      var target = event.target;
+
+      if (target && target.classList.contains('calculation__block')) {
+        console.log(this);
+      }
+
+      console.log('dragStart');
+      snap(draggBlock);
+    });
+  }
+
+  function snap(activeBlock) {
+    draggieBlocks.forEach(function (item, i) {
+      var snapBlock = draggieBlocks[i];
+      var dx = activeBlock.position.x - snapBlock.position.x;
+      console.log(snapBlock.position.y);
+
+      if (dx < 100 && dx > 70) {
+        console.log(1654111111);
+        activeBlock.setPosition(snapBlock.position.x + 70, snapBlock.position.y);
+        console.log(activeBlock.position);
+        console.log(snapBlock.position);
+      }
+
+      if (dx > -100 && dx < -70) {
+        console.log(1654111111);
+        activeBlock.setPosition(snapBlock.position.x - 70, snapBlock.position.y);
+        console.log(activeBlock.position);
+        console.log(snapBlock.position);
+      }
+    });
+  }
   /*   GetDraggable(); */
 
   /*     GetElement(); */
 
 
   GetNewBlock();
+  console.log(draggieBlocks);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (dragg);
