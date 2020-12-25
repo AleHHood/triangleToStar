@@ -1,0 +1,57 @@
+.calculation{
+    &__container{
+        display: flex;
+        flex-direction: row;
+        width: 100vw;
+        height: 100vh;
+        background-color:aliceblue;
+    }
+    &__workTable{
+        position: relative;
+        width: 1000px;
+        height: 100%;
+        background: repeating-linear-gradient(0deg, rgb(221, 221, 221) 0px, rgb(221, 221, 221) 1px,transparent 1px, transparent 20px),repeating-linear-gradient(90deg, rgb(221, 221, 221) 0px, rgb(221, 221, 221) 1px,transparent 1px, transparent 20px);
+    }
+    &__blockBar{
+        width: 22%;
+        max-width: 167.4px;
+        height: 100%;
+        background-color:bisque;
+    }
+    &__btn{
+        width: 70px;
+        height: 70px;
+        border: black solid 1px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color:white;
+        &-R{
+            background-image: url("../img/svg/R.SVG");
+        }
+        &-E{
+            background-image: url("../img/svg/E.SVG");
+        }
+    }
+    &__block{
+        position: absolute;
+        left: 410.043px;
+        top: 128.571px;
+        width: 70px;
+        height: 70px;
+        border: black solid 1px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color:white;
+        &-R{
+            background-image: url("../img/svg/R.SVG");
+        }
+        &-E{
+            background-image: url("../img/svg/E.SVG");
+        }
+    }
+    &__branch{
+        width: 78px;
+        height: 300px;
+        border: 2px dashed;  
+    }
+}
