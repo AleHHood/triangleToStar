@@ -13,59 +13,51 @@ const dragg = () =>{
         }
     }); */
 
-
-    function GetElement () {
-        blockBar.addEventListener('click', function(event) { 
-            const target = event.target;
-            if(target && target.classList.contains('calculation__block')) {
-                console.log(`NEWblock`);
-                GetNewBlock();
-                blocks.forEach((item, i) => {
-                    if (target == item) {
-                        const activeBlock = draggieBlocks[i];
-                        draggieBlocks.forEach((item, i)=>{
-                            const snapBlock = draggieBlocks[i];
-                            const dx = activeBlock.position.x - snapBlock.position.x;
-                            console.log(snapBlock.position.y);
-
-                            if(((dx) < 400) && ((dx) > 70)){
-                                console.log(1654111111);
-                                activeBlock.setPosition( 50, (snapBlock.position.y + 70 ));
-                                console.log(activeBlock.position);
-                                console.log(snapBlock.position);
-                            }
-                        });
-
-                    }
-                });
-            }
-        });
-    }
+    let tn = -1;
 
     function GetNewBlock () {
+        let classesBlock = 0;
         blockBar.addEventListener('click', function(event) {
             const target = event.target;
-            if(target && target.classList.contains('calculation__btn')) {
-                console.log(`NEWblock`);
-                render();      
-                }            
+            if(target && target.classList.contains('calculation__btn-R')) {
+                classesBlock = 'calculation__block-R';
+                ++tn;
+                render(tn, classesBlock);      
+                }
+            if(target && target.classList.contains('calculation__btn-E')) {
+                classesBlock = 'calculation__block-E';
+                ++tn;
+                render(tn, classesBlock);      
+                }
+            if(target && target.classList.contains('calculation__btn-K')) {
+                classesBlock = 'calculation__block-K';
+                ++tn;
+                render(tn, classesBlock);      
+                }
+            if(target && target.classList.contains('calculation__btn-B')) {
+                classesBlock = 'calculation__block-B';
+                ++tn;
+                render(tn, classesBlock);      
+                }  
         });
     }
-
-    function render(){
+    function render(i, classesBlock){
         const newBlock = document.createElement('div');
         newBlock.classList.add('calculation__block');
+        newBlock.classList.add(classesBlock);
         workTable.append(newBlock);
-        GetDraggable(newBlock);
+        GetDraggable(newBlock, i);
         
     }
 
-    function GetDraggable (block) {   
+    function GetDraggable (block, i) {   
         // init Draggabillies
           let draggPush;
           draggPush = new Draggabilly( block, {
               // options...
             });
+            console.log(i);
+            draggPush.setPosition(((draggPush.position.x)+i *10), ((draggPush.position.y)+i *10));
             draggieBlocks.push(draggPush);
             addEventBlock(draggPush);
   }
@@ -84,21 +76,18 @@ const dragg = () =>{
         draggieBlocks.forEach((item, i)=>{
             const snapBlock = draggieBlocks[i];
             const dx = activeBlock.position.x - snapBlock.position.x;
+            const dy = activeBlock.position.y - snapBlock.position.y;
             console.log(snapBlock.position.y);
 
-            if(((dx) < 100) && ((dx) > 70)){
-                console.log(1654111111);
+            if((dx < 100) && (dx > 50) && (dy < 40) && (dy > -40)){
                 activeBlock.setPosition( (snapBlock.position.x + 70), (snapBlock.position.y));
-                console.log(activeBlock.position);
-                console.log(snapBlock.position);
             }
 
-            if(((dx) > -100) && ((dx) < -70)){
-                console.log(1654111111);
+            if((dx > -100) && ((dx) < -50) && (dy < 40) && (dy > -40)){
                 activeBlock.setPosition( (snapBlock.position.x - 70), (snapBlock.position.y));
-                console.log(activeBlock.position);
-                console.log(snapBlock.position);
             }
+
+            
         });
     }
 

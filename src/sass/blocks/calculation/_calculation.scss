@@ -44,9 +44,16 @@
         background-color:white;
         &-R{
             background-image: url("../img/svg/R.SVG");
+            transform: rotate(90deg);
         }
         &-E{
             background-image: url("../img/svg/E.SVG");
+        }
+        &-B{
+            background-image: url("../img/svg/E.SVG");
+        }
+        &-K{
+            height: 150px;
         }
     }
     &__branch{
