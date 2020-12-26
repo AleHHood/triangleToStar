@@ -33,9 +33,6 @@
         }
     }
     &__block{
-        position: absolute;
-        left: 410.043px;
-        top: 128.571px;
         width: 70px;
         height: 70px;
         border: black solid 1px;
@@ -53,12 +50,30 @@
             background-image: url("../img/svg/E.SVG");
         }
         &-K{
-            height: 150px;
+
         }
     }
     &__branch{
         width: 78px;
         height: 300px;
         border: 2px dashed;  
+    }
+}
+
+.grid{
+    &__container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-self: center;
+    }
+    &__row{
+        display: flex;
+    }
+    &__cell{
+        width: 70px;
+        height: 70px;
+        background-color: white;
+        border:rgb(83, 37, 161) 1px solid;
     }
 }
