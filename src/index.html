@@ -101,10 +101,10 @@
         </header>
         <div class="calculation__container">
             <div class="calculation__blockBar">
-                <div class="calculation__block-R calculation__block"></div>
-                <div class="calculation__block-K calculation__block"></div>
-                <div class="calculation__block-E calculation__block"></div>
-                <div class="calculation__block-B calculation__block"></div>
+                <div id="0" class="calculation__block calculation__block-R"></div>
+                <div id="1" class="calculation__block calculation__block-K"></div>
+                <div id="2" class="calculation__block calculation__block-E"></div>
+                <div id="3" class="calculation__block calculation__block-B"></div>
             </div>
             <div class="calculation__workTable">
                 <div class="grid__container">
@@ -146,6 +146,26 @@
                     </div>
                 </div>
                 <!-- <div class="calculation__branch"></div> -->
+            </div>
+            <div class="calculation__blocksettings">
+                <div class="blocksettings__container">
+                    <!-- <div data-close class="blocksettings__close">x</div> -->
+                    <div class="blocksettings__title">Параметры элемента</div>
+                    <div class="blocksettings__wrapper">
+                        <label for="nblock">Номер элемента</label>
+                        <input id="nblock" required placeholder="" name="numberBlock" type="number" class="blocksettings__input">
+                    </div>
+                    <div class="blocksettings__wrapper">
+                        <label for="rblock">Сопротивление, Ом</label>
+                        <input id="rblock" required placeholder="Сопротивление, Ом" name="resistance" type="number" class="blocksettings__input">
+                    </div>
+                    <div class="blocksettings__wrapper">
+                        <label for="eblock">ЭДС источника, В</label>
+                        <input id="eblock" required placeholder="ЭДС источника, В" name="voltage" type="number" class="blocksettings__input">
+                    </div>
+                    <button class="btn btn__delete">Повернуть элемент</button>
+                    <button class="btn btn__delete">Удалить элемент</button>
+                </div>
             </div>
         </div>
         <script src="script.js"></script>

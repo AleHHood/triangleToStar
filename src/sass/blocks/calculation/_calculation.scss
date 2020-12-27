@@ -14,24 +14,14 @@
     }
     &__blockBar{
         width: 22%;
-        max-width: 167.4px;
+        max-width: 70px;
         height: 100%;
         background-color:bisque;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
     }
-    &__btn{
-        width: 70px;
-        height: 70px;
-        border: black solid 1px;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-color:white;
-        &-R{
-            background-image: url("../img/svg/R.SVG");
-        }
-        &-E{
-            background-image: url("../img/svg/E.SVG");
-        }
-    }
+
     &__block{
         width: 70px;
         height: 70px;
@@ -42,14 +32,18 @@
         &-R{
             background-image: url("../img/svg/R.SVG");
             transform: rotate(90deg);
+            order: 1;
         }
         &-E{
             background-image: url("../img/svg/E.SVG");
+            order: 2;
         }
         &-B{
             background-image: url("../img/svg/E.SVG");
+            order: 3;
         }
         &-K{
+            order: 4;
 
         }
     }
@@ -58,6 +52,14 @@
         height: 300px;
         border: 2px dashed;  
     }
+    &__blocksettings{
+        height: 100vh;
+        width: 25%;
+    }
+}
+
+.none{
+    display: none;
 }
 
 .grid{
@@ -75,5 +77,16 @@
         height: 70px;
         background-color: white;
         border:rgb(83, 37, 161) 1px solid;
+    }
+}
+
+.blocksettings{
+    &__container{
+        height: 100vh;
+        background-color:#F2F6F9;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: start;
     }
 }
