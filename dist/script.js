@@ -4877,38 +4877,82 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 var dragggrid = function dragggrid() {
   var blockBar = document.querySelector('.calculation__blockBar'),
+      blockHome = document.querySelectorAll('.calculation__block'),
       container = document.querySelector('.calculation__container'),
       workTable = document.querySelector('.calculation__workTable'),
       blockSettings = document.querySelector('.blocksettings__container'),
       cell = document.querySelectorAll('.grid__cell'),
-      blocks = {}; // обЪект блоков
+      wrapperFormR = document.querySelector('.blocksettings__wrapper-R'),
+      wrapperFormE = document.querySelector('.blocksettings__wrapper-E'),
+      inputFormR = document.querySelector('#rblock'),
+      inputFormE = document.querySelector('#eblock'),
+      blocks = []; // массив блоков
 
   var copyDrakeContainers = [],
       tx = 10,
       numId = 10;
 
-  var Block = function Block(rotate, type, voltage, resistance, cell, id, element) {
-    _classCallCheck(this, Block);
+  var Block =
+  /*#__PURE__*/
+  function () {
+    function Block(rotate, type, voltage, resistance, cell, id, element) {
+      _classCallCheck(this, Block);
 
-    this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
+      this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
 
-    this.type = type; // 0=R, 1=E, 2=B, 3=K;
+      this.type = type; // 0=R, 1=E, 2=B, 3=K;
 
-    this.voltage = voltage;
-    this.resistance = resistance;
-    this.cell = cell;
-    this.id = id;
-    this.element = element;
-    /*             this.classes = classes;
-                this.parent = document.querySelector(parentSelector);
-                this.transfer = 27;
-                this.changeToUAH();  */
-  };
+      this.voltage = voltage;
+      this.resistance = resistance;
+      this.cell = cell;
+      this.id = id;
+      this.element = element;
+      /*  this.form = form; */
+    }
 
+    _createClass(Block, [{
+      key: "getParametrForm",
+      value: function getParametrForm() {
+        switch (this.type) {
+          case 0:
+            inputFormR.removeAttribute('data-form');
+            wrapperFormR.style.display = 'block';
+            wrapperFormE.style.display = 'none';
+            inputFormR.setAttribute('data-form', this.id);
+            inputFormR.value = this.resistance;
+            break;
+
+          case 1:
+            inputFormR.removeAttribute('data-form');
+            wrapperFormE.style.display = 'block';
+            wrapperFormR.style.display = 'none';
+            inputFormE.setAttribute('data-form', this.id);
+            inputFormE.value = this.voltage;
+            break;
+        }
+      }
+    }]);
+
+    return Block;
+  }();
+
+  blockHome.forEach(function (element, i) {
+    blocks[i] = new Block();
+    blocks[i].rotate = 0;
+    blocks[i].voltage = 0;
+    blocks[i].resistance = 0;
+    blocks[i].type = +element.id;
+    blocks[i].id = element.id;
+    blocks[i].element = element;
+  });
   var drake = dragula__WEBPACK_IMPORTED_MODULE_12___default()([blockBar].concat(_toConsumableArray(cell)), {
     accepts: function accepts(el, target) {
       return target !== blockBar;
@@ -4989,6 +5033,8 @@ var dragggrid = function dragggrid() {
         classesBlock = 'calculation__block-B';
         render(classesBlock);
       }
+
+      getForm(target);
     });
   }
 
@@ -5042,16 +5088,16 @@ var dragggrid = function dragggrid() {
     blockBar.append(newBlock);
   }
 
-  function getForm() {
-    workTable.addEventListener('click', function (event) {
-      var target = event.target;
-
-      if (target && target.classList.contains('calculation__block')) {
-        console.log(11);
-        console.log(event.target.id);
-        blockSettings.style.display = 'flex';
-      }
-    });
+  function getForm(target) {
+    if (target && target.classList.contains('calculation__block')) {
+      blocks.forEach(function (elem, i) {
+        if (elem.element == event.target) {
+          elem.getParametrForm();
+          console.log(elem.element);
+        }
+      });
+      blockSettings.style.display = 'flex';
+    }
   }
 
   function writeNewBlock(classesBlock, id, element) {
@@ -5059,6 +5105,8 @@ var dragggrid = function dragggrid() {
     blocks[tx].id = id;
     blocks[tx].element = element;
     blocks[tx].rotate = 0;
+    blocks[tx].voltage = 0;
+    blocks[tx].resistance = 0;
 
     if (classesBlock == 'calculation__block-R') {
       blocks[tx].type = 0;
@@ -5080,6 +5128,19 @@ var dragggrid = function dragggrid() {
     tx = tx + 1;
   }
 
+  function getValueFromForm() {
+    inputFormR.addEventListener('input', function () {
+      var dataForm = inputFormR.getAttribute('data-form');
+      console.log("data-form = ".concat(dataForm));
+      blocks.forEach(function (elem, i) {
+        if (elem.id == dataForm) {
+          elem.resistance = inputFormR.value;
+          console.log("R = ".concat(inputFormR.value));
+        }
+      });
+    });
+  }
+
   GetNewBlock();
   LimitingByDragging();
   MobileLimitingByDragging();
@@ -5087,7 +5148,11 @@ var dragggrid = function dragggrid() {
     return ShowBlocks();
   }, 500); //Не забыть остановить
 
-  getForm();
+  workTable.addEventListener('mousedown', function (event) {
+    var target = event.target;
+    getForm(target);
+  });
+  getValueFromForm();
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (dragggrid);

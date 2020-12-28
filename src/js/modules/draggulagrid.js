@@ -3,11 +3,16 @@ import dragula from 'dragula';
 const dragggrid = () => {
 
     const blockBar = document.querySelector('.calculation__blockBar'),
+    blockHome = document.querySelectorAll('.calculation__block'),
     container = document.querySelector('.calculation__container'),
     workTable = document.querySelector('.calculation__workTable'),
     blockSettings = document.querySelector('.blocksettings__container'),
     cell = document.querySelectorAll('.grid__cell'),
-    blocks = {}; // обЪект блоков
+    wrapperFormR = document.querySelector('.blocksettings__wrapper-R'),
+    wrapperFormE = document.querySelector('.blocksettings__wrapper-E'),
+    inputFormR = document.querySelector('#rblock'),
+    inputFormE = document.querySelector('#eblock'),
+    blocks = []; // массив блоков
     let copyDrakeContainers = [],
     tx = 10,
     numId = 10;
@@ -21,12 +26,42 @@ const dragggrid = () => {
             this.cell = cell;
             this.id = id;
             this.element = element;
-/*             this.classes = classes;
-            this.parent = document.querySelector(parentSelector);
-            this.transfer = 27;
-            this.changeToUAH();  */
+           /*  this.form = form; */
+        }
+        getParametrForm(){
+            switch(this.type){
+                case 0:
+                    inputFormR.removeAttribute('data-form');
+                    wrapperFormR.style.display = 'block';
+                    wrapperFormE.style.display = 'none';
+                    inputFormR.setAttribute('data-form', this.id);
+                    inputFormR.value = this.resistance;
+                    break;
+                case 1:
+                    inputFormR.removeAttribute('data-form');
+                    wrapperFormE.style.display = 'block';
+                    wrapperFormR.style.display = 'none';
+                    inputFormE.setAttribute('data-form', this.id);
+                    inputFormE.value = this.voltage;
+                    break;
+            }
+            
         }
     }
+
+    blockHome.forEach((element, i) => {
+        blocks[i] = new Block();
+        blocks[i].rotate = 0;
+        blocks[i].voltage = 0;
+        blocks[i].resistance = 0;
+        blocks[i].type = +element.id;
+        blocks[i].id = element.id;
+        blocks[i].element = element;
+    });
+    
+    
+
+    
 
     const drake = dragula([blockBar, ...cell], {
         accepts: function (el, target) {
@@ -105,7 +140,8 @@ const dragggrid = () => {
             if(target && target.classList.contains('calculation__block-B')) {
                 classesBlock = 'calculation__block-B';
                 render(classesBlock);      
-                }  
+                }
+                getForm(target);
         });
     }
 
@@ -159,15 +195,17 @@ const dragggrid = () => {
         blockBar.append(newBlock);     
     }
 
-    function getForm(){
-        workTable.addEventListener('click', function(event) {
-            const target = event.target;
-            if(target && target.classList.contains('calculation__block')) {
-                console.log(11);
-                console.log(event.target.id);
-                blockSettings.style.display = 'flex';
-            }
-        });
+
+    function getForm(target){
+        if(target && target.classList.contains('calculation__block')) {
+            blocks.forEach((elem, i) => {
+                if(elem.element == event.target){
+                    elem.getParametrForm();
+                    console.log(elem.element);
+                }
+            });
+            blockSettings.style.display = 'flex';
+        }
     }
     
     function writeNewBlock(classesBlock, id, element){
@@ -175,6 +213,8 @@ const dragggrid = () => {
         blocks[tx].id = id;
         blocks[tx].element = element;
         blocks[tx].rotate = 0;
+        blocks[tx].voltage = 0;
+        blocks[tx].resistance = 0;
         if (classesBlock == 'calculation__block-R'){
             blocks[tx].type = 0;
         }
@@ -191,12 +231,31 @@ const dragggrid = () => {
         tx = tx + 1;
     }
 
+    function getValueFromForm(){
+        inputFormR.addEventListener('input', () => {
+            const dataForm = inputFormR.getAttribute('data-form');
+            console.log(`data-form = ${dataForm}`);
+            blocks.forEach((elem, i) => {
+                if(elem.id == dataForm){
+                    elem.resistance = inputFormR.value;
+                    console.log(`R = ${inputFormR.value}`);
+                }
+            });            
+        });
+    }
+
 
     GetNewBlock();
     LimitingByDragging();
     MobileLimitingByDragging();
     setInterval( () => ShowBlocks(), 500);  //Не забыть остановить
-    getForm();
+    workTable.addEventListener('mousedown', function(event) {
+        const target = event.target;
+        getForm(target);
+    });
+    getValueFromForm();
+
+
 
 
 };
