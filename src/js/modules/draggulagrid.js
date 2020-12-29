@@ -12,13 +12,14 @@ const dragggrid = () => {
     wrapperFormE = document.querySelector('.blocksettings__wrapper-E'),
     inputFormR = document.querySelector('#rblock'),
     inputFormE = document.querySelector('#eblock'),
+    inputFormN = document.querySelector('#nblock'),
     blocks = []; // массив блоков
     let copyDrakeContainers = [],
     tx = 10,
     numId = 10;
 
     class Block {
-        constructor(rotate, type, voltage, resistance, cell, id, element) {
+        constructor(rotate, type, voltage, resistance, cell, id, element, number) {
             this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
             this.type = type; // 0=R, 1=E, 2=B, 3=K;
             this.voltage = voltage;
@@ -26,26 +27,24 @@ const dragggrid = () => {
             this.cell = cell;
             this.id = id;
             this.element = element;
-           /*  this.form = form; */
+            this.number = number;
         }
         getParametrForm(){
             switch(this.type){
                 case 0:
-                    inputFormR.removeAttribute('data-form');
                     wrapperFormR.style.display = 'block';
                     wrapperFormE.style.display = 'none';
-                    inputFormR.setAttribute('data-form', this.id);
                     inputFormR.value = this.resistance;
                     break;
                 case 1:
-                    inputFormR.removeAttribute('data-form');
                     wrapperFormE.style.display = 'block';
                     wrapperFormR.style.display = 'none';
-                    inputFormE.setAttribute('data-form', this.id);
                     inputFormE.value = this.voltage;
                     break;
             }
-            
+            inputFormN.removeAttribute('data-form');
+            inputFormN.setAttribute('data-form', this.id);
+            inputFormN.value = this.number;    
         }
     }
 
@@ -93,7 +92,10 @@ const dragggrid = () => {
                         i = i - 1;
                     }
                 });    
-                }  
+                }
+            if(target && target.classList.contains('grid__cell')){
+                blockSettings.style.display = 'none';
+            }
         });
     }
 
@@ -199,9 +201,8 @@ const dragggrid = () => {
     function getForm(target){
         if(target && target.classList.contains('calculation__block')) {
             blocks.forEach((elem, i) => {
-                if(elem.element == event.target){
+                if(elem.element == target){
                     elem.getParametrForm();
-                    console.log(elem.element);
                 }
             });
             blockSettings.style.display = 'flex';
@@ -232,17 +233,45 @@ const dragggrid = () => {
     }
 
     function getValueFromForm(){
-        inputFormR.addEventListener('input', () => {
-            const dataForm = inputFormR.getAttribute('data-form');
-            console.log(`data-form = ${dataForm}`);
-            blocks.forEach((elem, i) => {
-                if(elem.id == dataForm){
-                    elem.resistance = inputFormR.value;
-                    console.log(`R = ${inputFormR.value}`);
-                }
-            });            
+        blockSettings.addEventListener('input', (event) => {
+            const target = event.target;
+            if(target && target.id == inputFormR.id) {
+                const dataForm = inputFormN.getAttribute('data-form');
+                blocks.forEach((elem, i) => {
+                    if(elem.id == dataForm){
+                            elem.resistance = inputFormR.value;
+                    }
+                }); 
+            }   
+            if(target && target.id == inputFormE.id) {
+                const dataForm = inputFormN.getAttribute('data-form');
+                blocks.forEach((elem, i) => {
+                    if(elem.id == dataForm){
+                            elem.voltage = inputFormE.value;
+                    }
+                }); 
+            } 
+            if(target && target.id == inputFormN.id) {
+                const dataForm = inputFormN.getAttribute('data-form');
+                blocks.forEach((elem, i) => {
+                    if(elem.id == dataForm){
+                            elem.number = inputFormN.value;
+                            console.log(elem);
+                    }
+                }); 
+            }        
         });
     }
+
+/*     function Getstartnumber(elementBlock){
+        cell.forEach((element, i) => {
+            if(element.firstChild.number){
+                if(element.firstChild.type == 0){
+
+                }
+            }
+        }); 
+    } */
 
 
     GetNewBlock();

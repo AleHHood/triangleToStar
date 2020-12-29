@@ -4894,6 +4894,7 @@ var dragggrid = function dragggrid() {
       wrapperFormE = document.querySelector('.blocksettings__wrapper-E'),
       inputFormR = document.querySelector('#rblock'),
       inputFormE = document.querySelector('#eblock'),
+      inputFormN = document.querySelector('#nblock'),
       blocks = []; // массив блоков
 
   var copyDrakeContainers = [],
@@ -4903,7 +4904,7 @@ var dragggrid = function dragggrid() {
   var Block =
   /*#__PURE__*/
   function () {
-    function Block(rotate, type, voltage, resistance, cell, id, element) {
+    function Block(rotate, type, voltage, resistance, cell, id, element, number) {
       _classCallCheck(this, Block);
 
       this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
@@ -4915,7 +4916,7 @@ var dragggrid = function dragggrid() {
       this.cell = cell;
       this.id = id;
       this.element = element;
-      /*  this.form = form; */
+      this.number = number;
     }
 
     _createClass(Block, [{
@@ -4923,21 +4924,21 @@ var dragggrid = function dragggrid() {
       value: function getParametrForm() {
         switch (this.type) {
           case 0:
-            inputFormR.removeAttribute('data-form');
             wrapperFormR.style.display = 'block';
             wrapperFormE.style.display = 'none';
-            inputFormR.setAttribute('data-form', this.id);
             inputFormR.value = this.resistance;
             break;
 
           case 1:
-            inputFormR.removeAttribute('data-form');
             wrapperFormE.style.display = 'block';
             wrapperFormR.style.display = 'none';
-            inputFormE.setAttribute('data-form', this.id);
             inputFormE.value = this.voltage;
             break;
         }
+
+        inputFormN.removeAttribute('data-form');
+        inputFormN.setAttribute('data-form', this.id);
+        inputFormN.value = this.number;
       }
     }]);
 
@@ -4978,6 +4979,10 @@ var dragggrid = function dragggrid() {
             i = i - 1;
           }
         });
+      }
+
+      if (target && target.classList.contains('grid__cell')) {
+        blockSettings.style.display = 'none';
       }
     });
   }
@@ -5091,9 +5096,8 @@ var dragggrid = function dragggrid() {
   function getForm(target) {
     if (target && target.classList.contains('calculation__block')) {
       blocks.forEach(function (elem, i) {
-        if (elem.element == event.target) {
+        if (elem.element == target) {
           elem.getParametrForm();
-          console.log(elem.element);
         }
       });
       blockSettings.style.display = 'flex';
@@ -5129,17 +5133,50 @@ var dragggrid = function dragggrid() {
   }
 
   function getValueFromForm() {
-    inputFormR.addEventListener('input', function () {
-      var dataForm = inputFormR.getAttribute('data-form');
-      console.log("data-form = ".concat(dataForm));
-      blocks.forEach(function (elem, i) {
-        if (elem.id == dataForm) {
-          elem.resistance = inputFormR.value;
-          console.log("R = ".concat(inputFormR.value));
-        }
-      });
+    blockSettings.addEventListener('input', function (event) {
+      var target = event.target;
+
+      if (target && target.id == inputFormR.id) {
+        var dataForm = inputFormN.getAttribute('data-form');
+        blocks.forEach(function (elem, i) {
+          if (elem.id == dataForm) {
+            elem.resistance = inputFormR.value;
+          }
+        });
+      }
+
+      if (target && target.id == inputFormE.id) {
+        var _dataForm = inputFormN.getAttribute('data-form');
+
+        blocks.forEach(function (elem, i) {
+          if (elem.id == _dataForm) {
+            elem.voltage = inputFormE.value;
+          }
+        });
+      }
+
+      if (target && target.id == inputFormN.id) {
+        var _dataForm2 = inputFormN.getAttribute('data-form');
+
+        blocks.forEach(function (elem, i) {
+          if (elem.id == _dataForm2) {
+            elem.number = inputFormN.value;
+            console.log(elem);
+          }
+        });
+      }
     });
   }
+  /*     function Getstartnumber(elementBlock){
+          cell.forEach((element, i) => {
+              if(element.firstChild.number){
+                  if(element.firstChild.type == 0){
+  
+                  }
+              }
+          }); 
+      } */
+
 
   GetNewBlock();
   LimitingByDragging();
