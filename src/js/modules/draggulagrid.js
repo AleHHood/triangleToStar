@@ -13,13 +13,17 @@ const dragggrid = () => {
     inputFormR = document.querySelector('#rblock'),
     inputFormE = document.querySelector('#eblock'),
     inputFormN = document.querySelector('#nblock'),
-    blocks = []; // массив блоков
+    notifyR = document.querySelector('#notifyR'),
+    notifyE = document.querySelector('#notifyE'),
+    notifyN = document.querySelector('#notifyN'),
+    blocks = [], // массив блоков
+    ActiveBlocks = []; //массив блоков в рабочей зоне
     let copyDrakeContainers = [],
     tx = 10,
     numId = 10;
 
     class Block {
-        constructor(rotate, type, voltage, resistance, cell, id, element, number) {
+        constructor(rotate, type, voltage, resistance, cell, id, element, number, error) {
             this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
             this.type = type; // 0=R, 1=E, 2=B, 3=K;
             this.voltage = voltage;
@@ -28,6 +32,7 @@ const dragggrid = () => {
             this.id = id;
             this.element = element;
             this.number = number;
+            this.error = error;
         }
         getParametrForm(){
             switch(this.type){
@@ -45,6 +50,58 @@ const dragggrid = () => {
             inputFormN.removeAttribute('data-form');
             inputFormN.setAttribute('data-form', this.id);
             inputFormN.value = this.number;    
+        }
+        getErrorMessage(){
+            let tNotify = 0;
+            notifyN.style.display = 'none';
+            switch (this.type) {
+                case 0:
+                    tNotify = notifyR;
+                    tNotify.style.display = 'none';
+                    break;
+                case 1:
+                    tNotify = notifyE;
+                    tNotify.style.display = 'none';
+                    break;            
+
+            }
+                    switch (this.error) {
+                        case 'error':
+                            tNotify.style.display = 'block';
+                            tNotify.textContent   = 'Введите значение от 0 до 1000';                            
+                            break;
+                        case 'errorNumber':
+                            notifyN.style.display = 'block';
+                            notifyN.textContent   = 'Введите значение от 0 до 1000';                          
+                            break;
+                        case 'number':
+                            notifyN.style.display = 'block';
+                            notifyN.textContent   = 'Максимальное з';                          
+                            break;
+                    
+                        default:
+                            break;
+                    }
+                     
+        }
+        Validation(InputForm, el){
+            let tb = 0;
+            if(((InputForm.value >= 1000) || (InputForm.value < 0)) && (InputForm !== inputFormN)){
+                this.error = 'error';
+                this.getErrorMessage();            
+            }
+            else{
+                if((InputForm.value < 0) || (InputForm.value >= 1000)){
+                    this.error = 'errorNumber';
+                    this.getErrorMessage();
+                    this.number = inputFormN.value;
+                }else{
+                    el.style.display = 'none';
+                                this.number = inputFormN.value;
+                                this.error = '';
+                }
+            }
+            console.log(`this error =   ${this.error}`);
         }
     }
 
@@ -90,7 +147,7 @@ const dragggrid = () => {
                         i = i + 1;
                         drake.containers.splice(i, 1, 0);
                         i = i - 1;
-                    }
+                    }                   
                 });    
                 }
             if(target && target.classList.contains('grid__cell')){
@@ -203,6 +260,10 @@ const dragggrid = () => {
             blocks.forEach((elem, i) => {
                 if(elem.element == target){
                     elem.getParametrForm();
+                    console.log(`inputFormN = == ${inputFormN.value}`);
+               /*      elem.Validation(inputFormN, notifyN); */
+                    console.log(`lmvdfkbmldk = == ${elem.error}`);
+                    elem.getErrorMessage();
                 }
             });
             blockSettings.style.display = 'flex';
@@ -232,6 +293,8 @@ const dragggrid = () => {
         tx = tx + 1;
     }
 
+//Forms
+
     function getValueFromForm(){
         blockSettings.addEventListener('input', (event) => {
             const target = event.target;
@@ -240,6 +303,8 @@ const dragggrid = () => {
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
                             elem.resistance = inputFormR.value;
+                            elem.Validation(inputFormR, notifyR);
+                        
                     }
                 }); 
             }   
@@ -248,6 +313,8 @@ const dragggrid = () => {
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
                             elem.voltage = inputFormE.value;
+                            elem.Validation(inputFormE, notifyE);
+                               
                     }
                 }); 
             } 
@@ -255,23 +322,14 @@ const dragggrid = () => {
                 const dataForm = inputFormN.getAttribute('data-form');
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
-                            elem.number = inputFormN.value;
-                            console.log(elem);
+                        elem.Validation(inputFormN, notifyN);
                     }
                 }); 
             }        
         });
     }
+   
 
-/*     function Getstartnumber(elementBlock){
-        cell.forEach((element, i) => {
-            if(element.firstChild.number){
-                if(element.firstChild.type == 0){
-
-                }
-            }
-        }); 
-    } */
 
 
     GetNewBlock();
@@ -291,3 +349,47 @@ const dragggrid = () => {
 
 export default dragggrid;
 
+
+
+
+
+
+/* Validation(InputForm, el){
+            
+    let tb = 0;
+    if(((InputForm.value >= 1000) || (InputForm.value < 0)) && (InputForm !== inputFormN)){
+        this.error = 'error';
+        this.getErrorMessage();            
+    }
+    else{
+        if((InputForm.value < 0) || (InputForm.value >= 1000)){
+            this.error = 'errorNumber';
+            this.getErrorMessage();
+        }else{
+            console.log(`InputForm.value11 =   ${InputForm.value}`);
+                blocks.forEach((element, i) => {
+                   
+                    if((element.type === this.type) && (element.number === InputForm.value)){
+                        if(this.number != InputForm.value){
+                            console.log(`i =   ${i}`);
+                            tb = 10;
+                            console.log(`this.number = ${this.number}`);
+                        }
+                    }
+                });
+                console.log(`tb = ${tb}`);
+                if(tb){                            
+                    this.error = 'number';
+                    this.getErrorMessage();
+                    tb = 10;
+                    console.log(`this error if =   ${this.error}`);
+                }else{
+                        el.style.display = 'none';
+                        this.number = inputFormN.value;
+                        this.error = '';
+                    }
+                    this.number = inputFormN.value;
+        }
+    }
+    console.log(`this error =   ${this.error}`);
+} */

@@ -4895,7 +4895,12 @@ var dragggrid = function dragggrid() {
       inputFormR = document.querySelector('#rblock'),
       inputFormE = document.querySelector('#eblock'),
       inputFormN = document.querySelector('#nblock'),
-      blocks = []; // массив блоков
+      notifyR = document.querySelector('#notifyR'),
+      notifyE = document.querySelector('#notifyE'),
+      notifyN = document.querySelector('#notifyN'),
+      blocks = [],
+      // массив блоков
+  ActiveBlocks = []; //массив блоков в рабочей зоне
 
   var copyDrakeContainers = [],
       tx = 10,
@@ -4904,7 +4909,7 @@ var dragggrid = function dragggrid() {
   var Block =
   /*#__PURE__*/
   function () {
-    function Block(rotate, type, voltage, resistance, cell, id, element, number) {
+    function Block(rotate, type, voltage, resistance, cell, id, element, number, error) {
       _classCallCheck(this, Block);
 
       this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
@@ -4917,6 +4922,7 @@ var dragggrid = function dragggrid() {
       this.id = id;
       this.element = element;
       this.number = number;
+      this.error = error;
     }
 
     _createClass(Block, [{
@@ -4939,6 +4945,66 @@ var dragggrid = function dragggrid() {
         inputFormN.removeAttribute('data-form');
         inputFormN.setAttribute('data-form', this.id);
         inputFormN.value = this.number;
+      }
+    }, {
+      key: "getErrorMessage",
+      value: function getErrorMessage() {
+        var tNotify = 0;
+        notifyN.style.display = 'none';
+
+        switch (this.type) {
+          case 0:
+            tNotify = notifyR;
+            tNotify.style.display = 'none';
+            break;
+
+          case 1:
+            tNotify = notifyE;
+            tNotify.style.display = 'none';
+            break;
+        }
+
+        switch (this.error) {
+          case 'error':
+            tNotify.style.display = 'block';
+            tNotify.textContent = 'Введите значение от 0 до 1000';
+            break;
+
+          case 'errorNumber':
+            notifyN.style.display = 'block';
+            notifyN.textContent = 'Введите значение от 0 до 1000';
+            break;
+
+          case 'number':
+            notifyN.style.display = 'block';
+            notifyN.textContent = 'Максимальное з';
+            break;
+
+          default:
+            break;
+        }
+      }
+    }, {
+      key: "Validation",
+      value: function Validation(InputForm, el) {
+        var tb = 0;
+
+        if ((InputForm.value >= 1000 || InputForm.value < 0) && InputForm !== inputFormN) {
+          this.error = 'error';
+          this.getErrorMessage();
+        } else {
+          if (InputForm.value < 0 || InputForm.value >= 1000) {
+            this.error = 'errorNumber';
+            this.getErrorMessage();
+            this.number = inputFormN.value;
+          } else {
+            el.style.display = 'none';
+            this.number = inputFormN.value;
+            this.error = '';
+          }
+        }
+
+        console.log("this error =   ".concat(this.error));
       }
     }]);
 
@@ -5098,6 +5164,11 @@ var dragggrid = function dragggrid() {
       blocks.forEach(function (elem, i) {
         if (elem.element == target) {
           elem.getParametrForm();
+          console.log("inputFormN = == ".concat(inputFormN.value));
+          /*      elem.Validation(inputFormN, notifyN); */
+
+          console.log("lmvdfkbmldk = == ".concat(elem.error));
+          elem.getErrorMessage();
         }
       });
       blockSettings.style.display = 'flex';
@@ -5130,7 +5201,8 @@ var dragggrid = function dragggrid() {
 
     console.log(blocks[tx]);
     tx = tx + 1;
-  }
+  } //Forms
+
 
   function getValueFromForm() {
     blockSettings.addEventListener('input', function (event) {
@@ -5141,6 +5213,7 @@ var dragggrid = function dragggrid() {
         blocks.forEach(function (elem, i) {
           if (elem.id == dataForm) {
             elem.resistance = inputFormR.value;
+            elem.Validation(inputFormR, notifyR);
           }
         });
       }
@@ -5151,6 +5224,7 @@ var dragggrid = function dragggrid() {
         blocks.forEach(function (elem, i) {
           if (elem.id == _dataForm) {
             elem.voltage = inputFormE.value;
+            elem.Validation(inputFormE, notifyE);
           }
         });
       }
@@ -5160,23 +5234,12 @@ var dragggrid = function dragggrid() {
 
         blocks.forEach(function (elem, i) {
           if (elem.id == _dataForm2) {
-            elem.number = inputFormN.value;
-            console.log(elem);
+            elem.Validation(inputFormN, notifyN);
           }
         });
       }
     });
   }
-  /*     function Getstartnumber(elementBlock){
-          cell.forEach((element, i) => {
-              if(element.firstChild.number){
-                  if(element.firstChild.type == 0){
-  
-                  }
-              }
-          }); 
-      } */
-
 
   GetNewBlock();
   LimitingByDragging();
@@ -5193,6 +5256,45 @@ var dragggrid = function dragggrid() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (dragggrid);
+/* Validation(InputForm, el){
+            
+    let tb = 0;
+    if(((InputForm.value >= 1000) || (InputForm.value < 0)) && (InputForm !== inputFormN)){
+        this.error = 'error';
+        this.getErrorMessage();            
+    }
+    else{
+        if((InputForm.value < 0) || (InputForm.value >= 1000)){
+            this.error = 'errorNumber';
+            this.getErrorMessage();
+        }else{
+            console.log(`InputForm.value11 =   ${InputForm.value}`);
+                blocks.forEach((element, i) => {
+                   
+                    if((element.type === this.type) && (element.number === InputForm.value)){
+                        if(this.number != InputForm.value){
+                            console.log(`i =   ${i}`);
+                            tb = 10;
+                            console.log(`this.number = ${this.number}`);
+                        }
+                    }
+                });
+                console.log(`tb = ${tb}`);
+                if(tb){                            
+                    this.error = 'number';
+                    this.getErrorMessage();
+                    tb = 10;
+                    console.log(`this error if =   ${this.error}`);
+                }else{
+                        el.style.display = 'none';
+                        this.number = inputFormN.value;
+                        this.error = '';
+                    }
+                    this.number = inputFormN.value;
+        }
+    }
+    console.log(`this error =   ${this.error}`);
+} */
 
 /***/ })
 

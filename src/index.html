@@ -153,15 +153,18 @@
                     <div class="blocksettings__title">Параметры элемента</div>
                     <div class="blocksettings__wrapper">
                         <label for="nblock">Номер элемента</label>
-                        <input id="nblock" required placeholder="" name="numberBlock" type="number" class="blocksettings__input">
+                        <input id="nblock" required placeholder="" name="numberBlock" type="number" min="1" max="10000" class="blocksettings__input">
+                        <div id="notifyN" class="blocsettings__notify"></div>
                     </div>
                     <div class="blocksettings__wrapper-R">
                         <label for="rblock">Сопротивление, Ом</label>
                         <input id="rblock" required placeholder="Сопротивление, Ом" name="resistance" type="number" class="blocksettings__input">
+                        <div id ="notifyR" class="blocsettings__notify"></div>
                     </div>
                     <div class="blocksettings__wrapper-E">
                         <label for="eblock">ЭДС источника, В</label>
                         <input id="eblock" required placeholder="ЭДС источника, В" name="voltage" type="number" class="blocksettings__input">
+                        <div id="notifyE" class="blocsettings__notify"></div>
                     </div>
                     <button class="btn btn__delete">Повернуть элемент</button>
                     <button class="btn btn__delete">Удалить элемент</button>
