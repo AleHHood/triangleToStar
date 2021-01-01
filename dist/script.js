@@ -4900,11 +4900,12 @@ var dragggrid = function dragggrid() {
       notifyN = document.querySelector('#notifyN'),
       blocks = [],
       // массив блоков
-  ActiveBlocks = []; //массив блоков в рабочей зоне
+  ActiveBlocks = []; //массив блоков в рабочей зоне  
 
   var copyDrakeContainers = [],
       tx = 10,
-      numId = 10;
+      numId = 10,
+      ActiveBlock = 0; // активный блок
 
   var Block =
   /*#__PURE__*/
@@ -4989,7 +4990,7 @@ var dragggrid = function dragggrid() {
       value: function Validation(InputForm, el) {
         var tb = 0;
 
-        if ((InputForm.value >= 1000 || InputForm.value < 0) && InputForm !== inputFormN) {
+        if ((InputForm.value >= 1000 || InputForm.value <= 0) && InputForm !== inputFormN) {
           this.error = 'error';
           this.getErrorMessage();
         } else {
@@ -5034,6 +5035,10 @@ var dragggrid = function dragggrid() {
       var target = event.target;
 
       if (target && target.classList.contains('calculation__block')) {
+        blocks.forEach(function (element) {
+          element.element.classList.remove('active');
+        });
+        getForm(target);
         drake.containers = [];
         copyDrakeContainers.forEach(function (element) {
           drake.containers.push(element);
@@ -5104,8 +5109,8 @@ var dragggrid = function dragggrid() {
         classesBlock = 'calculation__block-B';
         render(classesBlock);
       }
+      /* getForm(target); */
 
-      getForm(target);
     });
   }
 
@@ -5159,22 +5164,6 @@ var dragggrid = function dragggrid() {
     blockBar.append(newBlock);
   }
 
-  function getForm(target) {
-    if (target && target.classList.contains('calculation__block')) {
-      blocks.forEach(function (elem, i) {
-        if (elem.element == target) {
-          elem.getParametrForm();
-          console.log("inputFormN = == ".concat(inputFormN.value));
-          /*      elem.Validation(inputFormN, notifyN); */
-
-          console.log("lmvdfkbmldk = == ".concat(elem.error));
-          elem.getErrorMessage();
-        }
-      });
-      blockSettings.style.display = 'flex';
-    }
-  }
-
   function writeNewBlock(classesBlock, id, element) {
     blocks[tx] = new Block();
     blocks[tx].id = id;
@@ -5203,6 +5192,19 @@ var dragggrid = function dragggrid() {
     tx = tx + 1;
   } //Forms
 
+
+  function getForm(target) {
+    if (target && target.classList.contains('calculation__block')) {
+      blocks.forEach(function (elem, i) {
+        if (elem.element == target) {
+          elem.getParametrForm();
+          elem.getErrorMessage();
+        }
+      });
+      blockSettings.style.display = 'flex';
+      target.classList.add('active');
+    }
+  }
 
   function getValueFromForm() {
     blockSettings.addEventListener('input', function (event) {
@@ -5241,6 +5243,35 @@ var dragggrid = function dragggrid() {
     });
   }
 
+  function GetRemoveOrRotateBlock() {
+    blockSettings.addEventListener('click', function (event) {
+      var target = event.target;
+
+      if (target && target.classList.contains('btn__remove')) {
+        blocks.forEach(function (element) {
+          if (element.element.classList.contains('active')) {
+            element.element.remove();
+            blockSettings.style.display = 'none';
+          }
+        });
+      }
+
+      if (target && target.classList.contains('btn__rotate')) {
+        blocks.forEach(function (element) {
+          if (element.element.classList.contains('active')) {
+            if (element.rotate == 0) {
+              element.element.classList.add('rotate');
+              element.rotate = 1;
+            } else {
+              element.element.classList.remove('rotate');
+              element.rotate = 0;
+            }
+          }
+        });
+      }
+    });
+  }
+
   GetNewBlock();
   LimitingByDragging();
   MobileLimitingByDragging();
@@ -5248,11 +5279,13 @@ var dragggrid = function dragggrid() {
     return ShowBlocks();
   }, 500); //Не забыть остановить
 
-  workTable.addEventListener('mousedown', function (event) {
-    var target = event.target;
-    getForm(target);
-  });
+  /*    workTable.addEventListener('mousedown', function(event) {
+         const target = event.target;
+         getForm(target);
+     }); */
+
   getValueFromForm();
+  GetRemoveOrRotateBlock();
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (dragggrid);

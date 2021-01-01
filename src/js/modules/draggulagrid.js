@@ -17,10 +17,11 @@ const dragggrid = () => {
     notifyE = document.querySelector('#notifyE'),
     notifyN = document.querySelector('#notifyN'),
     blocks = [], // массив блоков
-    ActiveBlocks = []; //массив блоков в рабочей зоне
+    ActiveBlocks = []; //массив блоков в рабочей зоне  
     let copyDrakeContainers = [],
     tx = 10,
-    numId = 10;
+    numId = 10,
+    ActiveBlock = 0; // активный блок
 
     class Block {
         constructor(rotate, type, voltage, resistance, cell, id, element, number, error) {
@@ -86,7 +87,7 @@ const dragggrid = () => {
         }
         Validation(InputForm, el){
             let tb = 0;
-            if(((InputForm.value >= 1000) || (InputForm.value < 0)) && (InputForm !== inputFormN)){
+            if(((InputForm.value >= 1000) || (InputForm.value <= 0)) && (InputForm !== inputFormN)){
                 this.error = 'error';
                 this.getErrorMessage();            
             }
@@ -130,14 +131,16 @@ const dragggrid = () => {
         copyDrakeContainers.push(element);
     });
 
-
-
-
-
     function LimitingByDragging() {
         container.addEventListener('mousedown', function(event) {
             const target = event.target;
+
+
             if(target && target.classList.contains('calculation__block')) {
+                blocks.forEach(element => {
+                    element.element.classList.remove('active');
+                });
+                getForm(target);
                 drake.containers = [];
                 copyDrakeContainers.forEach(element => {
                     drake.containers.push(element);
@@ -200,7 +203,7 @@ const dragggrid = () => {
                 classesBlock = 'calculation__block-B';
                 render(classesBlock);      
                 }
-                getForm(target);
+                /* getForm(target); */
         });
     }
 
@@ -253,22 +256,6 @@ const dragggrid = () => {
         numId = numId + 1;
         blockBar.append(newBlock);     
     }
-
-
-    function getForm(target){
-        if(target && target.classList.contains('calculation__block')) {
-            blocks.forEach((elem, i) => {
-                if(elem.element == target){
-                    elem.getParametrForm();
-                    console.log(`inputFormN = == ${inputFormN.value}`);
-               /*      elem.Validation(inputFormN, notifyN); */
-                    console.log(`lmvdfkbmldk = == ${elem.error}`);
-                    elem.getErrorMessage();
-                }
-            });
-            blockSettings.style.display = 'flex';
-        }
-    }
     
     function writeNewBlock(classesBlock, id, element){
         blocks[tx] = new Block();
@@ -294,6 +281,19 @@ const dragggrid = () => {
     }
 
 //Forms
+
+function getForm(target){
+    if(target && target.classList.contains('calculation__block')) {
+        blocks.forEach((elem, i) => {
+            if(elem.element == target){
+                elem.getParametrForm();
+                elem.getErrorMessage();
+            }
+        });
+        blockSettings.style.display = 'flex';
+        target.classList.add('active');
+    }
+}
 
     function getValueFromForm(){
         blockSettings.addEventListener('input', (event) => {
@@ -328,6 +328,35 @@ const dragggrid = () => {
             }        
         });
     }
+
+    function GetRemoveOrRotateBlock(){ 
+
+        blockSettings.addEventListener('click', (event) => { 
+
+            const target = event.target;
+            if(target && target.classList.contains('btn__remove')) {             
+                blocks.forEach(element => {
+                    if(element.element.classList.contains('active')){
+                        element.element.remove();                
+                        blockSettings.style.display = 'none';
+                    }
+                });
+            }
+            if(target && target.classList.contains('btn__rotate')) {
+                blocks.forEach(element => {
+                    if(element.element.classList.contains('active')){
+                        if(element.rotate == 0){
+                            element.element.classList.add('rotate');
+                            element.rotate = 1;
+                        }else{
+                            element.element.classList.remove('rotate');
+                            element.rotate = 0;
+                        }
+                    }
+                });
+            }
+        });
+    }
    
 
 
@@ -336,11 +365,12 @@ const dragggrid = () => {
     LimitingByDragging();
     MobileLimitingByDragging();
     setInterval( () => ShowBlocks(), 500);  //Не забыть остановить
-    workTable.addEventListener('mousedown', function(event) {
+ /*    workTable.addEventListener('mousedown', function(event) {
         const target = event.target;
         getForm(target);
-    });
+    }); */
     getValueFromForm();
+    GetRemoveOrRotateBlock();
 
 
 
