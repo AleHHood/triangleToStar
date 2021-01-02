@@ -26,31 +26,79 @@
         width: 70px;
         height: 70px;
         border: black solid 1px;
-        background-repeat: no-repeat;
-        background-position: center;
+        z-index: 1;
         background-color:white;
+        position: relative;
+        overflow: hidden;
+
         &-R{
-            background-image: url("../img/svg/R.SVG");
-            transform: rotate(90deg);
             order: 1;
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -71%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/R.SVG") 0 0 repeat;
+              }
+
         }
+
         &-E{
-            background-image: url("../img/svg/E.SVG");
             order: 2;
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -71%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/E.SVG") 0 0 repeat;
+              }
         }
+
         &-B{
-            background-image: url("../img/svg/E.SVG");
             order: 3;
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -71%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/B.SVG") 0 0 repeat;
+              }
         }
         &-K{
             order: 4;
-
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -71%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/K.SVG") 0 0 repeat;
+              }
         }
-    }
-    &__branch{
-        width: 78px;
-        height: 300px;
-        border: 2px dashed;  
+        &-Corner{
+            order: 5;
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -71%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/Corner.SVG") 0 0 repeat;
+              }
+        }
     }
     &__blocksettings{
         height: 100vh;
@@ -89,6 +137,9 @@
         align-items: center;
         justify-content: start;
     }
+    &__wrapper-N{
+        display: none;
+    }
     &__wrapper-R{
         display: none;
     }
@@ -97,6 +148,179 @@
     }
 }
 
+.rotate{
+    &-0{
+        &:before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -71%;
+            left: -29%;
+            z-index: -1;
+            background: url("../img/svg/R.SVG") 0 0 repeat;
+            transform: rotate(0.25turn);
+          }
+    }
+    &-1{
+        &:before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -71%;
+            left: -29%;
+            z-index: -1;
+            background: url("../img/svg/E.SVG") 0 0 repeat;
+            transform: rotate(0.25turn);
+          }
+        &-180{
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -29%;
+                left: -29%;
+                z-index: -1;
+                background: url("../img/svg/E.SVG") 0 0 repeat;
+                transform: rotate(0.5turn);
+              }
+        }  
+        &-270{
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -29%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/E.SVG") 0 0 repeat;
+                transform: rotate(0.75turn);
+                }
+        }
+    }
+    &-2{
+        &:before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -71%;
+            left: -29%;
+            z-index: -3;
+            background: url("../img/svg/B.SVG") 0 0 repeat;
+            transform: rotate(0.25turn);
+          }
+          &-180{
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -29%;
+                left: -29%;
+                z-index: -1;
+                background: url("../img/svg/B.SVG") 0 0 repeat;
+                transform: rotate(0.5turn);
+              }
+        }  
+        &-270{
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -29%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/B.SVG") 0 0 repeat;
+                transform: rotate(0.75turn);
+                }
+        }
+    }
+    &-3{
+        &:before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -71%;
+            left: -29%;
+            z-index: -2;
+            background: url("../img/svg/K.SVG") 0 0 repeat;
+            transform: rotate(0.25turn);
+          }
+          &-180{
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -29%;
+                left: -29%;
+                z-index: -1;
+                background: url("../img/svg/K.SVG") 0 0 repeat;
+                transform: rotate(0.5turn);
+              }
+        }  
+        &-270{
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -29%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/K.SVG") 0 0 repeat;
+                transform: rotate(0.75turn);
+                }
+        }
+    }
+    &-4{
+        &:before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -71%;
+            left: -29%;
+            z-index: -2;
+            background: url("../img/svg/Corner.SVG") 0 0 repeat;
+            transform: rotate(0.25turn);
+          }
+          &-180{
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -29%;
+                left: -29%;
+                z-index: -1;
+                background: url("../img/svg/Corner.SVG") 0 0 repeat;
+                transform: rotate(0.5turn);
+              }
+        }  
+        &-270{
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -29%;
+                left: -72%;
+                z-index: -1;
+                background: url("../img/svg/Corner.SVG") 0 0 repeat;
+                transform: rotate(0.75turn);
+                }
+        }
+    }
+
+};
+
 .active{
     border: 2px red dotted;
-}
+};

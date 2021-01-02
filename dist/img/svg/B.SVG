@@ -3,7 +3,7 @@
 <svg version="1.1" baseProfile="full"
 xmlns="http://www.w3.org/2000/svg"
 width="170" height="170">
-<title>E</title>
+<title>B</title>
 <defs>
 <style type="text/css">
 <![CDATA[
@@ -14,10 +14,6 @@ circle {stroke-linecap:round; stroke-linejoin:round}
 ]]>
 </style>
 </defs>
-<circle cx="85.00" cy="85.00" r="25.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
-<polyline points="99.00 85.00 67.94 85.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
-<polygon points="81.54 81.40 67.94 85.00 81.54 88.60" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" stroke-width="3" />
+<polyline points="40.00 85.00 130.03 85.07" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
 <path fill="none" stroke="none" stroke-width="1" style="stroke-linecap:square; stroke-linejoin:miter" d=" M 40 40 L 130 40 130 130 40 130 40 40" />
-<polyline points="60.00 85.00 40.00 85.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
-<polyline points="110.00 85.00 130.00 85.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
 </svg>

@@ -101,13 +101,38 @@
         </header>
         <div class="calculation__container">
             <div class="calculation__blockBar">
-                <div id="0" class="calculation__block calculation__block-R">R1</div>
+                <div id="0" class="calculation__block calculation__block-R"></div>
                 <div id="3" class="calculation__block calculation__block-K"></div>
                 <div id="1" class="calculation__block calculation__block-E"></div>
                 <div id="2" class="calculation__block calculation__block-B"></div>
+                <div id="4" class="calculation__block calculation__block-Corner"></div>
             </div>
             <div class="calculation__workTable">
                 <div class="grid__container">
+                    <div class="grid__row">
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                    </div>
+                    <div class="grid__row">
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                        <div class="grid__cell"></div>
+                    </div>
                     <div class="grid__row">
                         <div class="grid__cell"></div>
                         <div class="grid__cell"></div>
@@ -151,10 +176,15 @@
                 <div class="blocksettings__container">
                     <!-- <div data-close class="blocksettings__close">x</div> -->
                     <div class="blocksettings__title">Параметры элемента</div>
-                    <div class="blocksettings__wrapper">
+                    <div class="blocksettings__wrapper-N">
                         <label for="nblock">Номер элемента</label>
-                        <input id="nblock" required placeholder="" name="numberBlock" type="number" min="1" max="10000" class="blocksettings__input">
+                        <input id="nblock" required placeholder="" name="numberBlock" type="number" class="blocksettings__input">
                         <div id="notifyN" class="blocsettings__notify"></div>
+                    </div>
+                    <div class="blocksettings__wrapper-Knots">
+                        <label for="knotsblock">Узел</label>
+                        <input id="knotsblock" maxlength="2" required placeholder="" name="numberBlock" class="blocksettings__input">
+                        <div id="notifyKnots" class="blocsettings__notify"></div>
                     </div>
                     <div class="blocksettings__wrapper-R">
                         <label for="rblock">Сопротивление, Ом</label>

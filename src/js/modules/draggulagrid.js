@@ -8,11 +8,14 @@ const dragggrid = () => {
     workTable = document.querySelector('.calculation__workTable'),
     blockSettings = document.querySelector('.blocksettings__container'),
     cell = document.querySelectorAll('.grid__cell'),
+    wrapperFormN = document.querySelector('.blocksettings__wrapper-N'),
+    wrapperFormKnots = document.querySelector('.blocksettings__wrapper-Knots'),
     wrapperFormR = document.querySelector('.blocksettings__wrapper-R'),
     wrapperFormE = document.querySelector('.blocksettings__wrapper-E'),
     inputFormR = document.querySelector('#rblock'),
     inputFormE = document.querySelector('#eblock'),
     inputFormN = document.querySelector('#nblock'),
+    inputFormKnots = document.querySelector('#knotsblock'),
     notifyR = document.querySelector('#notifyR'),
     notifyE = document.querySelector('#notifyE'),
     notifyN = document.querySelector('#notifyN'),
@@ -26,7 +29,7 @@ const dragggrid = () => {
     class Block {
         constructor(rotate, type, voltage, resistance, cell, id, element, number, error) {
             this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
-            this.type = type; // 0=R, 1=E, 2=B, 3=K;
+            this.type = type; // 0=R, 1=E, 2=B, 3=K, 4=Corner;
             this.voltage = voltage;
             this.resistance = resistance;
             this.cell = cell;
@@ -38,15 +41,32 @@ const dragggrid = () => {
         getParametrForm(){
             switch(this.type){
                 case 0:
+                    wrapperFormN.style.display = 'block';
+                    wrapperFormKnots.style.display = 'none';
                     wrapperFormR.style.display = 'block';
                     wrapperFormE.style.display = 'none';
                     inputFormR.value = this.resistance;
                     break;
                 case 1:
+                    wrapperFormN.style.display = 'block';
+                    wrapperFormKnots.style.display = 'none';
                     wrapperFormE.style.display = 'block';
                     wrapperFormR.style.display = 'none';
                     inputFormE.value = this.voltage;
                     break;
+                case 3:
+                    wrapperFormKnots.style.display = 'block';
+                    wrapperFormN.style.display = 'none';
+                    wrapperFormE.style.display = 'none';
+                    wrapperFormR.style.display = 'none';
+                    inputFormE.value = this.voltage;
+                    break;
+                default:
+                    wrapperFormN.style.display = 'none';
+                    wrapperFormKnots.style.display = 'none';
+                    wrapperFormE.style.display = 'none';
+                    wrapperFormR.style.display = 'none';
+                break;
             }
             inputFormN.removeAttribute('data-form');
             inputFormN.setAttribute('data-form', this.id);
@@ -106,6 +126,8 @@ const dragggrid = () => {
         }
     }
 
+//-----------------Добавляем блоки из блокБар в blocks------------//
+
     blockHome.forEach((element, i) => {
         blocks[i] = new Block();
         blocks[i].rotate = 0;
@@ -114,10 +136,11 @@ const dragggrid = () => {
         blocks[i].type = +element.id;
         blocks[i].id = element.id;
         blocks[i].element = element;
+        console.log(blocks[i]);
     });
     
     
-
+//-----------------Добавляем перетаскивание для блоков------------//
     
 
     const drake = dragula([blockBar, ...cell], {
@@ -155,6 +178,9 @@ const dragggrid = () => {
                 }
             if(target && target.classList.contains('grid__cell')){
                 blockSettings.style.display = 'none';
+                blocks.forEach(element => {
+                    element.element.classList.remove('active');
+                });
             }
         });
     }
@@ -203,7 +229,11 @@ const dragggrid = () => {
                 classesBlock = 'calculation__block-B';
                 render(classesBlock);      
                 }
-                /* getForm(target); */
+            matchBlocks('calculation__block-Corner');
+            if(target && target.classList.contains('calculation__block-Corner')) {
+                classesBlock = 'calculation__block-Corner';
+                render(classesBlock);      
+                }
         });
     }
 
@@ -242,6 +272,7 @@ const dragggrid = () => {
         ShowBlock('calculation__block-E');
         ShowBlock('calculation__block-K');
         ShowBlock('calculation__block-B');
+        ShowBlock('calculation__block-Corner');
         console.log('Остановитесь!!');
     }
     
@@ -276,6 +307,9 @@ const dragggrid = () => {
         if (classesBlock == 'calculation__block-K'){
             blocks[tx].type = 3;
         }
+        if (classesBlock == 'calculation__block-Corner'){
+            blocks[tx].type = 4;
+        }
         console.log(blocks[tx]);
         tx = tx + 1;
     }
@@ -302,9 +336,8 @@ function getForm(target){
                 const dataForm = inputFormN.getAttribute('data-form');
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
-                            elem.resistance = inputFormR.value;
-                            elem.Validation(inputFormR, notifyR);
-                        
+                        elem.resistance = inputFormR.value;
+                        elem.Validation(inputFormR, notifyR);
                     }
                 }); 
             }   
@@ -312,9 +345,17 @@ function getForm(target){
                 const dataForm = inputFormN.getAttribute('data-form');
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
-                            elem.voltage = inputFormE.value;
-                            elem.Validation(inputFormE, notifyE);
-                               
+                        elem.voltage = inputFormE.value;
+                        elem.Validation(inputFormE, notifyE);   
+                    }
+                }); 
+            } 
+            if(target && target.id == inputFormKnots.id) {
+                const dataForm = inputFormN.getAttribute('data-form');
+                blocks.forEach((elem, i) => {
+                    if(elem.id == dataForm){
+                        elem.number = inputFormKnots.value;
+                        elem.element.textContent = inputFormKnots.value;   
                     }
                 }); 
             } 
@@ -323,6 +364,14 @@ function getForm(target){
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
                         elem.Validation(inputFormN, notifyN);
+                        switch (elem.type) {
+                            case 0:
+                                elem.element.textContent = `R${inputFormN.value}`;
+                                break;
+                            case 1:
+                                elem.element.textContent = `E${inputFormN.value}`;
+                                break;
+                        }
                     }
                 }); 
             }        
@@ -345,12 +394,36 @@ function getForm(target){
             if(target && target.classList.contains('btn__rotate')) {
                 blocks.forEach(element => {
                     if(element.element.classList.contains('active')){
-                        if(element.rotate == 0){
-                            element.element.classList.add('rotate');
-                            element.rotate = 1;
-                        }else{
-                            element.element.classList.remove('rotate');
-                            element.rotate = 0;
+                        if(element.type == 0){
+                            if(element.rotate == 0){
+                                    element.element.classList.add('rotate-0');
+                                    element.rotate = 1;                      
+                            }else{
+                                element.element.classList.remove('rotate-0');
+                                element.rotate = 0;
+                            }
+                        }
+                        else{
+                            switch (element.rotate) {
+                                case 0:
+                                    element.element.classList.add(`rotate-${element.type}`);
+                                    element.rotate = 1; 
+                                    break;
+                                case 1:
+                                    element.element.classList.add(`rotate-${element.type}-180`);
+                                    element.element.classList.remove(`rotate-${element.type}`);
+                                    element.rotate = 2; 
+                                    break;
+                                case 2:
+                                    element.element.classList.add(`rotate-${element.type}-270`);
+                                    element.element.classList.remove(`rotate-${element.type}-180`);
+                                    element.rotate = 3; 
+                                    break;
+                                case 3:
+                                    element.element.classList.remove(`rotate-${element.type}-270`);
+                                    element.rotate = 0; 
+                                    break;
+                            }
                         }
                     }
                 });
@@ -365,10 +438,6 @@ function getForm(target){
     LimitingByDragging();
     MobileLimitingByDragging();
     setInterval( () => ShowBlocks(), 500);  //Не забыть остановить
- /*    workTable.addEventListener('mousedown', function(event) {
-        const target = event.target;
-        getForm(target);
-    }); */
     getValueFromForm();
     GetRemoveOrRotateBlock();
 
