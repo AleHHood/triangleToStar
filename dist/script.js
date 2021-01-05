@@ -4852,6 +4852,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var dragula__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! dragula */ "./node_modules/dragula/dragula.js");
 /* harmony import */ var dragula__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(dragula__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _getScheme__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./getScheme */ "./src/js/modules/getScheme.js");
 
 
 
@@ -4881,6 +4882,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
 var dragggrid = function dragggrid() {
   var blockBar = document.querySelector('.calculation__blockBar'),
       blockHome = document.querySelectorAll('.calculation__block'),
@@ -4901,17 +4903,24 @@ var dragggrid = function dragggrid() {
       notifyN = document.querySelector('#notifyN'),
       blocks = [],
       // массив блоков
-  ActiveBlocks = []; //массив блоков в рабочей зоне  
-
+  branchs = [],
+      branch = [],
+      branch3 = [],
+      branch4 = [];
   var copyDrakeContainers = [],
       tx = 10,
       numId = 10,
       ActiveBlock = 0; // активный блок
 
+  var formSettings = document.querySelector('.calculation__settings'),
+      ActiveBlocks = []; //массив блоков в рабочей зоне
+
+  var formData;
+
   var Block =
   /*#__PURE__*/
   function () {
-    function Block(rotate, type, voltage, resistance, cell, id, element, number, error) {
+    function Block(rotate, type, voltage, resistance, cell, id, element, number, error, x, y) {
       _classCallCheck(this, Block);
 
       this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
@@ -4925,6 +4934,8 @@ var dragggrid = function dragggrid() {
       this.element = element;
       this.number = number;
       this.error = error;
+      this.x = x;
+      this.y = y;
     }
 
     _createClass(Block, [{
@@ -5019,8 +5030,20 @@ var dragggrid = function dragggrid() {
             this.getErrorMessage();
             this.number = inputFormN.value;
           } else {
-            el.style.display = 'none';
-            this.number = inputFormN.value;
+            el.style.display = 'none'; ////////////////
+
+            switch (this.type) {
+              case 0:
+                this.number = "R".concat(inputFormN.value);
+                break;
+
+              case 1:
+                this.number = "E".concat(inputFormN.value);
+                break;
+            }
+            /* this.number = inputFormN.value; */
+
+
             this.error = '';
           }
         }
@@ -5284,16 +5307,7 @@ var dragggrid = function dragggrid() {
         blocks.forEach(function (elem, i) {
           if (elem.id == _dataForm3) {
             elem.Validation(inputFormN, notifyN);
-
-            switch (elem.type) {
-              case 0:
-                elem.element.textContent = "R".concat(inputFormN.value);
-                break;
-
-              case 1:
-                elem.element.textContent = "E".concat(inputFormN.value);
-                break;
-            }
+            elem.element.textContent = elem.number;
           }
         });
       }
@@ -5355,6 +5369,125 @@ var dragggrid = function dragggrid() {
     });
   }
 
+  console.log(formSettings);
+
+  function GetFormSettings() {
+    formSettings.addEventListener('click', function (event) {
+      event.preventDefault();
+      var target = event.target;
+
+      if (target && target.classList.contains('btn__calculate')) {
+        formData = new FormData(formSettings);
+        console.log(formData.get('choiceMethod'));
+        getActiveBlocks();
+      }
+    });
+  }
+
+  function getActiveBlocks() {
+    var ti = 0;
+    cell.forEach(function (element, i) {
+      if (element.firstChild) {
+        blocks.forEach(function (el, x) {
+          if (element.firstChild === el.element) {
+            el.cell = element;
+            el.x = +element.getAttribute('data-x');
+            el.y = +element.getAttribute('data-y');
+            ActiveBlocks[ti] = el;
+            ti = ti + 1;
+          }
+        });
+      }
+    });
+    /* console.log(ActiveBlocks); */
+
+    ActiveBlocks.forEach(function (element, i) {
+      /* console.log(getValidations(element)); */
+      console.log(Object(_getScheme__WEBPACK_IMPORTED_MODULE_13__["default"])(ActiveBlocks));
+      /* branchs[i] =  */
+
+      /* getValidationsPostions(element, i); */
+
+      if (element.type === 3) {
+        if (element.rotate === 0
+        /* || ActiveBlock.rotate === 2 */
+        ) {
+            branch[0] = element;
+            var x = +element.x;
+            var y = +element.y;
+            var j = 0;
+
+            do {
+              j = j + 1;
+              branchs[i] = branch[j] = getBlockByData(x + j, y);
+              console.log(getBlockByData(x + j, y));
+            } while (getBlockByData(x + j, y).type != 3 && getBlockByData(x + j, y)); /////////////
+
+            /* branchs[i] = branch; */
+
+          }
+      }
+      /*             console.log(branchs[i]); */
+
+    });
+  }
+  /*     function getValidations (ActiveBlock){
+          let error = 0;
+          if(ActiveBlock.error || (!ActiveBlock.number)){
+              ActiveBlock.getErrorMessage();
+              console.log(`Ошибка! Значения элемента: ${ActiveBlock.number}`);
+              error = error + 1;          
+          }
+          else{
+              ActiveBlocks.forEach((element, i) => {
+              if((element.type === ActiveBlock.type) && (element.number === ActiveBlock.number)){
+                  if(element.number && (element.id != ActiveBlock.id)){
+                      console.log(`Ошибка! Совпадают номера элементов: ${element.number}`);
+                      error = error + 1;    
+                      }
+                  }
+              });              
+          }
+          return error;
+      } */
+
+
+  function getValidationsPostions(ActiveBlock, i) {
+    console.log(ActiveBlock);
+
+    if (ActiveBlock.type === 3) {
+      if (ActiveBlock.rotate === 0
+      /* || ActiveBlock.rotate === 2 */
+      ) {
+          branch[0] = ActiveBlock;
+          var x = +ActiveBlock.x;
+          var y = +ActiveBlock.y;
+          var j = 0;
+
+          do {
+            j = j + 1;
+            branch[j] = getBlockByData(x + j, y);
+          } while (getBlockByData(x + j, y).type != 3 && getBlockByData(x + j, y)); /////////////
+
+
+          branchs[i] = branch;
+          console.log(branch);
+        }
+    }
+    /*         return branch; */
+
+  }
+
+  function getBlockByData(dataX, dataY) {
+    var returnBlock = 0;
+    blocks.forEach(function (element) {
+      if (+element.x == dataX && +element.y == dataY) {
+        returnBlock = element;
+      }
+    });
+    return returnBlock;
+  }
+
   GetNewBlock();
   LimitingByDragging();
   MobileLimitingByDragging();
@@ -5364,6 +5497,7 @@ var dragggrid = function dragggrid() {
 
   getValueFromForm();
   GetRemoveOrRotateBlock();
+  GetFormSettings();
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (dragggrid);
@@ -5406,6 +5540,62 @@ var dragggrid = function dragggrid() {
     }
     console.log(`this error =   ${this.error}`);
 } */
+
+/***/ }),
+
+/***/ "./src/js/modules/getScheme.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/getScheme.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+
+
+var getscheme = function getscheme(blocks) {
+  var error = '',
+      returnValue = 0;
+
+  function getValidations(ActiveBlock) {
+    var error = 0;
+
+    if (ActiveBlock.error || !ActiveBlock.number) {
+      ActiveBlock.getErrorMessage();
+      console.log("\u041E\u0448\u0438\u0431\u043A\u0430! \u0417\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430: ".concat(ActiveBlock.number));
+      error = error + 1;
+    } else {
+      blocks.forEach(function (element, i) {
+        if (element.type === ActiveBlock.type && element.number === ActiveBlock.number) {
+          if (element.number && element.id != ActiveBlock.id) {
+            console.log("\u041E\u0448\u0438\u0431\u043A\u0430! \u0421\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442 \u043D\u043E\u043C\u0435\u0440\u0430 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432: ".concat(element.number));
+            error = error + 1;
+          }
+        }
+      });
+    }
+
+    return error;
+  }
+
+  console.log(blocks);
+  blocks.forEach(function (element) {
+    error = getValidations(element);
+  });
+
+  if (error === '') {
+    returnValue = error;
+  } else {
+    returnValue = blocks;
+  }
+
+  return [returnValue];
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (getscheme);
 
 /***/ })
 

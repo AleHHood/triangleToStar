@@ -1,4 +1,5 @@
 import dragula from 'dragula';
+import getscheme from './getScheme';
 
 const dragggrid = () => {
 
@@ -20,14 +21,20 @@ const dragggrid = () => {
     notifyE = document.querySelector('#notifyE'),
     notifyN = document.querySelector('#notifyN'),
     blocks = [], // массив блоков
-    ActiveBlocks = []; //массив блоков в рабочей зоне  
+    branchs = [],
+    branch = [],
+    branch3 = [],
+    branch4 = [];
     let copyDrakeContainers = [],
     tx = 10,
     numId = 10,
     ActiveBlock = 0; // активный блок
+    const formSettings = document.querySelector('.calculation__settings'),
+    ActiveBlocks = []; //массив блоков в рабочей зоне
+    let formData;
 
     class Block {
-        constructor(rotate, type, voltage, resistance, cell, id, element, number, error) {
+        constructor(rotate, type, voltage, resistance, cell, id, element, number, error, x, y) {
             this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
             this.type = type; // 0=R, 1=E, 2=B, 3=K, 4=Corner;
             this.voltage = voltage;
@@ -37,6 +44,8 @@ const dragggrid = () => {
             this.element = element;
             this.number = number;
             this.error = error;
+            this.x = x;
+            this.y = y;
         }
         getParametrForm(){
             switch(this.type){
@@ -117,8 +126,16 @@ const dragggrid = () => {
                     this.getErrorMessage();
                     this.number = inputFormN.value;
                 }else{
-                    el.style.display = 'none';
-                                this.number = inputFormN.value;
+                    el.style.display = 'none';////////////////
+                    switch (this.type) {
+                        case 0:
+                            this.number = `R${inputFormN.value}`;
+                            break;
+                        case 1:
+                            this.number = `E${inputFormN.value}`;
+                            break;
+                    }
+                                /* this.number = inputFormN.value; */
                                 this.error = '';
                 }
             }
@@ -364,14 +381,7 @@ function getForm(target){
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
                         elem.Validation(inputFormN, notifyN);
-                        switch (elem.type) {
-                            case 0:
-                                elem.element.textContent = `R${inputFormN.value}`;
-                                break;
-                            case 1:
-                                elem.element.textContent = `E${inputFormN.value}`;
-                                break;
-                        }
+                            elem.element.textContent = elem.number;
                     }
                 }); 
             }        
@@ -432,6 +442,116 @@ function getForm(target){
     }
    
 
+    console.log(formSettings);
+
+    function GetFormSettings(){
+        formSettings.addEventListener('click', (event) => { 
+            event.preventDefault();
+            const target = event.target;
+            if(target && target.classList.contains('btn__calculate')) {      
+                formData = new FormData(formSettings);      
+                console.log(formData.get('choiceMethod'));
+                getActiveBlocks();
+            }
+        });
+    }
+
+    function getActiveBlocks(){
+        let ti = 0;
+        cell.forEach((element, i) => {
+            if(element.firstChild){
+                blocks.forEach((el, x) => {
+                    if(element.firstChild === el.element){
+                        el.cell = element;
+                        el.x = +(element.getAttribute('data-x'));
+                        el.y = +(element.getAttribute('data-y'));
+                        ActiveBlocks[ti] = el;
+                        ti = ti + 1;
+                    }
+                });
+            }       
+        });
+        /* console.log(ActiveBlocks); */
+        ActiveBlocks.forEach((element, i) => {
+            /* console.log(getValidations(element)); */
+            console.log(getscheme(ActiveBlocks));
+            /* branchs[i] =  *//* getValidationsPostions(element, i); */
+
+            if(element.type === 3){
+                if(element.rotate === 0 /* || ActiveBlock.rotate === 2 */){
+                    branch[0] = element;
+                    const x = +(element.x);
+                    const y = +(element.y);
+                    let j = 0; 
+    
+                    do{
+                        j = j + 1;                    
+                        branchs[i] = branch[j] = getBlockByData((x+j), y);
+                        console.log(getBlockByData((x+j), y));
+                    }while((getBlockByData((x+j), y).type != 3) && getBlockByData((x+j), y));  /////////////
+                    /* branchs[i] = branch; */
+                    
+                }
+            }
+/*             console.log(branchs[i]); */
+        });
+        
+    }
+
+/*     function getValidations (ActiveBlock){
+        let error = 0;
+        if(ActiveBlock.error || (!ActiveBlock.number)){
+            ActiveBlock.getErrorMessage();
+            console.log(`Ошибка! Значения элемента: ${ActiveBlock.number}`);
+            error = error + 1;          
+        }
+        else{
+            ActiveBlocks.forEach((element, i) => {
+            if((element.type === ActiveBlock.type) && (element.number === ActiveBlock.number)){
+                if(element.number && (element.id != ActiveBlock.id)){
+                    console.log(`Ошибка! Совпадают номера элементов: ${element.number}`);
+                    error = error + 1;    
+                    }
+                }
+            });              
+        }
+        return error;
+    } */
+
+
+
+
+    
+    function getValidationsPostions (ActiveBlock,i){
+        console.log(ActiveBlock);
+        if(ActiveBlock.type === 3){
+            if(ActiveBlock.rotate === 0 /* || ActiveBlock.rotate === 2 */){
+                branch[0] = ActiveBlock;
+                const x = +(ActiveBlock.x);
+                const y = +(ActiveBlock.y);
+                let j = 0; 
+
+                do{
+                    j = j + 1;                    
+                    branch[j] = getBlockByData((x+j), y);
+                }while((getBlockByData((x+j), y).type != 3) && getBlockByData((x+j), y));  /////////////
+                branchs[i] = branch;
+                console.log(branch);
+            }
+        }
+        
+/*         return branch; */
+    }
+
+    function getBlockByData(dataX, dataY){
+        let returnBlock = 0;
+        blocks.forEach(element => {
+            if((+(element.x) == dataX) && (+(element.y) == dataY)){ 
+                returnBlock = element;
+            }
+        });
+        return returnBlock;
+    }
 
 
     GetNewBlock();
@@ -440,6 +560,8 @@ function getForm(target){
     setInterval( () => ShowBlocks(), 500);  //Не забыть остановить
     getValueFromForm();
     GetRemoveOrRotateBlock();
+    GetFormSettings();
+
 
 
 
