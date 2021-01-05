@@ -4901,12 +4901,8 @@ var dragggrid = function dragggrid() {
       notifyR = document.querySelector('#notifyR'),
       notifyE = document.querySelector('#notifyE'),
       notifyN = document.querySelector('#notifyN'),
-      blocks = [],
-      // массив блоков
-  branchs = [],
-      branch = [],
-      branch3 = [],
-      branch4 = [];
+      blocks = []; // массив блоков
+
   var copyDrakeContainers = [],
       tx = 10,
       numId = 10,
@@ -5368,20 +5364,14 @@ var dragggrid = function dragggrid() {
       }
     });
   }
+  /*     console.log(formSettings); */
 
-  console.log(formSettings);
 
-  function GetFormSettings() {
-    formSettings.addEventListener('click', function (event) {
-      event.preventDefault();
-      var target = event.target;
-
-      if (target && target.classList.contains('btn__calculate')) {
-        formData = new FormData(formSettings);
-        console.log(formData.get('choiceMethod'));
-        getActiveBlocks();
-      }
-    });
+  function GetFormSettings(target) {
+    if (target && target.classList.contains('btn__calculate')) {
+      formData = new FormData(formSettings);
+      console.log(formData.get('choiceMethod'));
+    }
   }
 
   function getActiveBlocks() {
@@ -5399,93 +5389,6 @@ var dragggrid = function dragggrid() {
         });
       }
     });
-    /* console.log(ActiveBlocks); */
-
-    ActiveBlocks.forEach(function (element, i) {
-      /* console.log(getValidations(element)); */
-      console.log(Object(_getScheme__WEBPACK_IMPORTED_MODULE_13__["default"])(ActiveBlocks));
-      /* branchs[i] =  */
-
-      /* getValidationsPostions(element, i); */
-
-      if (element.type === 3) {
-        if (element.rotate === 0
-        /* || ActiveBlock.rotate === 2 */
-        ) {
-            branch[0] = element;
-            var x = +element.x;
-            var y = +element.y;
-            var j = 0;
-
-            do {
-              j = j + 1;
-              branchs[i] = branch[j] = getBlockByData(x + j, y);
-              console.log(getBlockByData(x + j, y));
-            } while (getBlockByData(x + j, y).type != 3 && getBlockByData(x + j, y)); /////////////
-
-            /* branchs[i] = branch; */
-
-          }
-      }
-      /*             console.log(branchs[i]); */
-
-    });
-  }
-  /*     function getValidations (ActiveBlock){
-          let error = 0;
-          if(ActiveBlock.error || (!ActiveBlock.number)){
-              ActiveBlock.getErrorMessage();
-              console.log(`Ошибка! Значения элемента: ${ActiveBlock.number}`);
-              error = error + 1;          
-          }
-          else{
-              ActiveBlocks.forEach((element, i) => {
-              if((element.type === ActiveBlock.type) && (element.number === ActiveBlock.number)){
-                  if(element.number && (element.id != ActiveBlock.id)){
-                      console.log(`Ошибка! Совпадают номера элементов: ${element.number}`);
-                      error = error + 1;    
-                      }
-                  }
-              });              
-          }
-          return error;
-      } */
-
-
-  function getValidationsPostions(ActiveBlock, i) {
-    console.log(ActiveBlock);
-
-    if (ActiveBlock.type === 3) {
-      if (ActiveBlock.rotate === 0
-      /* || ActiveBlock.rotate === 2 */
-      ) {
-          branch[0] = ActiveBlock;
-          var x = +ActiveBlock.x;
-          var y = +ActiveBlock.y;
-          var j = 0;
-
-          do {
-            j = j + 1;
-            branch[j] = getBlockByData(x + j, y);
-          } while (getBlockByData(x + j, y).type != 3 && getBlockByData(x + j, y)); /////////////
-
-
-          branchs[i] = branch;
-          console.log(branch);
-        }
-    }
-    /*         return branch; */
-
-  }
-
-  function getBlockByData(dataX, dataY) {
-    var returnBlock = 0;
-    blocks.forEach(function (element) {
-      if (+element.x == dataX && +element.y == dataY) {
-        returnBlock = element;
-      }
-    });
-    return returnBlock;
   }
 
   GetNewBlock();
@@ -5497,49 +5400,16 @@ var dragggrid = function dragggrid() {
 
   getValueFromForm();
   GetRemoveOrRotateBlock();
-  GetFormSettings();
+  formSettings.addEventListener('click', function (event) {
+    event.preventDefault();
+    var target = event.target;
+    GetFormSettings();
+    getActiveBlocks();
+    console.log(Object(_getScheme__WEBPACK_IMPORTED_MODULE_13__["default"])(ActiveBlocks));
+  });
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (dragggrid);
-/* Validation(InputForm, el){
-            
-    let tb = 0;
-    if(((InputForm.value >= 1000) || (InputForm.value < 0)) && (InputForm !== inputFormN)){
-        this.error = 'error';
-        this.getErrorMessage();            
-    }
-    else{
-        if((InputForm.value < 0) || (InputForm.value >= 1000)){
-            this.error = 'errorNumber';
-            this.getErrorMessage();
-        }else{
-            console.log(`InputForm.value11 =   ${InputForm.value}`);
-                blocks.forEach((element, i) => {
-                   
-                    if((element.type === this.type) && (element.number === InputForm.value)){
-                        if(this.number != InputForm.value){
-                            console.log(`i =   ${i}`);
-                            tb = 10;
-                            console.log(`this.number = ${this.number}`);
-                        }
-                    }
-                });
-                console.log(`tb = ${tb}`);
-                if(tb){                            
-                    this.error = 'number';
-                    this.getErrorMessage();
-                    tb = 10;
-                    console.log(`this error if =   ${this.error}`);
-                }else{
-                        el.style.display = 'none';
-                        this.number = inputFormN.value;
-                        this.error = '';
-                    }
-                    this.number = inputFormN.value;
-        }
-    }
-    console.log(`this error =   ${this.error}`);
-} */
 
 /***/ }),
 
@@ -5556,9 +5426,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
 
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var getscheme = function getscheme(blocks) {
+  var branchs = [];
   var error = '',
       returnValue = 0;
+
+  var Branch = function Branch() {
+    _classCallCheck(this, Branch);
+
+    for (var _len = arguments.length, elements = new Array(_len), _key = 0; _key < _len; _key++) {
+      elements[_key] = arguments[_key];
+    }
+
+    this.elements = elements;
+  };
 
   function getValidations(ActiveBlock) {
     var error = 0;
@@ -5581,18 +5464,55 @@ var getscheme = function getscheme(blocks) {
     return error;
   }
 
-  console.log(blocks);
+  function getValidationsPostions(ActiveBlocks) {
+    var i = -1;
+    ActiveBlocks.forEach(function (element) {
+      if (element.type === 3) {
+        if (element.rotate === 0) {
+          i = i + 1;
+          branchs[i] = new Branch();
+          branchs[i].elements[0] = element;
+          var x = +element.x;
+          var y = +element.y;
+
+          for (var j = 1; getBlockByData(x + j, y).type != 3 && getBlockByData(x + j, y); j++) {
+            branchs[i].elements[j] = getBlockByData(x + j, y);
+
+            if (getBlockByData(x + j + 1, y).type === 3) {
+              branchs[i].elements[j + 1] = getBlockByData(x + j + 1, y);
+            }
+          }
+
+          console.log(i);
+          console.log(branchs[i].elements);
+        }
+      }
+    });
+  }
+
+  function getBlockByData(dataX, dataY) {
+    var returnBlock = 0;
+    blocks.forEach(function (element) {
+      if (+element.x == dataX && +element.y == dataY) {
+        returnBlock = element;
+      }
+    });
+    return returnBlock;
+  }
+
   blocks.forEach(function (element) {
     error = getValidations(element);
   });
 
   if (error === '') {
+    //if(error != ''){   игнор ошибок
     returnValue = error;
   } else {
-    returnValue = blocks;
+    getValidationsPostions(blocks);
+    returnValue = branchs;
   }
 
-  return [returnValue];
+  return returnValue;
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (getscheme);

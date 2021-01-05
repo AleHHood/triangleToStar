@@ -20,11 +20,7 @@ const dragggrid = () => {
     notifyR = document.querySelector('#notifyR'),
     notifyE = document.querySelector('#notifyE'),
     notifyN = document.querySelector('#notifyN'),
-    blocks = [], // массив блоков
-    branchs = [],
-    branch = [],
-    branch3 = [],
-    branch4 = [];
+    blocks = []; // массив блоков
     let copyDrakeContainers = [],
     tx = 10,
     numId = 10,
@@ -442,18 +438,13 @@ function getForm(target){
     }
    
 
-    console.log(formSettings);
+/*     console.log(formSettings); */
 
-    function GetFormSettings(){
-        formSettings.addEventListener('click', (event) => { 
-            event.preventDefault();
-            const target = event.target;
-            if(target && target.classList.contains('btn__calculate')) {      
-                formData = new FormData(formSettings);      
-                console.log(formData.get('choiceMethod'));
-                getActiveBlocks();
-            }
-        });
+    function GetFormSettings(target){
+        if(target && target.classList.contains('btn__calculate')) {      
+            formData = new FormData(formSettings);      
+            console.log(formData.get('choiceMethod'));
+        }
     }
 
     function getActiveBlocks(){
@@ -470,88 +461,9 @@ function getForm(target){
                     }
                 });
             }       
-        });
-        /* console.log(ActiveBlocks); */
-        ActiveBlocks.forEach((element, i) => {
-            /* console.log(getValidations(element)); */
-            console.log(getscheme(ActiveBlocks));
-            /* branchs[i] =  *//* getValidationsPostions(element, i); */
-
-            if(element.type === 3){
-                if(element.rotate === 0 /* || ActiveBlock.rotate === 2 */){
-                    branch[0] = element;
-                    const x = +(element.x);
-                    const y = +(element.y);
-                    let j = 0; 
-    
-                    do{
-                        j = j + 1;                    
-                        branchs[i] = branch[j] = getBlockByData((x+j), y);
-                        console.log(getBlockByData((x+j), y));
-                    }while((getBlockByData((x+j), y).type != 3) && getBlockByData((x+j), y));  /////////////
-                    /* branchs[i] = branch; */
-                    
-                }
-            }
-/*             console.log(branchs[i]); */
-        });
-        
+        });        
     }
 
-/*     function getValidations (ActiveBlock){
-        let error = 0;
-        if(ActiveBlock.error || (!ActiveBlock.number)){
-            ActiveBlock.getErrorMessage();
-            console.log(`Ошибка! Значения элемента: ${ActiveBlock.number}`);
-            error = error + 1;          
-        }
-        else{
-            ActiveBlocks.forEach((element, i) => {
-            if((element.type === ActiveBlock.type) && (element.number === ActiveBlock.number)){
-                if(element.number && (element.id != ActiveBlock.id)){
-                    console.log(`Ошибка! Совпадают номера элементов: ${element.number}`);
-                    error = error + 1;    
-                    }
-                }
-            });              
-        }
-        return error;
-    } */
-
-
-
-
-    
-    function getValidationsPostions (ActiveBlock,i){
-        console.log(ActiveBlock);
-        if(ActiveBlock.type === 3){
-            if(ActiveBlock.rotate === 0 /* || ActiveBlock.rotate === 2 */){
-                branch[0] = ActiveBlock;
-                const x = +(ActiveBlock.x);
-                const y = +(ActiveBlock.y);
-                let j = 0; 
-
-                do{
-                    j = j + 1;                    
-                    branch[j] = getBlockByData((x+j), y);
-                }while((getBlockByData((x+j), y).type != 3) && getBlockByData((x+j), y));  /////////////
-                branchs[i] = branch;
-                console.log(branch);
-            }
-        }
-        
-/*         return branch; */
-    }
-
-    function getBlockByData(dataX, dataY){
-        let returnBlock = 0;
-        blocks.forEach(element => {
-            if((+(element.x) == dataX) && (+(element.y) == dataY)){ 
-                returnBlock = element;
-            }
-        });
-        return returnBlock;
-    }
 
 
     GetNewBlock();
@@ -560,57 +472,16 @@ function getForm(target){
     setInterval( () => ShowBlocks(), 500);  //Не забыть остановить
     getValueFromForm();
     GetRemoveOrRotateBlock();
-    GetFormSettings();
-
-
-
+    formSettings.addEventListener('click', (event) => {
+        event.preventDefault();
+        const target = event.target;
+        GetFormSettings();
+        getActiveBlocks();
+        console.log(getscheme(ActiveBlocks));
+    });
+    
 
 
 };
 
 export default dragggrid;
-
-
-
-
-
-
-/* Validation(InputForm, el){
-            
-    let tb = 0;
-    if(((InputForm.value >= 1000) || (InputForm.value < 0)) && (InputForm !== inputFormN)){
-        this.error = 'error';
-        this.getErrorMessage();            
-    }
-    else{
-        if((InputForm.value < 0) || (InputForm.value >= 1000)){
-            this.error = 'errorNumber';
-            this.getErrorMessage();
-        }else{
-            console.log(`InputForm.value11 =   ${InputForm.value}`);
-                blocks.forEach((element, i) => {
-                   
-                    if((element.type === this.type) && (element.number === InputForm.value)){
-                        if(this.number != InputForm.value){
-                            console.log(`i =   ${i}`);
-                            tb = 10;
-                            console.log(`this.number = ${this.number}`);
-                        }
-                    }
-                });
-                console.log(`tb = ${tb}`);
-                if(tb){                            
-                    this.error = 'number';
-                    this.getErrorMessage();
-                    tb = 10;
-                    console.log(`this error if =   ${this.error}`);
-                }else{
-                        el.style.display = 'none';
-                        this.number = inputFormN.value;
-                        this.error = '';
-                    }
-                    this.number = inputFormN.value;
-        }
-    }
-    console.log(`this error =   ${this.error}`);
-} */
