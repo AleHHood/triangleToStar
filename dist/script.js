@@ -2844,6 +2844,39 @@ $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT || !USES_TO_LENGT
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.function.name.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.function.name.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "./node_modules/core-js/internals/descriptors.js");
+var defineProperty = __webpack_require__(/*! ../internals/object-define-property */ "./node_modules/core-js/internals/object-define-property.js").f;
+
+var FunctionPrototype = Function.prototype;
+var FunctionPrototypeToString = FunctionPrototype.toString;
+var nameRE = /^\s*function ([^ (]*)/;
+var NAME = 'name';
+
+// Function instances `.name` property
+// https://tc39.github.io/ecma262/#sec-function-instances-name
+if (DESCRIPTORS && !(NAME in FunctionPrototype)) {
+  defineProperty(FunctionPrototype, NAME, {
+    configurable: true,
+    get: function () {
+      try {
+        return FunctionPrototypeToString.call(this).match(nameRE)[1];
+      } catch (error) {
+        return '';
+      }
+    }
+  });
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.object.to-string.js":
 /*!*************************************************************!*\
   !*** ./node_modules/core-js/modules/es.object.to-string.js ***!
@@ -4995,18 +5028,29 @@ var dragggrid = function dragggrid() {
         switch (this.error) {
           case 'error':
             tNotify.style.display = 'block';
+            inputFormR.style.border = '2px solid #D4410F'; //////////////////////////////
+
             tNotify.textContent = 'Введите значение от 0 до 1000';
+            this.element.style.backgroundColor = 'pink';
             break;
 
           case 'errorNumber':
             notifyN.style.display = 'block';
             notifyN.textContent = 'Введите значение от 0 до 1000';
+            this.element.style.backgroundColor = 'pink';
             break;
 
           case 'number':
             notifyN.style.display = 'block';
             notifyN.textContent = 'Максимальное з';
+            this.element.style.backgroundColor = 'pink';
             break;
+
+          case 'connection':
+            {
+              this.element.style.backgroundColor = 'pink';
+              break;
+            }
 
           default:
             break;
@@ -5041,6 +5085,7 @@ var dragggrid = function dragggrid() {
 
 
             this.error = '';
+            this.element.style.backgroundColor = '#fff';
           }
         }
 
@@ -5422,8 +5467,14 @@ var dragggrid = function dragggrid() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat */ "./node_modules/core-js/modules/es.array.concat.js");
+/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
+
+
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5431,29 +5482,35 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var getscheme = function getscheme(blocks) {
   var branchs = [];
   var error = '',
+      baseCorner = 0,
+      baseRightCorner = 0,
       returnValue = 0;
 
-  var Branch = function Branch() {
+  var Branch = function Branch(name) {
     _classCallCheck(this, Branch);
 
-    for (var _len = arguments.length, elements = new Array(_len), _key = 0; _key < _len; _key++) {
-      elements[_key] = arguments[_key];
+    for (var _len = arguments.length, elements = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      elements[_key - 1] = arguments[_key];
     }
 
     this.elements = elements;
+    this.name = name;
   };
 
   function getValidations(ActiveBlock) {
     var error = 0;
 
     if (ActiveBlock.error || !ActiveBlock.number) {
-      ActiveBlock.getErrorMessage();
-      console.log("\u041E\u0448\u0438\u0431\u043A\u0430! \u0417\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430: ".concat(ActiveBlock.number));
-      error = error + 1;
+      if (ActiveBlock.type != 4 && ActiveBlock.type != 2) {
+        ActiveBlock.getErrorMessage();
+        console.log("\u041E\u0448\u0438\u0431\u043A\u0430! \u0417\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430: ".concat(ActiveBlock.number));
+        error = error + 1;
+      }
     } else {
       blocks.forEach(function (element, i) {
         if (element.type === ActiveBlock.type && element.number === ActiveBlock.number) {
           if (element.number && element.id != ActiveBlock.id) {
+            element.error = 'number';
             console.log("\u041E\u0448\u0438\u0431\u043A\u0430! \u0421\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442 \u043D\u043E\u043C\u0435\u0440\u0430 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432: ".concat(element.number));
             error = error + 1;
           }
@@ -5465,32 +5522,186 @@ var getscheme = function getscheme(blocks) {
   }
 
   function getValidationsPostions(ActiveBlocks) {
-    var i = -1;
+    var i = 1;
+    ActiveBlocks.forEach(function (element) {
+      if (element.type === 4 && element.rotate === 2) {
+        baseCorner = element;
+      }
+
+      if (element.type === 4 && element.rotate === 3) {
+        baseRightCorner = element;
+      }
+    });
+    getLeftKnots();
+    getRightKnots();
     ActiveBlocks.forEach(function (element) {
       if (element.type === 3) {
-        if (element.rotate === 0) {
+        if (element.rotate === 1) {
           i = i + 1;
-          branchs[i] = new Branch();
-          branchs[i].elements[0] = element;
-          var x = +element.x;
-          var y = +element.y;
 
-          for (var j = 1; getBlockByData(x + j, y).type != 3 && getBlockByData(x + j, y); j++) {
-            branchs[i].elements[j] = getBlockByData(x + j, y);
-
-            if (getBlockByData(x + j + 1, y).type === 3) {
-              branchs[i].elements[j + 1] = getBlockByData(x + j + 1, y);
-            }
+          if (getBranchLeftToRight(i, element) == 'error') {
+            console.log("\u041E\u0448\u0438\u0431\u043A\u0430");
+            error = error + 1;
           }
+        }
+      }
 
-          console.log(i);
-          console.log(branchs[i].elements);
+      if (element.type === 4) {
+        if (element.rotate === 1 || element.rotate === 2) {
+          i = i + 1;
+
+          if (getBranchLeftToRight(i, element) == 'error') {
+            console.log("\u041E\u0448\u0438\u0431\u043A\u0430");
+            error = error + 1;
+          }
         }
       }
     });
   }
 
-  function getBlockByData(dataX, dataY) {
+  function getLeftKnots() {
+    branchs[0] = new Branch();
+    branchs[0].elements[0] = baseCorner;
+    var x = +baseCorner.x;
+    var y = +baseCorner.y;
+
+    if (!getBlock(x, y + 1) || getBlock(x, y + 1).type === 4) {
+      getErrorMessagePosition(baseCorner.number);
+      return 'error';
+    }
+
+    for (var j = 1; getBlock(x, y + j).type != 4 && getBlock(x, y + j); j++) {
+      var jBlock = getBlock(x, y + j),
+          nextBlock = getBlock(x, y + j + 1);
+
+      if (jBlock.rotate == 0 || jBlock.rotate == 2) {
+        getErrorMessagePosition(jBlock.number);
+        return 'error';
+      }
+
+      if (jBlock.rotate == 3 && jBlock.type == 3) {
+        getErrorMessagePosition(jBlock.number);
+        return 'error';
+      }
+
+      if (nextBlock.type === 4) {
+        if (nextBlock.rotate === 1) {
+          branchs[0].elements[j + 1] = nextBlock;
+        } else {
+          getErrorMessagePosition(nextBlock.number);
+          return 'error';
+        }
+      }
+
+      if (nextBlock.type != 3 && nextBlock.type != 2 && nextBlock.type != 4) {
+        getErrorMessagePosition(nextBlock.number);
+        return 'error';
+      }
+
+      if (!nextBlock) {
+        getErrorMessagePosition(nextBlock);
+        return 'error';
+      }
+
+      branchs[0].elements[j] = getBlock(x, y + j);
+    }
+
+    console.log(branchs[0].elements);
+  }
+
+  function getRightKnots() {
+    branchs[1] = new Branch();
+    branchs[1].elements[0] = baseRightCorner;
+    var x = +baseRightCorner.x;
+    var y = +baseRightCorner.y;
+
+    if (!getBlock(x, y + 1) || getBlock(x, y + 1).type === 4) {
+      getErrorMessagePosition(baseRightCorner.number);
+      return 'error';
+    }
+
+    for (var j = 1; getBlock(x, y + j).type != 4 && getBlock(x, y + j); j++) {
+      var jBlock = getBlock(x, y + j),
+          nextBlock = getBlock(x, y + j + 1);
+
+      if (jBlock.rotate == 2) {
+        getErrorMessagePosition(jBlock.number);
+        return 'error';
+      }
+
+      if (jBlock.rotate == 0 && jBlock.type != 4) {
+        getErrorMessagePosition(jBlock.number);
+        return 'error';
+      }
+
+      if (jBlock.rotate == 1 && jBlock.type == 3) {
+        getErrorMessagePosition(jBlock.number);
+        return 'error';
+      }
+
+      if (nextBlock.type === 4) {
+        if (nextBlock.rotate === 0) {
+          branchs[1].elements[j + 1] = nextBlock;
+        } else {
+          getErrorMessagePosition(nextBlock.number);
+          return 'error';
+        }
+      }
+
+      if (nextBlock.type != 3 && nextBlock.type != 2 && nextBlock.type != 4) {
+        getErrorMessagePosition(nextBlock.number);
+        return 'error';
+      }
+
+      if (!nextBlock) {
+        getErrorMessagePosition(nextBlock);
+        return 'error';
+      }
+
+      branchs[1].elements[j] = getBlock(x, y + j);
+    }
+
+    console.log(branchs[1].elements);
+  }
+
+  function getBranchLeftToRight(i, element) {
+    branchs[i] = new Branch();
+    branchs[i].elements[0] = element;
+    var x = +element.x;
+    var y = +element.y;
+
+    if (!getBlock(x + 1, y)) {
+      getErrorMessagePosition(element.number);
+      return 'error';
+    }
+
+    for (var j = 1; getBlock(x + j, y).type < 3 && getBlock(x + j, y); j++) {
+      var jBlock = getBlock(x + j, y),
+          nextBlock = getBlock(x + j + 1, y);
+
+      if (jBlock.rotate == 1 || jBlock.rotate == 3) {
+        getErrorMessagePosition(jBlock.number);
+        return 'error';
+      }
+
+      if (nextBlock.type === 3 || nextBlock.type === 4) {
+        branchs[i].elements[j + 1] = nextBlock;
+      }
+
+      if (!nextBlock) {
+        /*                 jBlock.error = 'connection';
+                        jBlock.getErrorMessage(); */
+        getErrorMessagePosition(jBlock.number);
+        return 'error';
+      }
+
+      branchs[i].elements[j] = jBlock;
+    }
+
+    console.log(branchs[i].elements);
+  }
+
+  function getBlock(dataX, dataY) {
     var returnBlock = 0;
     blocks.forEach(function (element) {
       if (+element.x == dataX && +element.y == dataY) {
@@ -5498,6 +5709,19 @@ var getscheme = function getscheme(blocks) {
       }
     });
     return returnBlock;
+  }
+
+  function getErrorMessagePosition(nextBlock, customMessage) {
+    var defaultMessage = "\u041E\u0448\u0438\u0431\u043A\u0430! \u0421\u043E\u0435\u0434\u0438\u043D\u0438\u0442\u0435 \u0432\u0441\u0435 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0438\u043B\u0438 \u0443\u0434\u0430\u043B\u0438\u0442\u0435 \u043D\u0435\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u043C\u044B\u0435:";
+
+    if (customMessage) {
+      console.log("".concat(customMessage, " ").concat(nextBlock));
+    } else {
+      console.log("".concat(defaultMessage, " ").concat(nextBlock));
+    }
+
+    error = error + 1;
+    return error;
   }
 
   blocks.forEach(function (element) {

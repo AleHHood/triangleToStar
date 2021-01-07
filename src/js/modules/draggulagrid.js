@@ -94,16 +94,24 @@ const dragggrid = () => {
                     switch (this.error) {
                         case 'error':
                             tNotify.style.display = 'block';
-                            tNotify.textContent   = 'Введите значение от 0 до 1000';                            
+                            inputFormR.style.border = '2px solid #D4410F';  //////////////////////////////
+                            tNotify.textContent   = 'Введите значение от 0 до 1000';
+                            this.element.style.backgroundColor = 'pink';                         
                             break;
                         case 'errorNumber':
                             notifyN.style.display = 'block';
-                            notifyN.textContent   = 'Введите значение от 0 до 1000';                          
+                            notifyN.textContent   = 'Введите значение от 0 до 1000';
+                            this.element.style.backgroundColor = 'pink';                      
                             break;
                         case 'number':
                             notifyN.style.display = 'block';
-                            notifyN.textContent   = 'Максимальное з';                          
+                            notifyN.textContent   = 'Максимальное з';
+                            this.element.style.backgroundColor = 'pink';                      
                             break;
+                        case 'connection':{
+                            this.element.style.backgroundColor = 'pink';
+                            break;
+                        }
                     
                         default:
                             break;
@@ -133,6 +141,7 @@ const dragggrid = () => {
                     }
                                 /* this.number = inputFormN.value; */
                                 this.error = '';
+                                this.element.style.backgroundColor = '#fff';
                 }
             }
             console.log(`this error =   ${this.error}`);
