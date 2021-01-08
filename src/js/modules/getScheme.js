@@ -19,7 +19,7 @@ const getscheme = (blocks) => {
         let error = 0;
         if(ActiveBlock.error || (!ActiveBlock.number)) {
 
-            if(ActiveBlock.type != 4 && ActiveBlock.type != 2){
+            if(ActiveBlock.type < 2){
             ActiveBlock.getErrorMessage();
             console.log(`Ошибка! Значения элемента: ${ActiveBlock.number}`);
             error = error + 1;}
@@ -27,10 +27,15 @@ const getscheme = (blocks) => {
         
         else{
             blocks.forEach((element, i) => {
-            if((element.type === ActiveBlock.type) && (element.number === ActiveBlock.number)){
+            if(
+                (element.type === ActiveBlock.type) && 
+                (element.number === ActiveBlock.number)
+            ) {
                 if(element.number && (element.id != ActiveBlock.id)){
                     element.error = 'number';
-                    console.log(`Ошибка! Совпадают номера элементов: ${element.number}`);
+                    console.log(
+                        `Ошибка! Совпадают номера элементов: ${element.number}`
+                        );
                     error = error + 1;    
                     }
                 }
@@ -52,16 +57,24 @@ const getscheme = (blocks) => {
             }
         });
 
-        getLeftKnots();
-        getRightKnots();
+        if(getLeftKnots() == 'error') {
+            console.log(`Ошибка getLeftKnots`);
+            return 'error';
+        }  
+
+        if(getRightKnots() == 'error') {
+            console.log(`Ошибка getRightKnots`);
+            return 'error';
+        }
+        
 
         ActiveBlocks.forEach(element => {
             if(element.type === 3){                
                 if(element.rotate === 1){
                     i = i + 1;
                     if(getBranchLeftToRight(i, element) == 'error') {
-                        console.log(`Ошибка`);
-                        error = error + 1;
+                        console.log(`Ошибка getBranchLeftToRight`);
+                        return 'error';
                     }  
                 }
             }
@@ -70,12 +83,16 @@ const getscheme = (blocks) => {
                 if(element.rotate === 1 || element.rotate === 2){
                     i = i + 1;
                     if(getBranchLeftToRight(i, element) == 'error') {
-                        console.log(`Ошибка`);
-                        error = error + 1;
+                        console.log(`Ошибка getBranchLeftToRight`);
+                        return 'error';
                     }  
                 }
             }
       });
+      if(getValidationsBranch(branchs) == 'error') {
+        console.log(`Ошибка getValidationsBranch`);
+        return 'error';
+        }  
     }
 
 
@@ -84,13 +101,18 @@ const getscheme = (blocks) => {
         branchs[0].elements[0] = baseCorner;
         const x = +(baseCorner.x);
         const y = +(baseCorner.y);
+        let knots = 0;
 
         if(!getBlock(x, (y+1)) || getBlock(x, (y+1)).type === 4){
             getErrorMessagePosition(baseCorner.number);
             return 'error';
         }
-        
-        for (let j = 1; (getBlock(x, (y+j)).type != 4) && getBlock(x, (y+j)); j++) {
+
+        for (
+            let j = 1; 
+            (getBlock(x, (y+j)).type != 4) && getBlock(x, (y+j)); 
+            j++
+            ) {
 
             let jBlock = getBlock(x, (y+j)),
             nextBlock = getBlock(x, (y+j+1));
@@ -114,7 +136,11 @@ const getscheme = (blocks) => {
                 }
             }
 
-            if(nextBlock.type != 3 && nextBlock.type != 2 && nextBlock.type != 4){
+            if(
+                nextBlock.type != 3 && 
+                nextBlock.type != 2 && 
+                nextBlock.type != 4
+            ) {
                 getErrorMessagePosition(nextBlock.number);
                 return 'error';
             }
@@ -122,6 +148,14 @@ const getscheme = (blocks) => {
             if(!nextBlock){
                 getErrorMessagePosition(nextBlock);
                 return 'error';
+            }
+
+            jBlock.number = '';
+            jBlock.element.textContent = '';
+            if(jBlock.type === 3 && knots === 0){
+                knots = knots + 1;
+                jBlock.number = 'A';
+                jBlock.element.textContent = 'A';
             }
 
             branchs[0].elements[j] = getBlock(x, (y+j));
@@ -134,13 +168,18 @@ const getscheme = (blocks) => {
         branchs[1].elements[0] = baseRightCorner;
         const x = +(baseRightCorner.x);
         const y = +(baseRightCorner.y);
+        let knots = 0;
 
         if(!getBlock(x, (y+1)) || getBlock(x, (y+1)).type === 4){
             getErrorMessagePosition(baseRightCorner.number);
             return 'error';
         }
         
-        for (let j = 1; (getBlock(x, (y+j)).type != 4) && getBlock(x, (y+j)); j++) {
+        for (
+            let j = 1; 
+            (getBlock(x, (y+j)).type != 4) && getBlock(x, (y+j)); 
+            j++
+            ) {
 
             let jBlock = getBlock(x, (y+j)),
             nextBlock = getBlock(x, (y+j+1));
@@ -169,7 +208,11 @@ const getscheme = (blocks) => {
                 }
             }
 
-            if(nextBlock.type != 3 && nextBlock.type != 2 && nextBlock.type != 4){
+            if(
+                nextBlock.type != 3 && 
+                nextBlock.type != 2 && 
+                nextBlock.type != 4
+            ) {
                 getErrorMessagePosition(nextBlock.number);
                 return 'error';
             }
@@ -179,13 +222,20 @@ const getscheme = (blocks) => {
                 return 'error';
             }
 
+            jBlock.number = '';
+            jBlock.element.textContent = '';
+            if(jBlock.type === 3 && knots === 0){
+                knots = knots + 1;
+                jBlock.number = 'B';
+                jBlock.element.textContent = 'B';
+            }
+
             branchs[1].elements[j] = getBlock(x, (y+j));
         }
         console.log(branchs[1].elements);
     }
 
 
-    
     function getBranchLeftToRight(i, element) {
         
         branchs[i] = new Branch();
@@ -199,7 +249,11 @@ const getscheme = (blocks) => {
         }
         
         
-        for (let j = 1; (getBlock((x+j), y).type < 3) && getBlock((x+j), y); j++) {
+        for (
+            let j = 1; 
+            (getBlock((x+j), y).type < 3) && getBlock((x+j), y); 
+            j++
+            ) {
 
             let jBlock = getBlock((x+j), y),
             nextBlock = getBlock((x+j+1), y);
@@ -228,9 +282,6 @@ const getscheme = (blocks) => {
 
 
 
-
-
-
     function getBlock(dataX, dataY) {
         let returnBlock = 0;
         blocks.forEach(element => {
@@ -242,7 +293,9 @@ const getscheme = (blocks) => {
     }
 
     function getErrorMessagePosition(nextBlock, customMessage){
-        const defaultMessage = `Ошибка! Соедините все элементы или удалите неиспользуемые:`;
+        const defaultMessage = 
+        `Ошибка! Соедините все элементы или удалите неиспользуемые:`;
+
         if(customMessage){
             console.log(`${customMessage} ${nextBlock}`);
         }else{
@@ -252,6 +305,33 @@ const getscheme = (blocks) => {
         return error;
     }
 
+    function getValidationsBranch(branchs) {
+        let E = 0,
+        message = '';
+        branchs.forEach((element, i) => {
+            if (i > 1){
+                let R = 0;
+                element.elements.forEach(block => {
+                   if(block.type === 0){
+                        R = R + 1;
+                   }
+                   if(block.type === 1){
+                    E = E + 1;
+                    }
+                });
+                if(R === 0){
+                    message = 'Ошибка! В ветви отсуствует сопротивление:';
+                    getErrorMessagePosition('R', message);
+                    return 'error';
+                }
+            }
+        });
+        if(E === 0){
+            message = 'Ошибка! В схеме отсуствует источник ЭДС:';
+            getErrorMessagePosition('Е', message);
+            return 'error';
+        }
+    }
 
 
 
@@ -264,8 +344,17 @@ const getscheme = (blocks) => {
     if(error === '') {        //if(error != ''){   игнор ошибок
         returnValue = error;
     } else {
-        getValidationsPostions (blocks);
-        returnValue = branchs;
+        if(getValidationsPostions (blocks) === 'error'){
+            return error;
+        }else{
+            returnValue = branchs;
+/*             if(getValidationsBranch(branchs) === 'error'){
+                return error;
+            }else{
+                returnValue = branchs;
+            }    */         
+        }
+        
     }
     return returnValue;
 };

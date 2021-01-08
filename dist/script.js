@@ -4844,6 +4844,8 @@ module.exports = g;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_draggulagrid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/draggulagrid */ "./src/js/modules/draggulagrid.js");
 
+/* import getCalculation from './getCalculation'; */
+
 window.addEventListener('DOMContentLoaded', function () {
   Object(_modules_draggulagrid__WEBPACK_IMPORTED_MODULE_0__["default"])();
 });
@@ -5030,19 +5032,19 @@ var dragggrid = function dragggrid() {
             tNotify.style.display = 'block';
             inputFormR.style.border = '2px solid #D4410F'; //////////////////////////////
 
-            tNotify.textContent = 'Введите значение от 0 до 1000';
+            tNotify.textContent = "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u043E\u0442 0 \u0434\u043E 1000";
             this.element.style.backgroundColor = 'pink';
             break;
 
           case 'errorNumber':
             notifyN.style.display = 'block';
-            notifyN.textContent = 'Введите значение от 0 до 1000';
+            notifyN.textContent = "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u043E\u0442 0 \u0434\u043E 1000";
             this.element.style.backgroundColor = 'pink';
             break;
 
           case 'number':
             notifyN.style.display = 'block';
-            notifyN.textContent = 'Максимальное з';
+            notifyN.textContent = "\u041D\u043E\u043C\u0435\u0440\u0430 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432 \u0441\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442";
             this.element.style.backgroundColor = 'pink';
             break;
 
@@ -5072,17 +5074,8 @@ var dragggrid = function dragggrid() {
           } else {
             el.style.display = 'none'; ////////////////
 
-            switch (this.type) {
-              case 0:
-                this.number = "R".concat(inputFormN.value);
-                break;
-
-              case 1:
-                this.number = "E".concat(inputFormN.value);
-                break;
-            }
+            this.number = inputFormN.value;
             /* this.number = inputFormN.value; */
-
 
             this.error = '';
             this.element.style.backgroundColor = '#fff';
@@ -5348,7 +5341,16 @@ var dragggrid = function dragggrid() {
         blocks.forEach(function (elem, i) {
           if (elem.id == _dataForm3) {
             elem.Validation(inputFormN, notifyN);
-            elem.element.textContent = elem.number;
+
+            switch (elem.type) {
+              case 0:
+                elem.element.textContent = "R".concat(elem.number);
+                break;
+
+              case 1:
+                elem.element.textContent = "E".concat(elem.number);
+                break;
+            }
           }
         });
       }
@@ -5501,7 +5503,7 @@ var getscheme = function getscheme(blocks) {
     var error = 0;
 
     if (ActiveBlock.error || !ActiveBlock.number) {
-      if (ActiveBlock.type != 4 && ActiveBlock.type != 2) {
+      if (ActiveBlock.type < 2) {
         ActiveBlock.getErrorMessage();
         console.log("\u041E\u0448\u0438\u0431\u043A\u0430! \u0417\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430: ".concat(ActiveBlock.number));
         error = error + 1;
@@ -5532,16 +5534,25 @@ var getscheme = function getscheme(blocks) {
         baseRightCorner = element;
       }
     });
-    getLeftKnots();
-    getRightKnots();
+
+    if (getLeftKnots() == 'error') {
+      console.log("\u041E\u0448\u0438\u0431\u043A\u0430 getLeftKnots");
+      return 'error';
+    }
+
+    if (getRightKnots() == 'error') {
+      console.log("\u041E\u0448\u0438\u0431\u043A\u0430 getRightKnots");
+      return 'error';
+    }
+
     ActiveBlocks.forEach(function (element) {
       if (element.type === 3) {
         if (element.rotate === 1) {
           i = i + 1;
 
           if (getBranchLeftToRight(i, element) == 'error') {
-            console.log("\u041E\u0448\u0438\u0431\u043A\u0430");
-            error = error + 1;
+            console.log("\u041E\u0448\u0438\u0431\u043A\u0430 getBranchLeftToRight");
+            return 'error';
           }
         }
       }
@@ -5551,12 +5562,17 @@ var getscheme = function getscheme(blocks) {
           i = i + 1;
 
           if (getBranchLeftToRight(i, element) == 'error') {
-            console.log("\u041E\u0448\u0438\u0431\u043A\u0430");
-            error = error + 1;
+            console.log("\u041E\u0448\u0438\u0431\u043A\u0430 getBranchLeftToRight");
+            return 'error';
           }
         }
       }
     });
+
+    if (getValidationsBranch(branchs) == 'error') {
+      console.log("\u041E\u0448\u0438\u0431\u043A\u0430 getValidationsBranch");
+      return 'error';
+    }
   }
 
   function getLeftKnots() {
@@ -5564,6 +5580,7 @@ var getscheme = function getscheme(blocks) {
     branchs[0].elements[0] = baseCorner;
     var x = +baseCorner.x;
     var y = +baseCorner.y;
+    var knots = 0;
 
     if (!getBlock(x, y + 1) || getBlock(x, y + 1).type === 4) {
       getErrorMessagePosition(baseCorner.number);
@@ -5603,6 +5620,15 @@ var getscheme = function getscheme(blocks) {
         return 'error';
       }
 
+      jBlock.number = '';
+      jBlock.element.textContent = '';
+
+      if (jBlock.type === 3 && knots === 0) {
+        knots = knots + 1;
+        jBlock.number = 'A';
+        jBlock.element.textContent = 'A';
+      }
+
       branchs[0].elements[j] = getBlock(x, y + j);
     }
 
@@ -5614,6 +5640,7 @@ var getscheme = function getscheme(blocks) {
     branchs[1].elements[0] = baseRightCorner;
     var x = +baseRightCorner.x;
     var y = +baseRightCorner.y;
+    var knots = 0;
 
     if (!getBlock(x, y + 1) || getBlock(x, y + 1).type === 4) {
       getErrorMessagePosition(baseRightCorner.number);
@@ -5656,6 +5683,15 @@ var getscheme = function getscheme(blocks) {
       if (!nextBlock) {
         getErrorMessagePosition(nextBlock);
         return 'error';
+      }
+
+      jBlock.number = '';
+      jBlock.element.textContent = '';
+
+      if (jBlock.type === 3 && knots === 0) {
+        knots = knots + 1;
+        jBlock.number = 'B';
+        jBlock.element.textContent = 'B';
       }
 
       branchs[1].elements[j] = getBlock(x, y + j);
@@ -5724,6 +5760,37 @@ var getscheme = function getscheme(blocks) {
     return error;
   }
 
+  function getValidationsBranch(branchs) {
+    var E = 0,
+        message = '';
+    branchs.forEach(function (element, i) {
+      if (i > 1) {
+        var R = 0;
+        element.elements.forEach(function (block) {
+          if (block.type === 0) {
+            R = R + 1;
+          }
+
+          if (block.type === 1) {
+            E = E + 1;
+          }
+        });
+
+        if (R === 0) {
+          message = 'Ошибка! В ветви отсуствует сопротивление:';
+          getErrorMessagePosition('R', message);
+          return 'error';
+        }
+      }
+    });
+
+    if (E === 0) {
+      message = 'Ошибка! В схеме отсуствует источник ЭДС:';
+      getErrorMessagePosition('Е', message);
+      return 'error';
+    }
+  }
+
   blocks.forEach(function (element) {
     error = getValidations(element);
   });
@@ -5732,8 +5799,16 @@ var getscheme = function getscheme(blocks) {
     //if(error != ''){   игнор ошибок
     returnValue = error;
   } else {
-    getValidationsPostions(blocks);
-    returnValue = branchs;
+    if (getValidationsPostions(blocks) === 'error') {
+      return error;
+    } else {
+      returnValue = branchs;
+      /*             if(getValidationsBranch(branchs) === 'error'){
+                      return error;
+                  }else{
+                      returnValue = branchs;
+                  }    */
+    }
   }
 
   return returnValue;

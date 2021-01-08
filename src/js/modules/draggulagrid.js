@@ -1,6 +1,7 @@
 import dragula from 'dragula';
 import getscheme from './getScheme';
 
+
 const dragggrid = () => {
 
     const blockBar = document.querySelector('.calculation__blockBar'),
@@ -30,7 +31,10 @@ const dragggrid = () => {
     let formData;
 
     class Block {
-        constructor(rotate, type, voltage, resistance, cell, id, element, number, error, x, y) {
+        constructor(
+            rotate, type, voltage, resistance, cell, 
+            id, element, number, error, x, y
+            ) {
             this.rotate = rotate; // 0 - горизонтальное пол. 1 - вертикальное
             this.type = type; // 0=R, 1=E, 2=B, 3=K, 4=Corner;
             this.voltage = voltage;
@@ -95,19 +99,31 @@ const dragggrid = () => {
                         case 'error':
                             tNotify.style.display = 'block';
                             inputFormR.style.border = '2px solid #D4410F';  //////////////////////////////
-                            tNotify.textContent   = 'Введите значение от 0 до 1000';
-                            this.element.style.backgroundColor = 'pink';                         
+                            tNotify.textContent   = 
+                            `Введите значение от 0 до 1000`;
+
+                            this.element.style.backgroundColor = 
+                            'pink';                         
                             break;
+
                         case 'errorNumber':
                             notifyN.style.display = 'block';
-                            notifyN.textContent   = 'Введите значение от 0 до 1000';
-                            this.element.style.backgroundColor = 'pink';                      
+                            notifyN.textContent   = 
+                            `Введите значение от 0 до 1000`;
+
+                            this.element.style.backgroundColor = 
+                            'pink';                      
                             break;
+
                         case 'number':
                             notifyN.style.display = 'block';
-                            notifyN.textContent   = 'Максимальное з';
-                            this.element.style.backgroundColor = 'pink';                      
+                            notifyN.textContent   = 
+                            `Номера элементов совпадают`;
+
+                            this.element.style.backgroundColor = 
+                            'pink';                      
                             break;
+
                         case 'connection':{
                             this.element.style.backgroundColor = 'pink';
                             break;
@@ -120,7 +136,10 @@ const dragggrid = () => {
         }
         Validation(InputForm, el){
             let tb = 0;
-            if(((InputForm.value >= 1000) || (InputForm.value <= 0)) && (InputForm !== inputFormN)){
+            if(
+                ((InputForm.value >= 1000) || (InputForm.value <= 0)) && 
+                (InputForm !== inputFormN)
+            ) {
                 this.error = 'error';
                 this.getErrorMessage();            
             }
@@ -131,17 +150,10 @@ const dragggrid = () => {
                     this.number = inputFormN.value;
                 }else{
                     el.style.display = 'none';////////////////
-                    switch (this.type) {
-                        case 0:
-                            this.number = `R${inputFormN.value}`;
-                            break;
-                        case 1:
-                            this.number = `E${inputFormN.value}`;
-                            break;
-                    }
-                                /* this.number = inputFormN.value; */
-                                this.error = '';
-                                this.element.style.backgroundColor = '#fff';
+                    this.number = inputFormN.value;
+                    /* this.number = inputFormN.value; */
+                    this.error = '';
+                    this.element.style.backgroundColor = '#fff';
                 }
             }
             console.log(`this error =   ${this.error}`);
@@ -191,14 +203,20 @@ const dragggrid = () => {
                     drake.containers.push(element);
                 });
                 cell.forEach((element, i) => {
-                    if((element.firstChild) && (element.firstChild != event.target)){
+                    if(
+                        (element.firstChild) &&
+                         (element.firstChild != event.target)
+                    ) {
                         i = i + 1;
                         drake.containers.splice(i, 1, 0);
                         i = i - 1;
                     }                   
                 });    
                 }
-            if(target && target.classList.contains('grid__cell')){
+            if(
+                target && 
+                target.classList.contains('grid__cell')
+            ) {
                 blockSettings.style.display = 'none';
                 blocks.forEach(element => {
                     element.element.classList.remove('active');
@@ -216,7 +234,10 @@ const dragggrid = () => {
                     drake.containers.push(element);
                 });
                 cell.forEach((element, i) => {
-                    if((element.firstChild) && (element.firstChild != event.target)){
+                    if(
+                        (element.firstChild) && 
+                        (element.firstChild != event.target)
+                    ) {
                         i = i + 1;
                         drake.containers.splice(i, 1, 0);
                         i = i - 1;
@@ -252,7 +273,10 @@ const dragggrid = () => {
                 render(classesBlock);      
                 }
             matchBlocks('calculation__block-Corner');
-            if(target && target.classList.contains('calculation__block-Corner')) {
+            if(
+                target && 
+                target.classList.contains('calculation__block-Corner')
+            ) {
                 classesBlock = 'calculation__block-Corner';
                 render(classesBlock);      
                 }
@@ -262,7 +286,10 @@ const dragggrid = () => {
     function matchBlocks(classBlock){
         let x = 0;
         blockBar.children.forEach((element, i) => {
-            if((element.classList == `calculation__block ${classBlock}`) || (element.classList == `calculation__block none ${classBlock}`)){
+            if(
+            (element.classList == `calculation__block ${classBlock}`) || 
+            (element.classList == `calculation__block none ${classBlock}`)
+            ) {
                 x = x + 1;
                 if(x > 1){
                 blockBar.children[i].remove();
@@ -386,7 +413,17 @@ function getForm(target){
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
                         elem.Validation(inputFormN, notifyN);
-                            elem.element.textContent = elem.number;
+                        switch (elem.type) {
+                            case 0:
+                                elem.element.textContent = 
+                                `R${elem.number}`;
+                                break;
+
+                            case 1:
+                                elem.element.textContent = 
+                                `E${elem.number}`;
+                                break;
+                        }
                     }
                 }); 
             }        
@@ -398,7 +435,10 @@ function getForm(target){
         blockSettings.addEventListener('click', (event) => { 
 
             const target = event.target;
-            if(target && target.classList.contains('btn__remove')) {             
+            if(
+                target &&
+                 target.classList.contains('btn__remove')
+            ) {             
                 blocks.forEach(element => {
                     if(element.element.classList.contains('active')){
                         element.element.remove();                
@@ -421,21 +461,33 @@ function getForm(target){
                         else{
                             switch (element.rotate) {
                                 case 0:
-                                    element.element.classList.add(`rotate-${element.type}`);
+                                    element.element.classList.add(
+                                        `rotate-${element.type}`
+                                        );
                                     element.rotate = 1; 
                                     break;
                                 case 1:
-                                    element.element.classList.add(`rotate-${element.type}-180`);
-                                    element.element.classList.remove(`rotate-${element.type}`);
+                                    element.element.classList.add(
+                                        `rotate-${element.type}-180`
+                                        );
+                                    element.element.classList.remove(
+                                        `rotate-${element.type}`
+                                        );
                                     element.rotate = 2; 
                                     break;
                                 case 2:
-                                    element.element.classList.add(`rotate-${element.type}-270`);
-                                    element.element.classList.remove(`rotate-${element.type}-180`);
+                                    element.element.classList.add(
+                                        `rotate-${element.type}-270`
+                                        );
+                                    element.element.classList.remove(
+                                        `rotate-${element.type}-180`
+                                        );
                                     element.rotate = 3; 
                                     break;
                                 case 3:
-                                    element.element.classList.remove(`rotate-${element.type}-270`);
+                                    element.element.classList.remove(
+                                        `rotate-${element.type}-270`
+                                        );
                                     element.rotate = 0; 
                                     break;
                             }
