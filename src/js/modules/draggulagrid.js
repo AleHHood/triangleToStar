@@ -1,5 +1,6 @@
 import dragula from 'dragula';
 import getscheme from './getScheme';
+import getCalculation from './calculationMethod';
 
 
 const dragggrid = () => {
@@ -526,6 +527,13 @@ function getForm(target){
     }
 
 
+    
+    function SaveScheme(){
+   
+        let branchs = [{"elements":[{"rotate":2,"type":4,"voltage":0,"resistance":0,"cell":{},"id":20,"element":{},"x":0,"y":0},{"rotate":1,"type":3,"voltage":0,"resistance":0,"cell":{},"id":"3","element":{},"number":"A","x":0,"y":1},{"rotate":1,"type":4,"voltage":0,"resistance":0,"cell":{},"id":"4","element":{},"x":0,"y":2}]},{"elements":[{"rotate":3,"type":4,"voltage":0,"resistance":0,"cell":{},"id":19,"element":{},"x":4,"y":0},{"rotate":3,"type":3,"voltage":0,"resistance":0,"cell":{},"id":10,"element":{},"number":"B","x":4,"y":1},{"rotate":0,"type":4,"voltage":0,"resistance":0,"cell":{},"id":18,"element":{},"x":4,"y":2}]},{"elements":[{"rotate":2,"type":4,"voltage":0,"resistance":0,"cell":{},"id":20,"element":{},"x":0,"y":0},{"rotate":0,"type":0,"voltage":0,"resistance":"10","cell":{},"id":12,"element":{},"number":"1","error":"","x":1,"y":0},{"rotate":0,"type":1,"voltage":"10","resistance":0,"cell":{},"id":15,"element":{},"number":"1","error":"","x":2,"y":0},{"rotate":2,"type":1,"voltage":"20","resistance":0,"cell":{},"id":17,"element":{},"number":"2","error":"","x":3,"y":0},{"rotate":3,"type":4,"voltage":0,"resistance":0,"cell":{},"id":19,"element":{},"x":4,"y":0}]},{"elements":[{"rotate":1,"type":3,"voltage":0,"resistance":0,"cell":{},"id":"3","element":{},"number":"A","x":0,"y":1},{"rotate":0,"type":0,"voltage":0,"resistance":"15","cell":{},"id":"0","element":{},"number":"2","error":"","x":1,"y":1},{"rotate":0,"type":1,"voltage":"20","resistance":0,"cell":{},"id":"1","element":{},"number":"3","error":"","x":2,"y":1},{"rotate":0,"type":0,"voltage":0,"resistance":"10","cell":{},"id":14,"element":{},"number":"3","error":"","x":3,"y":1},{"rotate":3,"type":3,"voltage":0,"resistance":0,"cell":{},"id":10,"element":{},"number":"B","x":4,"y":1}]},{"elements":[{"rotate":1,"type":4,"voltage":0,"resistance":0,"cell":{},"id":"4","element":{},"x":0,"y":2},{"rotate":0,"type":0,"voltage":0,"resistance":"5","cell":{},"id":13,"element":{},"number":"4","error":"","x":1,"y":2},{"rotate":0,"type":0,"voltage":0,"resistance":"10","cell":{},"id":22,"element":{},"number":"5","error":"","x":3,"y":2},{"rotate":0,"type":4,"voltage":0,"resistance":0,"cell":{},"id":18,"element":{},"x":4,"y":2}]}];
+        return branchs;
+    }
+
 
     GetNewBlock();
     LimitingByDragging();
@@ -539,6 +547,8 @@ function getForm(target){
         GetFormSettings();
         getActiveBlocks();
         console.log(getscheme(ActiveBlocks));
+        console.log(SaveScheme());
+        getCalculation( SaveScheme() );
     });
     
 

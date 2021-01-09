@@ -2762,6 +2762,67 @@ addToUnscopables('entries');
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.array.slice.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/modules/es.array.slice.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var isObject = __webpack_require__(/*! ../internals/is-object */ "./node_modules/core-js/internals/is-object.js");
+var isArray = __webpack_require__(/*! ../internals/is-array */ "./node_modules/core-js/internals/is-array.js");
+var toAbsoluteIndex = __webpack_require__(/*! ../internals/to-absolute-index */ "./node_modules/core-js/internals/to-absolute-index.js");
+var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
+var toIndexedObject = __webpack_require__(/*! ../internals/to-indexed-object */ "./node_modules/core-js/internals/to-indexed-object.js");
+var createProperty = __webpack_require__(/*! ../internals/create-property */ "./node_modules/core-js/internals/create-property.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+var arrayMethodHasSpeciesSupport = __webpack_require__(/*! ../internals/array-method-has-species-support */ "./node_modules/core-js/internals/array-method-has-species-support.js");
+var arrayMethodUsesToLength = __webpack_require__(/*! ../internals/array-method-uses-to-length */ "./node_modules/core-js/internals/array-method-uses-to-length.js");
+
+var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('slice');
+var USES_TO_LENGTH = arrayMethodUsesToLength('slice', { ACCESSORS: true, 0: 0, 1: 2 });
+
+var SPECIES = wellKnownSymbol('species');
+var nativeSlice = [].slice;
+var max = Math.max;
+
+// `Array.prototype.slice` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.slice
+// fallback for not array-like ES3 strings and DOM objects
+$({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT || !USES_TO_LENGTH }, {
+  slice: function slice(start, end) {
+    var O = toIndexedObject(this);
+    var length = toLength(O.length);
+    var k = toAbsoluteIndex(start, length);
+    var fin = toAbsoluteIndex(end === undefined ? length : end, length);
+    // inline `ArraySpeciesCreate` for usage native `Array#slice` where it's possible
+    var Constructor, result, n;
+    if (isArray(O)) {
+      Constructor = O.constructor;
+      // cross-realm fallback
+      if (typeof Constructor == 'function' && (Constructor === Array || isArray(Constructor.prototype))) {
+        Constructor = undefined;
+      } else if (isObject(Constructor)) {
+        Constructor = Constructor[SPECIES];
+        if (Constructor === null) Constructor = undefined;
+      }
+      if (Constructor === Array || Constructor === undefined) {
+        return nativeSlice.call(O, k, fin);
+      }
+    }
+    result = new (Constructor === undefined ? Array : Constructor)(max(fin - k, 0));
+    for (n = 0; k < fin; k++, n++) if (k in O) createProperty(result, n, O[k]);
+    result.length = n;
+    return result;
+  }
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.array.splice.js":
 /*!*********************************************************!*\
   !*** ./node_modules/core-js/modules/es.array.splice.js ***!
@@ -4852,6 +4913,173 @@ window.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./src/js/modules/calculationMethod.js":
+/*!*********************************************!*\
+  !*** ./src/js/modules/calculationMethod.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat */ "./node_modules/core-js/modules/es.array.concat.js");
+/* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var getCalculation = function getCalculation(branchs) {
+  var parameters = [];
+
+  var branchElements = function branchElements(numberBranch, nameR, resistance, nameE, voltage) {
+    _classCallCheck(this, branchElements);
+
+    this.numberBranch = numberBranch;
+    this.resistance = resistance;
+    this.nameR = nameR;
+    this.voltage = voltage;
+    this.nameE = nameE;
+
+    for (var _len = arguments.length, elements = new Array(_len > 5 ? _len - 5 : 0), _key = 5; _key < _len; _key++) {
+      elements[_key - 5] = arguments[_key];
+    }
+
+    this.elements = elements;
+  };
+
+  console.log(1561514);
+  getValidationsBranch(branchs);
+
+  function getValidationsBranch(branchs) {
+    var numberBranch = 0; //Перебор ветвей
+
+    branchs.forEach(function (branch, i) {
+      if (i < 2) {
+        return;
+      }
+
+      var R = [],
+          K = 0,
+          E = [],
+          N = 0; //Перебор элементов ветви
+
+      branch.elements.forEach(function (block) {
+        //Правильная нумерация
+        branchs[0].elements.forEach(function (knot, number) {
+          if (knot.y === block.y) {
+            numberBranch = number + 1;
+          }
+        });
+
+        if (block.type === 0) {
+          K = K + 1;
+          R[K] = block;
+        }
+
+        if (block.type === 1) {
+          N = N + 1;
+          E[N] = block;
+        }
+      });
+      GetValueResist(R, K, numberBranch);
+      GetValueVoltage(E, N, numberBranch);
+    });
+  }
+
+  function GetValueResist(R, K, numberBranch) {
+    parameters[numberBranch] = new branchElements(numberBranch);
+
+    if (K < 2) {
+      console.log("C\u043E\u043F\u0440\u043E\u0442\u0438\u0432\u043B\u0435\u043D\u0438\u0435 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
+      console.log("R".concat(R[K].number, " = ") + R[K].resistance);
+      parameters[numberBranch].nameR = R[K].number;
+      parameters[numberBranch].resistance = +R[K].resistance;
+    } else {
+      var Name = '',
+          value = 0,
+          sum = 0,
+          expressionValue = '',
+          expression = '';
+      R.forEach(function (resist) {
+        Name = "".concat(Name) + "".concat(resist.number);
+        expression += "+ R".concat(resist.number, " ");
+        expressionValue += "+ ".concat(resist.resistance, " ");
+        sum = +resist.resistance;
+        value = value + sum;
+      });
+      console.log("\u041D\u0430\u0439\u0434\u0451\u043C \u0441\u043E\u043F\u0440\u043E\u0442\u0438\u0432\u043B\u0435\u043D\u0438\u0435 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
+      console.log("1/R".concat(Name, " = ") + "".concat(expression).slice(2));
+      console.log("1/R".concat(Name, " = ") + "".concat(expressionValue, " = ").slice(2) + value);
+      parameters[numberBranch].nameR = "R".concat(Name);
+      parameters[numberBranch].resistance = +value;
+    }
+  }
+
+  function GetValueVoltage(R, K, numberBranch) {
+    var voltage = 0;
+
+    if (K === 0) {
+      console.log("\u042D\u0434\u0441 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
+      console.log(0);
+      parameters[numberBranch].nameE = 0;
+      parameters[numberBranch].voltage = 0;
+      return;
+    }
+
+    if (K < 2) {
+      console.log("\u042D\u0434\u0441 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
+      voltage = +R[K].voltage;
+
+      if (R[K].rotate == 0) {
+        voltage = -voltage;
+      }
+
+      console.log("E".concat(R[K].number, " = ") + voltage);
+      parameters[numberBranch].nameE = "E".concat(R[K].number);
+      parameters[numberBranch].voltage = +voltage;
+    } else {
+      var Name = '',
+          value = 0,
+          expressionValue = '',
+          expression = '';
+      R.forEach(function (EDS) {
+        var EDSname = '+ E',
+            plus = '+';
+        Name = "".concat(Name) + "".concat(EDS.number);
+        voltage = +EDS.voltage;
+        console.log(EDS.rotate);
+
+        if (EDS.rotate == 0) {
+          voltage = -voltage;
+          EDSname = '- E';
+          plus = '-';
+        }
+
+        expression += "".concat(EDSname).concat(EDS.number, " ");
+        expressionValue += "".concat(plus, " ").concat(EDS.voltage, " ");
+        value = value + voltage;
+      });
+      console.log("\u042D\u0434\u0441 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
+      console.log("E".concat(Name, " = ") + "".concat(expression).slice(' +'));
+      console.log("E".concat(Name, " = ") + "".concat(expressionValue, " = ").slice(' +') + value);
+      parameters[numberBranch].nameE = "E".concat(Name);
+      parameters[numberBranch].voltage = +value;
+    }
+  }
+
+  function Arrow(branch) {}
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (getCalculation);
+
+/***/ }),
+
 /***/ "./src/js/modules/draggulagrid.js":
 /*!****************************************!*\
   !*** ./src/js/modules/draggulagrid.js ***!
@@ -4888,6 +5116,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dragula__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! dragula */ "./node_modules/dragula/dragula.js");
 /* harmony import */ var dragula__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(dragula__WEBPACK_IMPORTED_MODULE_12__);
 /* harmony import */ var _getScheme__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./getScheme */ "./src/js/modules/getScheme.js");
+/* harmony import */ var _calculationMethod__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./calculationMethod */ "./src/js/modules/calculationMethod.js");
 
 
 
@@ -4914,6 +5143,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 
 
 
@@ -5438,6 +5668,241 @@ var dragggrid = function dragggrid() {
     });
   }
 
+  function SaveScheme() {
+    var branchs = [{
+      "elements": [{
+        "rotate": 2,
+        "type": 4,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": 20,
+        "element": {},
+        "x": 0,
+        "y": 0
+      }, {
+        "rotate": 1,
+        "type": 3,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": "3",
+        "element": {},
+        "number": "A",
+        "x": 0,
+        "y": 1
+      }, {
+        "rotate": 1,
+        "type": 4,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": "4",
+        "element": {},
+        "x": 0,
+        "y": 2
+      }]
+    }, {
+      "elements": [{
+        "rotate": 3,
+        "type": 4,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": 19,
+        "element": {},
+        "x": 4,
+        "y": 0
+      }, {
+        "rotate": 3,
+        "type": 3,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": 10,
+        "element": {},
+        "number": "B",
+        "x": 4,
+        "y": 1
+      }, {
+        "rotate": 0,
+        "type": 4,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": 18,
+        "element": {},
+        "x": 4,
+        "y": 2
+      }]
+    }, {
+      "elements": [{
+        "rotate": 2,
+        "type": 4,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": 20,
+        "element": {},
+        "x": 0,
+        "y": 0
+      }, {
+        "rotate": 0,
+        "type": 0,
+        "voltage": 0,
+        "resistance": "10",
+        "cell": {},
+        "id": 12,
+        "element": {},
+        "number": "1",
+        "error": "",
+        "x": 1,
+        "y": 0
+      }, {
+        "rotate": 0,
+        "type": 1,
+        "voltage": "10",
+        "resistance": 0,
+        "cell": {},
+        "id": 15,
+        "element": {},
+        "number": "1",
+        "error": "",
+        "x": 2,
+        "y": 0
+      }, {
+        "rotate": 2,
+        "type": 1,
+        "voltage": "20",
+        "resistance": 0,
+        "cell": {},
+        "id": 17,
+        "element": {},
+        "number": "2",
+        "error": "",
+        "x": 3,
+        "y": 0
+      }, {
+        "rotate": 3,
+        "type": 4,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": 19,
+        "element": {},
+        "x": 4,
+        "y": 0
+      }]
+    }, {
+      "elements": [{
+        "rotate": 1,
+        "type": 3,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": "3",
+        "element": {},
+        "number": "A",
+        "x": 0,
+        "y": 1
+      }, {
+        "rotate": 0,
+        "type": 0,
+        "voltage": 0,
+        "resistance": "15",
+        "cell": {},
+        "id": "0",
+        "element": {},
+        "number": "2",
+        "error": "",
+        "x": 1,
+        "y": 1
+      }, {
+        "rotate": 0,
+        "type": 1,
+        "voltage": "20",
+        "resistance": 0,
+        "cell": {},
+        "id": "1",
+        "element": {},
+        "number": "3",
+        "error": "",
+        "x": 2,
+        "y": 1
+      }, {
+        "rotate": 0,
+        "type": 0,
+        "voltage": 0,
+        "resistance": "10",
+        "cell": {},
+        "id": 14,
+        "element": {},
+        "number": "3",
+        "error": "",
+        "x": 3,
+        "y": 1
+      }, {
+        "rotate": 3,
+        "type": 3,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": 10,
+        "element": {},
+        "number": "B",
+        "x": 4,
+        "y": 1
+      }]
+    }, {
+      "elements": [{
+        "rotate": 1,
+        "type": 4,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": "4",
+        "element": {},
+        "x": 0,
+        "y": 2
+      }, {
+        "rotate": 0,
+        "type": 0,
+        "voltage": 0,
+        "resistance": "5",
+        "cell": {},
+        "id": 13,
+        "element": {},
+        "number": "4",
+        "error": "",
+        "x": 1,
+        "y": 2
+      }, {
+        "rotate": 0,
+        "type": 0,
+        "voltage": 0,
+        "resistance": "10",
+        "cell": {},
+        "id": 22,
+        "element": {},
+        "number": "5",
+        "error": "",
+        "x": 3,
+        "y": 2
+      }, {
+        "rotate": 0,
+        "type": 4,
+        "voltage": 0,
+        "resistance": 0,
+        "cell": {},
+        "id": 18,
+        "element": {},
+        "x": 4,
+        "y": 2
+      }]
+    }];
+    return branchs;
+  }
+
   GetNewBlock();
   LimitingByDragging();
   MobileLimitingByDragging();
@@ -5453,6 +5918,8 @@ var dragggrid = function dragggrid() {
     GetFormSettings();
     getActiveBlocks();
     console.log(Object(_getScheme__WEBPACK_IMPORTED_MODULE_13__["default"])(ActiveBlocks));
+    console.log(SaveScheme());
+    Object(_calculationMethod__WEBPACK_IMPORTED_MODULE_14__["default"])(SaveScheme());
   });
 };
 
@@ -5471,10 +5938,13 @@ var dragggrid = function dragggrid() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.concat */ "./node_modules/core-js/modules/es.array.concat.js");
 /* harmony import */ var core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
-/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_array_splice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.array.splice */ "./node_modules/core-js/modules/es.array.splice.js");
+/* harmony import */ var core_js_modules_es_array_splice__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_splice__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -5486,7 +5956,8 @@ var getscheme = function getscheme(blocks) {
   var error = '',
       baseCorner = 0,
       baseRightCorner = 0,
-      returnValue = 0;
+      returnValue = 0,
+      jsonFile = 0;
 
   var Branch = function Branch(name) {
     _classCallCheck(this, Branch);
@@ -5573,6 +6044,12 @@ var getscheme = function getscheme(blocks) {
       console.log("\u041E\u0448\u0438\u0431\u043A\u0430 getValidationsBranch");
       return 'error';
     }
+
+    DeleteElementBranch(branchs);
+    jsonFile = JSON.stringify(branchs);
+    console.log(jsonFile); /// 
+
+    return branchs;
   }
 
   function getLeftKnots() {
@@ -5618,7 +6095,8 @@ var getscheme = function getscheme(blocks) {
       if (!nextBlock) {
         getErrorMessagePosition(nextBlock);
         return 'error';
-      }
+      } //Добавляем обозначение узла
+
 
       jBlock.number = '';
       jBlock.element.textContent = '';
@@ -5789,6 +6267,18 @@ var getscheme = function getscheme(blocks) {
       getErrorMessagePosition('Е', message);
       return 'error';
     }
+  }
+
+  function DeleteElementBranch(branchs) {
+    branchs.forEach(function (branch) {
+      branch.elements.forEach(function (element, i) {
+        if (element.type === 2) {
+          branch.elements.splice(i, 1);
+          return;
+        }
+      });
+    });
+    console.log(branchs);
   }
 
   blocks.forEach(function (element) {

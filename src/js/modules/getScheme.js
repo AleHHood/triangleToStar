@@ -3,7 +3,8 @@ const getscheme = (blocks) => {
     let error = '',
     baseCorner = 0,
     baseRightCorner = 0,
-    returnValue = 0;
+    returnValue = 0,
+    jsonFile = 0;
 
     class Branch {
         constructor(name, ...elements) {
@@ -92,7 +93,11 @@ const getscheme = (blocks) => {
       if(getValidationsBranch(branchs) == 'error') {
         console.log(`Ошибка getValidationsBranch`);
         return 'error';
-        }  
+        }
+        DeleteElementBranch(branchs);
+        jsonFile = JSON.stringify(branchs);
+        console.log(jsonFile); /// 
+        return branchs;
     }
 
 
@@ -150,8 +155,10 @@ const getscheme = (blocks) => {
                 return 'error';
             }
 
+            //Добавляем обозначение узла
             jBlock.number = '';
             jBlock.element.textContent = '';
+
             if(jBlock.type === 3 && knots === 0){
                 knots = knots + 1;
                 jBlock.number = 'A';
@@ -331,6 +338,18 @@ const getscheme = (blocks) => {
             getErrorMessagePosition('Е', message);
             return 'error';
         }
+    }
+
+    function DeleteElementBranch(branchs) {
+        branchs.forEach(branch => {        
+            branch.elements.forEach((element, i) => {
+                if (element.type === 2){
+                    branch.elements.splice(i, 1);
+                    return;
+                }          
+            });
+        });
+        console.log(branchs);
     }
 
 
