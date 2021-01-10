@@ -546,9 +546,9 @@ function getForm(target){
         const target = event.target;
         GetFormSettings();
         getActiveBlocks();
-        console.log(getscheme(ActiveBlocks));
+       /*  console.log(getscheme(ActiveBlocks)); *///////////////////////////////////////////////////////////////////////////////
         console.log(SaveScheme());
-        getCalculation( SaveScheme() );
+        getCalculation( getscheme(ActiveBlocks) /* SaveScheme() */ );
     });
     
 
