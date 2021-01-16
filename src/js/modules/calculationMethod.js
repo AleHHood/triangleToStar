@@ -1,13 +1,15 @@
-import katex from 'katex';
+import getMath from './mathExpression';
 
 
 const getCalculation = (branchs) => {
+    console.log(branchs); ///////////////
     const formSettings = document.querySelector('.calculation__settings');
 
     let parameters = [],
     U = 0,
     I = [],
-    text = '';
+    textArr = [],
+    answer;
     class branchElements {
         constructor(numberBranch, nameG, resistance, nameE, voltage, ...elements) {
             this.numberBranch = numberBranch;
@@ -19,7 +21,7 @@ const getCalculation = (branchs) => {
         }
     }
 
-    const p = document.createElement('p');
+        
 
 
     function getParametrsBranch(branchs) {
@@ -63,13 +65,29 @@ const getCalculation = (branchs) => {
         });
     }
 
+
+    function getAnswerBlock(textArr) {
+        answer = document.createElement('div');
+        answer.classList.add('Answer__block');
+        formSettings.append(answer);
+        textArr.forEach(element => {
+            getMath(element, answer);
+        });
+    }
+
+
+
     function GetValueResist(R, K, numberBranch){
         parameters[numberBranch] = new branchElements(numberBranch);
 
         if(K < 2){
             
-            text = text + `\\newline Найдём~проводимость~ветви~№${numberBranch} \\newline g${R[K].number} = \\frac{1}{r${R[K].number}}`;
-            text = text + `\\newline g${R[K].number} = \\frac{1}{${R[K].resistance}} = ${1 / +R[K].resistance}~См`;
+            textArr.push(`Найдём проводимость ветви №${numberBranch}`);
+            textArr.push(`g${R[K].number} =~1/r${R[K].number}`);
+            textArr.push(`g${R[K].number} =~1/${R[K].resistance}~= ${1 / +R[K].resistance} См`);
+            getAnswerBlock(textArr);
+            textArr = [];
+
 
             parameters[numberBranch].nameG = `g${R[K].number}`;
             parameters[numberBranch].resistance = 1 / +R[K].resistance;
@@ -100,14 +118,13 @@ const getCalculation = (branchs) => {
 
             //Округляем число для вывода
             value = toFixed2(+value);
-
-            text = text + `\\newline Найдём~проводимость~ветви~№${numberBranch} \\newline g${Name} = \\frac{1}{${expression}}`;
-            text = text + `\\newline g${Name} = \\frac{1}{${expressionValue}} = ${value}~См`;
-            katex.render( text   , p , {
-                throwOnError: false
-            });
-            formSettings.append(p);
             
+            
+            textArr.push(`Найдём проводимость ветви №${numberBranch}`);
+            textArr.push(`g${Name} =~1/${expression}`);
+            textArr.push(`g${Name} =~1/${expressionValue}~= ${value} См`);
+            getAnswerBlock(textArr);
+            textArr = [];
 
         }
     }
@@ -118,10 +135,11 @@ const getCalculation = (branchs) => {
 
         if(K === 0){
 
-            text = text + `\\newline Эдс~для~ветви~№${numberBranch} \\newline 0~В`;
-            katex.render( text   , p , {
-                throwOnError: false
-            });
+            textArr.push(`Эдс для ветви №${numberBranch}`);
+            textArr.push(`0 В`);
+            getAnswerBlock(textArr);
+            textArr = [];
+
 
             parameters[numberBranch].nameE = ` + 0`;
             parameters[numberBranch].voltage = 0;
@@ -134,11 +152,11 @@ const getCalculation = (branchs) => {
             if(R[K].rotate == 0){
                 voltage = -voltage;
             }
-
-            text = text + `\\newline Эдс~для~ветви~№${numberBranch} \\newline E${R[K].number} = ${voltage}~В`;
-            katex.render( text   , p , {
-                throwOnError: false
-            });
+                
+            textArr.push(`Эдс для ветви №${numberBranch}`);
+            textArr.push(`E${R[K].number} = ${voltage} В`);
+            getAnswerBlock(textArr);
+            textArr = [];
 
             Name = ` + E${R[K].number}`;
             if(R[K].rotate == 0){
@@ -181,11 +199,11 @@ const getCalculation = (branchs) => {
                 expressionValue = SliceElement(`${expressionValue}`, '+ ');
 
 
-            text = text + `\\newline Эдс~для~ветви~№${numberBranch} \\newline E${Name} = ${expression}`;
-            text = text + `\\newline E${Name} = ${expressionValue} = ${value}~В`;
-            katex.render( text   , p , {
-                throwOnError: false
-            });
+            textArr.push(`Эдс для ветви №${numberBranch}`);
+            textArr.push(`E${Name} = ${expression}`);
+            textArr.push(`E${Name} = ${expressionValue} = ${value} В`);
+            getAnswerBlock(textArr);
+            textArr = [];
 
             
             if(value < 0){  
@@ -201,7 +219,7 @@ const getCalculation = (branchs) => {
     function Arrow(branch){
         
     }
-    console.log(toFixed2(0.04));
+
 
     function toFixed2(num){ 
         num = num.toFixed(2);
@@ -249,7 +267,7 @@ const getCalculation = (branchs) => {
         if(element.voltage < 0) { 
             plus = '';
         }else{
-            plus = '+ ';
+            plus = ' + ';
         }
 
         expressionEG = expressionEG + 
@@ -259,27 +277,22 @@ const getCalculation = (branchs) => {
         a = a + `${element.nameE}` +  `⋅${element.nameG}`;
 
         sumG = sumG + element.resistance;
-        expressionG = expressionG + `+ ${ toFixed2(element.resistance) }`;
-        b = b + `+ ${element.nameG}`;
+        expressionG = expressionG + ` + ${ toFixed2(element.resistance) }`;
+        b = b + ` + ${element.nameG}`;
 
     });
 
         U = sumEG / sumG;
-        console.log(b.substr(0, 2));
 
         a = SliceElement(a, ' +');
-        b = SliceElement(b, '+ ');
-        expressionG = SliceElement(expressionG, '+ ');
-        expressionEG = SliceElement(expressionEG, '+ ');
+        b = SliceElement(b, ' +');
+        expressionG = SliceElement(expressionG, ' +');
+        expressionEG = SliceElement(expressionEG, ' +');
 
-        if(b.substr(0, 2) == '+g'){
-            console.log('vnsflxvkfmvdfk');
-        }
-
-        text = text + `\\newline Напряжение~между~узлами~А-В~равно:\\newline Uab = \\frac{${a}}{${b}} = \\frac{${expressionEG}}{${expressionG}} = ${toFixed2(U)}~В`;
-        katex.render( text   , p , {
-            throwOnError: false
-        });
+        textArr.push(`Напряжение между узлами А-В равно:`);
+        textArr.push(`Uab =~${a}/${b}~=~${expressionEG}/${expressionG}~= ${toFixed2(U)} В`);
+        getAnswerBlock(textArr);
+        textArr = [];
     }
     
 
@@ -298,9 +311,9 @@ const getCalculation = (branchs) => {
             I[i] = toFixed2(I[i]);
 
             if(U < 0) { 
-                plus = '+';
+                plus = ' +';
             }else{
-                plus = '-';
+                plus = ' -';
             }
     
             expressionEU =  `${element.voltage}` + `${plus} ${toFixed2(U)}`;
@@ -310,11 +323,11 @@ const getCalculation = (branchs) => {
 
             a = SliceElement(a, ' +');
 
-        text = text + `\\newline Найдём~ток~в~ветви~№:${i}
-        \\newline I${i} = ${a}*${b} = (${expressionEU})*${toFixed2(element.resistance)} = ${I[i]}~А`;
-        katex.render( text   , p , {
-            throwOnError: false
-        });
+        console.log(textArr); ///////////////
+        textArr.push(`Найдём ток в ветви №:${i}`);
+        textArr.push(`I${i} = ${a}⋅${b} = (${expressionEU})⋅${toFixed2(element.resistance)} = ${I[i]} А`);
+        getAnswerBlock(textArr);
+        textArr = [];
         });
     }
 
@@ -335,12 +348,11 @@ const getCalculation = (branchs) => {
 
     console.log(sumEI);
     console.log(sumRII);
+
     
     
+    getMath('1/I1~=~1/5~+~1/6', formSettings);
 };
-
-
-
 
 
 

@@ -30,6 +30,30 @@ const dragggrid = () => {
     const formSettings = document.querySelector('.calculation__settings'),
     ActiveBlocks = []; //массив блоков в рабочей зоне
     let formData;
+    let scheme = 0;
+
+
+
+/*     const frac = document.querySelectorAll('.fraction');
+    let split = 0;
+    console.log(frac);
+    frac.forEach(element => {
+        console.log(element);
+        split = element.innerHTML;
+        split = split.split('/');
+        if(split.length == 2){
+            element.innerHTML = `<span class="fraction__top">` + 
+            `${split[0]}` + 
+            `</span><span class="fraction__bottom">` + 
+            `${split[1]}</span>`;
+            console.log(111);
+        }
+        console.log(split.length);
+    }); */
+
+
+
+    
 
     class Block {
         constructor(
@@ -545,10 +569,51 @@ function getForm(target){
         event.preventDefault();
         const target = event.target;
         GetFormSettings();
-        getActiveBlocks();
+        
+        const promise1 = new Promise((resolve, reject) => {
+            getActiveBlocks();
+            resolve(ActiveBlocks);
+          }).then(value => {
+              return new Promise((resolve, reject) => {
+                console.log(`Активные блоки ${value}`);
+                scheme = getscheme(ActiveBlocks);
+                console.log(scheme);
+                resolve(scheme);
+                /* return scheme; */
+                // expected output: "foo"
+
+              });
+
+          }).then(scheme => {
+            /* getCalculation(scheme); */
+            getCalculation( SaveScheme() );
+          }).finally(() => {
+            console.log('finnaly');
+          });
+          
+          console.log(promise1);
+          // expected output: [object Promise]
+
+        
        /*  console.log(getscheme(ActiveBlocks)); *///////////////////////////////////////////////////////////////////////////////
         console.log(SaveScheme());
-        getCalculation( getscheme(ActiveBlocks) /* SaveScheme() */ );
+
+        
+
+/*         setTimeout(() => {
+            scheme = getscheme(ActiveBlocks);
+            console.log(scheme);
+          }, 500);
+
+          
+
+          setTimeout(() => {
+            console.log(scheme);
+            getCalculation(scheme);
+          }, 1500); */
+
+
+          /* getCalculation( scheme  *//* getscheme(ActiveBlocks) */ /* SaveScheme() */ /* ); */
     });
     
 

@@ -352,3 +352,17 @@
 .active{
     border: 2px red dotted;
 };
+
+.fraction{
+    display: inline-block;
+    text-align: center;   
+    line-height: 1.2rem;
+    vertical-align: -0.6rem;
+/*     &__top{
+        text-align: center;
+    } */
+    &__bottom{
+        border-top: 1px solid #000;
+        display: block;
+    }
+}
