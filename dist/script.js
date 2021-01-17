@@ -3987,54 +3987,6 @@ if (!TO_STRING_TAG_SUPPORT) {
 
 /***/ }),
 
-/***/ "./node_modules/core-js/modules/es.promise.finally.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/modules/es.promise.finally.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
-var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "./node_modules/core-js/internals/is-pure.js");
-var NativePromise = __webpack_require__(/*! ../internals/native-promise-constructor */ "./node_modules/core-js/internals/native-promise-constructor.js");
-var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
-var getBuiltIn = __webpack_require__(/*! ../internals/get-built-in */ "./node_modules/core-js/internals/get-built-in.js");
-var speciesConstructor = __webpack_require__(/*! ../internals/species-constructor */ "./node_modules/core-js/internals/species-constructor.js");
-var promiseResolve = __webpack_require__(/*! ../internals/promise-resolve */ "./node_modules/core-js/internals/promise-resolve.js");
-var redefine = __webpack_require__(/*! ../internals/redefine */ "./node_modules/core-js/internals/redefine.js");
-
-// Safari bug https://bugs.webkit.org/show_bug.cgi?id=200829
-var NON_GENERIC = !!NativePromise && fails(function () {
-  NativePromise.prototype['finally'].call({ then: function () { /* empty */ } }, function () { /* empty */ });
-});
-
-// `Promise.prototype.finally` method
-// https://tc39.github.io/ecma262/#sec-promise.prototype.finally
-$({ target: 'Promise', proto: true, real: true, forced: NON_GENERIC }, {
-  'finally': function (onFinally) {
-    var C = speciesConstructor(this, getBuiltIn('Promise'));
-    var isFunction = typeof onFinally == 'function';
-    return this.then(
-      isFunction ? function (x) {
-        return promiseResolve(C, onFinally()).then(function () { return x; });
-      } : onFinally,
-      isFunction ? function (e) {
-        return promiseResolve(C, onFinally()).then(function () { throw e; });
-      } : onFinally
-    );
-  }
-});
-
-// patch native Promise.prototype for native async functions
-if (!IS_PURE && typeof NativePromise == 'function' && !NativePromise.prototype['finally']) {
-  redefine(NativePromise.prototype, 'finally', getBuiltIn('Promise').prototype['finally']);
-}
-
-
-/***/ }),
-
 /***/ "./node_modules/core-js/modules/es.promise.js":
 /*!****************************************************!*\
   !*** ./node_modules/core-js/modules/es.promise.js ***!
@@ -6579,23 +6531,26 @@ var getCalculation = function getCalculation(branchs) {
   console.log(branchs); ///////////////
 
   var formSettings = document.querySelector('.calculation__settings');
+  var answerSection = document.querySelector('.answer');
   var parameters = [],
       U = 0,
       I = [],
       textArr = [],
       answer;
 
-  var branchElements = function branchElements(numberBranch, nameG, resistance, nameE, voltage) {
+  var branchElements = function branchElements(numberBranch, nameR, resistance, nameG, conductance, nameE, voltage) {
     _classCallCheck(this, branchElements);
 
     this.numberBranch = numberBranch;
-    this.resistance = resistance;
+    this.conductance = conductance;
     this.nameG = nameG;
+    this.resistance = resistance;
+    this.nameR = nameR;
     this.voltage = voltage;
     this.nameE = nameE;
 
-    for (var _len = arguments.length, elements = new Array(_len > 5 ? _len - 5 : 0), _key = 5; _key < _len; _key++) {
-      elements[_key - 5] = arguments[_key];
+    for (var _len = arguments.length, elements = new Array(_len > 7 ? _len - 7 : 0), _key = 7; _key < _len; _key++) {
+      elements[_key - 7] = arguments[_key];
     }
 
     this.elements = elements;
@@ -6640,7 +6595,7 @@ var getCalculation = function getCalculation(branchs) {
   function getAnswerBlock(textArr) {
     answer = document.createElement('div');
     answer.classList.add('Answer__block');
-    formSettings.append(answer);
+    answerSection.append(answer);
     textArr.forEach(function (element) {
       Object(_mathExpression__WEBPACK_IMPORTED_MODULE_4__["default"])(element, answer);
     });
@@ -6652,11 +6607,13 @@ var getCalculation = function getCalculation(branchs) {
     if (K < 2) {
       textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u043F\u0440\u043E\u0432\u043E\u0434\u0438\u043C\u043E\u0441\u0442\u044C \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
       textArr.push("g".concat(R[K].number, " =~1/r").concat(R[K].number));
-      textArr.push("g".concat(R[K].number, " =~1/").concat(R[K].resistance, "~= ").concat(1 / +R[K].resistance, " \u0421\u043C"));
+      textArr.push("g".concat(R[K].number, " =~1/").concat(R[K].resistance, "~=") + " ".concat(1 / +R[K].resistance, " \u0421\u043C"));
       getAnswerBlock(textArr);
       textArr = [];
       parameters[numberBranch].nameG = "g".concat(R[K].number);
-      parameters[numberBranch].resistance = 1 / +R[K].resistance;
+      parameters[numberBranch].conductance = 1 / +R[K].resistance;
+      parameters[numberBranch].nameR = "r".concat(R[K].number);
+      parameters[numberBranch].resistance = +R[K].resistance;
     } else {
       var Name = '',
           value = 0,
@@ -6670,11 +6627,13 @@ var getCalculation = function getCalculation(branchs) {
         sum = +resist.resistance;
         value = value + sum;
       });
-      value = 1 / +value;
       expression = "".concat(expression).slice(2);
       expressionValue = "".concat(expressionValue).slice(2);
+      parameters[numberBranch].nameR = "r".concat(Name);
+      parameters[numberBranch].resistance = +value;
+      value = 1 / +value;
       parameters[numberBranch].nameG = "g".concat(Name);
-      parameters[numberBranch].resistance = +value; //Округляем число для вывода
+      parameters[numberBranch].conductance = +value; //Округляем число для вывода
 
       value = toFixed2(+value);
       textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u043F\u0440\u043E\u0432\u043E\u0434\u0438\u043C\u043E\u0441\u0442\u044C \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
@@ -6758,8 +6717,15 @@ var getCalculation = function getCalculation(branchs) {
       parameters[numberBranch].voltage = +value;
     }
   }
+  /*     function Arrow(branchs){
+          branchs[0].elements.forEach(element => {
+              element.style.background = 'url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;';
+              console.log(478547);
+          });
+      }
+  
+      Arrow(branchs); */
 
-  function Arrow(branch) {}
 
   function toFixed2(num) {
     num = num.toFixed(2);
@@ -6799,7 +6765,7 @@ var getCalculation = function getCalculation(branchs) {
         b = '',
         plus = '+';
     parameters.forEach(function (element) {
-      sumEG = sumEG + element.resistance * element.voltage;
+      sumEG = sumEG + element.conductance * element.voltage;
 
       if (element.voltage < 0) {
         plus = '';
@@ -6807,10 +6773,10 @@ var getCalculation = function getCalculation(branchs) {
         plus = ' + ';
       }
 
-      expressionEG = expressionEG + "".concat(plus, " ").concat(element.voltage) + "\u22C5".concat(toFixed2(element.resistance));
+      expressionEG = expressionEG + "".concat(plus, " ").concat(element.voltage) + "\u22C5".concat(toFixed2(element.conductance));
       a = a + "".concat(element.nameE) + "\u22C5".concat(element.nameG);
-      sumG = sumG + element.resistance;
-      expressionG = expressionG + " + ".concat(toFixed2(element.resistance));
+      sumG = sumG + element.conductance;
+      expressionG = expressionG + " + ".concat(toFixed2(element.conductance));
       b = b + " + ".concat(element.nameG);
     });
     U = sumEG / sumG;
@@ -6819,7 +6785,7 @@ var getCalculation = function getCalculation(branchs) {
     expressionG = SliceElement(expressionG, ' +');
     expressionEG = SliceElement(expressionEG, ' +');
     textArr.push("\u041D\u0430\u043F\u0440\u044F\u0436\u0435\u043D\u0438\u0435 \u043C\u0435\u0436\u0434\u0443 \u0443\u0437\u043B\u0430\u043C\u0438 \u0410-\u0412 \u0440\u0430\u0432\u043D\u043E:");
-    textArr.push("Uab =~".concat(a, "/").concat(b, "~=~").concat(expressionEG, "/").concat(expressionG, "~= ").concat(toFixed2(U), " \u0412"));
+    textArr.push("Uab =~".concat(a, "/").concat(b, "~=~").concat(expressionEG, "/").concat(expressionG, "~= ") + "".concat(toFixed2(U), " \u0412"));
     getAnswerBlock(textArr);
     textArr = [];
   }
@@ -6833,7 +6799,7 @@ var getCalculation = function getCalculation(branchs) {
         b = '',
         plus = '+';
     parameters.forEach(function (element, i) {
-      I[i] = (element.voltage - U) * element.resistance;
+      I[i] = (element.voltage - U) * element.conductance;
       I[i] = toFixed2(I[i]);
 
       if (U < 0) {
@@ -6842,31 +6808,61 @@ var getCalculation = function getCalculation(branchs) {
         plus = ' -';
       }
 
-      expressionEU = "".concat(element.voltage) + "".concat(plus, " ").concat(toFixed2(U));
-      a = "".concat(element.nameE) + "".concat(plus, " U");
+      expressionEU = "".concat(element.voltage) + "".concat(plus, " ").concat(Math.abs(toFixed2(U)));
+      a = "".concat(element.nameE) + " - U";
       b = "".concat(element.nameG);
       a = SliceElement(a, ' +');
-      console.log(textArr); ///////////////
-
-      textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u0442\u043E\u043A \u0432 \u0432\u0435\u0442\u0432\u0438 \u2116:".concat(i));
-      textArr.push("I".concat(i, " = ").concat(a, "\u22C5").concat(b, " = (").concat(expressionEU, ")\u22C5").concat(toFixed2(element.resistance), " = ").concat(I[i], " \u0410"));
+      textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u0442\u043E\u043A \u0432 \u0432\u0435\u0442\u0432\u0438 \u2116".concat(i));
+      textArr.push("I".concat(i, " = ").concat(a, "\u22C5").concat(b, " = ") + "(".concat(expressionEU, ")\u22C5").concat(toFixed2(element.conductance), " = ").concat(I[i], " \u0410"));
       getAnswerBlock(textArr);
       textArr = [];
     });
   }
 
+  function getBalance(parameters) {
+    var sumEI = 0,
+        sumRII = 0,
+        expressionEI = '',
+        expressionRII = '',
+        a = '',
+        b = '',
+        plus = '+';
+    parameters.forEach(function (element, i) {
+      sumEI = sumEI + element.voltage * I[i];
+      sumRII = sumRII + I[i] * I[i] * element.resistance; // добавляем скобки к отрицательным токам
+
+      if (I[i] < 0) {
+        I[i] = "(".concat(I[i], ")");
+      }
+
+      a = a + "".concat(element.nameE, " \u22C5 I").concat(i);
+      expressionEI = expressionEI + " + ".concat(element.resistance, " \u22C5 ").concat(I[i]);
+      b = b + " + I".concat(i, "<sup>2</sup> \u22C5 ").concat(element.nameR);
+      expressionRII = expressionRII + " + ".concat(I[i], "<sup>2</sup> \u22C5 ").concat(element.resistance);
+    });
+    a = SliceElement(a, ' +');
+    b = SliceElement(b, ' +');
+    expressionEI = SliceElement(expressionEI, ' +');
+    expressionRII = SliceElement(expressionRII, ' +');
+    textArr.push("\u0414\u043B\u044F \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E\u0441\u0442\u0438 \u0440\u0435\u0448\u0435\u043D\u0438\u044F \u0441\u043E\u0441\u0442\u0430\u0432\u0438\u043C \u0431\u0430\u043B\u0430\u043D\u0441 \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0435\u0439.");
+    textArr.push("".concat(a, " = ").concat(b));
+    textArr.push("".concat(expressionEI, " = ").concat(expressionRII));
+    textArr.push("".concat(toFixed2(sumEI), " = ").concat(toFixed2(sumRII)));
+
+    if (Math.abs((sumEI - sumRII) / sumEI) < 0.03) {
+      textArr.push("\u0411\u0430\u043B\u0430\u043D\u0441 \u0441\u043E\u0448\u0435\u043B\u0441\u044F.");
+    } else {
+      textArr.push("\u041E\u0428\u0418\u0411\u041A\u0410.");
+    }
+
+    getAnswerBlock(textArr);
+    textArr = [];
+  }
+
   getParametrsBranch(branchs);
   GetVoltageSсheme();
   FindCurrent();
-  var sumEI = 0,
-      sumRII = 0;
-  parameters.forEach(function (element, i) {
-    sumEI = sumEI + element.voltage * I[i];
-    sumRII = sumRII + I[i] * I[i] / element.resistance;
-  });
-  console.log(sumEI);
-  console.log(sumRII);
-  Object(_mathExpression__WEBPACK_IMPORTED_MODULE_4__["default"])('1/I1~=~1/5~+~1/6', formSettings);
+  getBalance(parameters);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (getCalculation);
@@ -6900,21 +6896,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.promise */ "./node_modules/core-js/modules/es.promise.js");
 /* harmony import */ var core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.promise.finally */ "./node_modules/core-js/modules/es.promise.finally.js");
-/* harmony import */ var core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_promise_finally__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.regexp.to-string */ "./node_modules/core-js/modules/es.regexp.to-string.js");
-/* harmony import */ var core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/es.string.iterator */ "./node_modules/core-js/modules/es.string.iterator.js");
-/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
-/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var dragula__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! dragula */ "./node_modules/dragula/dragula.js");
-/* harmony import */ var dragula__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(dragula__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _getScheme__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./getScheme */ "./src/js/modules/getScheme.js");
-/* harmony import */ var _calculationMethod__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./calculationMethod */ "./src/js/modules/calculationMethod.js");
-
+/* harmony import */ var core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.regexp.to-string */ "./node_modules/core-js/modules/es.regexp.to-string.js");
+/* harmony import */ var core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.string.iterator */ "./node_modules/core-js/modules/es.string.iterator.js");
+/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var dragula__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! dragula */ "./node_modules/dragula/dragula.js");
+/* harmony import */ var dragula__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(dragula__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _getScheme__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./getScheme */ "./src/js/modules/getScheme.js");
+/* harmony import */ var _calculationMethod__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./calculationMethod */ "./src/js/modules/calculationMethod.js");
 
 
 
@@ -6977,22 +6970,6 @@ var dragggrid = function dragggrid() {
 
   var formData;
   var scheme = 0;
-  /*     const frac = document.querySelectorAll('.fraction');
-      let split = 0;
-      console.log(frac);
-      frac.forEach(element => {
-          console.log(element);
-          split = element.innerHTML;
-          split = split.split('/');
-          if(split.length == 2){
-              element.innerHTML = `<span class="fraction__top">` + 
-              `${split[0]}` + 
-              `</span><span class="fraction__bottom">` + 
-              `${split[1]}</span>`;
-              console.log(111);
-          }
-          console.log(split.length);
-      }); */
 
   var Block =
   /*#__PURE__*/
@@ -7036,7 +7013,7 @@ var dragggrid = function dragggrid() {
             break;
 
           case 3:
-            wrapperFormKnots.style.display = 'block';
+            wrapperFormKnots.style.display = 'none';
             wrapperFormN.style.display = 'none';
             wrapperFormE.style.display = 'none';
             wrapperFormR.style.display = 'none';
@@ -7076,7 +7053,8 @@ var dragggrid = function dragggrid() {
         switch (this.error) {
           case 'error':
             tNotify.style.display = 'block';
-            inputFormR.style.border = '2px solid #D4410F'; //////////////////////////////
+            /* inputFormR.classList.add('input__error'); */
+            //////////////////////////
 
             tNotify.textContent = "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435 \u043E\u0442 0 \u0434\u043E 1000";
             this.element.style.backgroundColor = 'pink';
@@ -7119,6 +7097,9 @@ var dragggrid = function dragggrid() {
             this.number = inputFormN.value;
           } else {
             el.style.display = 'none'; ////////////////
+            // удаляем класс ощибки с инпута
+
+            /* InputForm.classList.remove('input__error'); */
 
             this.number = inputFormN.value;
             /* this.number = inputFormN.value; */
@@ -7147,7 +7128,7 @@ var dragggrid = function dragggrid() {
     console.log(blocks[i]);
   }); //-----------------Добавляем перетаскивание для блоков------------//
 
-  var drake = dragula__WEBPACK_IMPORTED_MODULE_14___default()([blockBar].concat(_toConsumableArray(cell)), {
+  var drake = dragula__WEBPACK_IMPORTED_MODULE_13___default()([blockBar].concat(_toConsumableArray(cell)), {
     accepts: function accepts(el, target) {
       return target !== blockBar;
     }
@@ -7369,23 +7350,22 @@ var dragggrid = function dragggrid() {
           }
         });
       }
+      /*             if(target && target.id == inputFormKnots.id) {
+                      const dataForm = inputFormN.getAttribute('data-form');
+                      blocks.forEach((elem, i) => {
+                          if(elem.id == dataForm){
+                              elem.number = inputFormKnots.value;
+                              elem.element.textContent = inputFormKnots.value;   
+                          }
+                      }); 
+                  }  */
 
-      if (target && target.id == inputFormKnots.id) {
+
+      if (target && target.id == inputFormN.id) {
         var _dataForm2 = inputFormN.getAttribute('data-form');
 
         blocks.forEach(function (elem, i) {
           if (elem.id == _dataForm2) {
-            elem.number = inputFormKnots.value;
-            elem.element.textContent = inputFormKnots.value;
-          }
-        });
-      }
-
-      if (target && target.id == inputFormN.id) {
-        var _dataForm3 = inputFormN.getAttribute('data-form');
-
-        blocks.forEach(function (elem, i) {
-          if (elem.id == _dataForm3) {
             elem.Validation(inputFormN, notifyN);
 
             switch (elem.type) {
@@ -7457,8 +7437,6 @@ var dragggrid = function dragggrid() {
       }
     });
   }
-  /*     console.log(formSettings); */
-
 
   function GetFormSettings(target) {
     if (target && target.classList.contains('btn__calculate')) {
@@ -7731,50 +7709,61 @@ var dragggrid = function dragggrid() {
   formSettings.addEventListener('click', function (event) {
     event.preventDefault();
     var target = event.target;
-    GetFormSettings();
-    var promise1 = new Promise(function (resolve, reject) {
-      getActiveBlocks();
-      resolve(ActiveBlocks);
-    }).then(function (value) {
-      return new Promise(function (resolve, reject) {
-        console.log("\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0431\u043B\u043E\u043A\u0438 ".concat(value));
-        scheme = Object(_getScheme__WEBPACK_IMPORTED_MODULE_15__["default"])(ActiveBlocks);
-        console.log(scheme);
-        resolve(scheme);
-        /* return scheme; */
-        // expected output: "foo"
+
+    if (target && target.classList.contains('btn__calculate')) {
+      GetFormSettings(); //Удаялем старые ошибки (если они есть)
+
+      var errorBlock = document.querySelectorAll('.Error__block');
+
+      if (errorBlock) {
+        errorBlock.forEach(function (element) {
+          element.remove();
+        });
+      }
+
+      var promise1 = new Promise(function (resolve, reject) {
+        getActiveBlocks();
+
+        function Arrow(ActiveBlocks) {
+          ActiveBlocks.forEach(function (element, i) {
+            var span = document.createElement('span');
+            span.classList.add("top");
+            span.textContent = "I".concat(i);
+            element.element.append(span);
+            element.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n                        background-size: 92px;";
+            console.log(element.element);
+          });
+        }
+
+        Arrow(ActiveBlocks);
+        resolve(ActiveBlocks);
+      }).then(function (value) {
+        return new Promise(function (resolve, reject) {
+          console.log("\u0410\u043A\u0442\u0438\u0432\u043D\u044B\u0435 \u0431\u043B\u043E\u043A\u0438 ".concat(value));
+          scheme = Object(_getScheme__WEBPACK_IMPORTED_MODULE_14__["default"])(ActiveBlocks);
+
+          if (scheme == 'error') {
+            reject();
+          } else {
+            resolve(scheme);
+          }
+        });
+      }).then(function (scheme) {
+        //Удаляем старый ответ (если он есть)
+        var answerBlock = document.querySelectorAll('.Answer__block');
+
+        if (answerBlock) {
+          answerBlock.forEach(function (element) {
+            element.remove();
+          });
+        }
+
+        Object(_calculationMethod__WEBPACK_IMPORTED_MODULE_15__["default"])(scheme);
+        /* getCalculation( SaveScheme() ); */
+      }).catch(function () {
+        console.log('reject');
       });
-    }).then(function (scheme) {
-      /* getCalculation(scheme); */
-      Object(_calculationMethod__WEBPACK_IMPORTED_MODULE_16__["default"])(SaveScheme());
-    }).finally(function () {
-      console.log('finnaly');
-    });
-    console.log(promise1); // expected output: [object Promise]
-
-    /*  console.log(getscheme(ActiveBlocks)); */
-    //////////////////////////////////////////////////////////////////////////////
-
-    console.log(SaveScheme());
-    /*         setTimeout(() => {
-                scheme = getscheme(ActiveBlocks);
-                console.log(scheme);
-              }, 500);
-    
-              
-    
-              setTimeout(() => {
-                console.log(scheme);
-                getCalculation(scheme);
-              }, 1500); */
-
-    /* getCalculation( scheme  */
-
-    /* getscheme(ActiveBlocks) */
-
-    /* SaveScheme() */
-
-    /* ); */
+    }
   });
 };
 
@@ -7807,7 +7796,8 @@ __webpack_require__.r(__webpack_exports__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var getscheme = function getscheme(blocks) {
-  var branchs = [];
+  var branchs = [],
+      errorDiv = document.querySelector('.error');
   var error = '',
       baseCorner = 0,
       baseRightCorner = 0,
@@ -7825,13 +7815,37 @@ var getscheme = function getscheme(blocks) {
     this.name = name;
   };
 
+  function getErrorBlock(text) {
+    var errorBlock;
+    errorBlock = document.createElement('p');
+    errorBlock.textContent = text;
+    errorBlock.classList.add('Error__block');
+    errorDiv.append(errorBlock);
+  }
+
   function getValidations(ActiveBlock) {
-    var error = 0;
+    if (ActiveBlock.type == 0) {
+      if (ActiveBlock.resistance >= 1000 || ActiveBlock.resistance <= 0) {
+        ActiveBlock.error = 'error';
+        ActiveBlock.getErrorMessage();
+        getErrorBlock("\u041E\u0448\u0438\u0431\u043A\u0430! \u0417\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430 R");
+        error = error + 1;
+      }
+    }
+
+    if (ActiveBlock.type == 1) {
+      if (ActiveBlock.voltage >= 1000 || ActiveBlock.voltage <= 0) {
+        ActiveBlock.error = 'error';
+        ActiveBlock.getErrorMessage();
+        getErrorBlock("\u041E\u0448\u0438\u0431\u043A\u0430! \u0417\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430 E");
+        error = error + 1;
+      }
+    }
 
     if (ActiveBlock.error || !ActiveBlock.number) {
       if (ActiveBlock.type < 2) {
         ActiveBlock.getErrorMessage();
-        console.log("\u041E\u0448\u0438\u0431\u043A\u0430! \u0417\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430: ".concat(ActiveBlock.number));
+        getErrorBlock("\u041E\u0448\u0438\u0431\u043A\u0430! \u0417\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u0430: ".concat(ActiveBlock.number));
         error = error + 1;
       }
     } else {
@@ -7839,7 +7853,7 @@ var getscheme = function getscheme(blocks) {
         if (element.type === ActiveBlock.type && element.number === ActiveBlock.number) {
           if (element.number && element.id != ActiveBlock.id) {
             element.error = 'number';
-            console.log("\u041E\u0448\u0438\u0431\u043A\u0430! \u0421\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442 \u043D\u043E\u043C\u0435\u0440\u0430 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432: ".concat(element.number));
+            getErrorBlock("\u041E\u0448\u0438\u0431\u043A\u0430! \u0421\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442 \u043D\u043E\u043C\u0435\u0440\u0430 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432: ".concat(element.number));
             error = error + 1;
           }
         }
@@ -8084,9 +8098,9 @@ var getscheme = function getscheme(blocks) {
     var defaultMessage = "\u041E\u0448\u0438\u0431\u043A\u0430! \u0421\u043E\u0435\u0434\u0438\u043D\u0438\u0442\u0435 \u0432\u0441\u0435 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0438\u043B\u0438 \u0443\u0434\u0430\u043B\u0438\u0442\u0435 \u043D\u0435\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u043C\u044B\u0435:";
 
     if (customMessage) {
-      console.log("".concat(customMessage, " ").concat(nextBlock));
+      getErrorBlock("".concat(customMessage, " ").concat(nextBlock));
     } else {
-      console.log("".concat(defaultMessage, " ").concat(nextBlock));
+      getErrorBlock("".concat(defaultMessage, " ").concat(nextBlock));
     }
 
     error = error + 1;
@@ -8134,25 +8148,21 @@ var getscheme = function getscheme(blocks) {
       });
     });
     console.log(branchs);
-  }
+  } //Проверка на записсынные ошибки в блоках
+
 
   blocks.forEach(function (element) {
     error = getValidations(element);
   });
 
-  if (error === '') {
-    //if(error != ''){   игнор ошибок
-    returnValue = error;
+  if (error != '') {
+    //if(error === ''){   игнор ошибок
+    returnValue = 'error';
   } else {
     if (getValidationsPostions(blocks) === 'error') {
-      return error;
+      return 'error';
     } else {
       returnValue = branchs;
-      /*             if(getValidationsBranch(branchs) === 'error'){
-                      return error;
-                  }else{
-                      returnValue = branchs;
-                  }    */
     }
   }
 

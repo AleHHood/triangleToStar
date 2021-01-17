@@ -81,10 +81,11 @@
         }
         &-K{
             order: 4;
-            background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
+            /* background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat; */
+
             /* background: url(../img/svg/Arrow1.SVG) 51% 52% no-repeat; */
             /* background-size: 126px; */
-            background-size: 92px;
+            /* background-size: 92px; */
             span{
                 &.top{
                     margin-left: 43px;
@@ -116,6 +117,11 @@
         }
         &-Corner{
             order: 5;
+            span{
+                &.top{
+                    margin-left: 43px;
+                }
+            }
             &:before {
                 content: "";
                 position: absolute;

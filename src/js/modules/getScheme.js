@@ -1,5 +1,6 @@
 const getscheme = (blocks) => {
-    const branchs = [];
+    const branchs = [],
+    errorDiv = document.querySelector('.error');
     let error = '',
     baseCorner = 0,
     baseRightCorner = 0,
@@ -13,17 +14,52 @@ const getscheme = (blocks) => {
         }
     }
 
+    function getErrorBlock(text) {
+        let errorBlock;
+        errorBlock = document.createElement('p');
+        errorBlock.textContent = text;
+        errorBlock.classList.add('Error__block');
+        errorDiv.append(errorBlock);
+    }
+
 
 
 
     function getValidations (ActiveBlock) {
-        let error = 0;
+        
+        if(ActiveBlock.type == 0){
+            if(
+                ActiveBlock.resistance >= 1000 || 
+                ActiveBlock.resistance <= 0
+            ) {
+                ActiveBlock.error = 'error';
+                ActiveBlock.getErrorMessage();
+                getErrorBlock(`Ошибка! Значения элемента R`);
+                error = error + 1;
+           }
+        }
+
+        if(ActiveBlock.type == 1){
+            if(
+                ActiveBlock.voltage >= 1000 || 
+                ActiveBlock.voltage <= 0
+            ) {
+                ActiveBlock.error = 'error';
+                ActiveBlock.getErrorMessage();
+                getErrorBlock(`Ошибка! Значения элемента E`);
+                error = error + 1;
+            }
+        }
+             
+
+
         if(ActiveBlock.error || (!ActiveBlock.number)) {
 
             if(ActiveBlock.type < 2){
             ActiveBlock.getErrorMessage();
-            console.log(`Ошибка! Значения элемента: ${ActiveBlock.number}`);
-            error = error + 1;}
+            getErrorBlock(`Ошибка! Значения элемента: ${ActiveBlock.number}`);
+            error = error + 1;
+            }
         }
         
         else{
@@ -34,9 +70,7 @@ const getscheme = (blocks) => {
             ) {
                 if(element.number && (element.id != ActiveBlock.id)){
                     element.error = 'number';
-                    console.log(
-                        `Ошибка! Совпадают номера элементов: ${element.number}`
-                        );
+                    getErrorBlock(`Ошибка! Совпадают номера элементов: ${element.number}`);
                     error = error + 1;    
                     }
                 }
@@ -304,9 +338,9 @@ const getscheme = (blocks) => {
         `Ошибка! Соедините все элементы или удалите неиспользуемые:`;
 
         if(customMessage){
-            console.log(`${customMessage} ${nextBlock}`);
+            getErrorBlock(`${customMessage} ${nextBlock}`);
         }else{
-            console.log(`${defaultMessage} ${nextBlock}`);
+            getErrorBlock(`${defaultMessage} ${nextBlock}`);
         }
         error = error + 1;
         return error;
@@ -353,25 +387,20 @@ const getscheme = (blocks) => {
     }
 
 
-
+    //Проверка на записсынные ошибки в блоках
     blocks.forEach(element => {
         error = getValidations(element);
     });
 
 
 
-    if(error === '') {        //if(error != ''){   игнор ошибок
-        returnValue = error;
+    if(error != '') {        //if(error === ''){   игнор ошибок
+        returnValue = 'error';
     } else {
         if(getValidationsPostions (blocks) === 'error'){
-            return error;
+            return 'error';
         }else{
-            returnValue = branchs;
-/*             if(getValidationsBranch(branchs) === 'error'){
-                return error;
-            }else{
-                returnValue = branchs;
-            }    */         
+            returnValue = branchs;    
         }
         
     }

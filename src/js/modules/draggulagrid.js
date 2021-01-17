@@ -32,27 +32,6 @@ const dragggrid = () => {
     let formData;
     let scheme = 0;
 
-
-
-/*     const frac = document.querySelectorAll('.fraction');
-    let split = 0;
-    console.log(frac);
-    frac.forEach(element => {
-        console.log(element);
-        split = element.innerHTML;
-        split = split.split('/');
-        if(split.length == 2){
-            element.innerHTML = `<span class="fraction__top">` + 
-            `${split[0]}` + 
-            `</span><span class="fraction__bottom">` + 
-            `${split[1]}</span>`;
-            console.log(111);
-        }
-        console.log(split.length);
-    }); */
-
-
-
     
 
     class Block {
@@ -89,7 +68,7 @@ const dragggrid = () => {
                     inputFormE.value = this.voltage;
                     break;
                 case 3:
-                    wrapperFormKnots.style.display = 'block';
+                    wrapperFormKnots.style.display = 'none';
                     wrapperFormN.style.display = 'none';
                     wrapperFormE.style.display = 'none';
                     wrapperFormR.style.display = 'none';
@@ -109,6 +88,7 @@ const dragggrid = () => {
         getErrorMessage(){
             let tNotify = 0;
             notifyN.style.display = 'none';
+
             switch (this.type) {
                 case 0:
                     tNotify = notifyR;
@@ -123,7 +103,7 @@ const dragggrid = () => {
                     switch (this.error) {
                         case 'error':
                             tNotify.style.display = 'block';
-                            inputFormR.style.border = '2px solid #D4410F';  //////////////////////////////
+                            /* inputFormR.classList.add('input__error'); *///////////////////////////
                             tNotify.textContent   = 
                             `Введите значение от 0 до 1000`;
 
@@ -175,6 +155,8 @@ const dragggrid = () => {
                     this.number = inputFormN.value;
                 }else{
                     el.style.display = 'none';////////////////
+                    // удаляем класс ощибки с инпута
+                    /* InputForm.classList.remove('input__error'); */
                     this.number = inputFormN.value;
                     /* this.number = inputFormN.value; */
                     this.error = '';
@@ -424,7 +406,7 @@ function getForm(target){
                     }
                 }); 
             } 
-            if(target && target.id == inputFormKnots.id) {
+/*             if(target && target.id == inputFormKnots.id) {
                 const dataForm = inputFormN.getAttribute('data-form');
                 blocks.forEach((elem, i) => {
                     if(elem.id == dataForm){
@@ -432,7 +414,7 @@ function getForm(target){
                         elem.element.textContent = inputFormKnots.value;   
                     }
                 }); 
-            } 
+            }  */
             if(target && target.id == inputFormN.id) {
                 const dataForm = inputFormN.getAttribute('data-form');
                 blocks.forEach((elem, i) => {
@@ -524,7 +506,6 @@ function getForm(target){
     }
    
 
-/*     console.log(formSettings); */
 
     function GetFormSettings(target){
         if(target && target.classList.contains('btn__calculate')) {      
@@ -568,56 +549,71 @@ function getForm(target){
     formSettings.addEventListener('click', (event) => {
         event.preventDefault();
         const target = event.target;
-        GetFormSettings();
-        
-        const promise1 = new Promise((resolve, reject) => {
-            getActiveBlocks();
-            resolve(ActiveBlocks);
-          }).then(value => {
-              return new Promise((resolve, reject) => {
-                console.log(`Активные блоки ${value}`);
-                scheme = getscheme(ActiveBlocks);
-                console.log(scheme);
-                resolve(scheme);
-                /* return scheme; */
-                // expected output: "foo"
+        if(target && target.classList.contains('btn__calculate')){
+            GetFormSettings();
 
+            //Удаялем старые ошибки (если они есть)
+            const errorBlock = document.querySelectorAll('.Error__block');
+            if(errorBlock){
+                errorBlock.forEach(element => {
+                    element.remove();
+                });
+            }
+
+            
+            const promise1 = new Promise((resolve, reject) => {
+                getActiveBlocks();
+
+
+                function Arrow(ActiveBlocks){
+                    ActiveBlocks.forEach((element,i) => {
+                        const span = document.createElement('span');
+                        span.classList.add("top");
+                        span.textContent = `I${i}`;
+                        element.element.append(span);
+                        element.element.style.cssText = 
+                        `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
+                        background-size: 92px;`;
+                        console.log(element.element);
+                    });
+                }
+
+                Arrow(ActiveBlocks);
+
+
+
+                resolve(ActiveBlocks);
+              }).then(value => {
+                  return new Promise((resolve, reject) => {
+                    console.log(`Активные блоки ${value}`);
+                    scheme = getscheme(ActiveBlocks);
+    
+                    if(scheme == 'error'){
+                        reject();
+                    }else{
+                        resolve(scheme);
+                    }
+                  });
+    
+              }).then(scheme => {
+
+                //Удаляем старый ответ (если он есть)
+                const answerBlock = document.querySelectorAll('.Answer__block');
+                if(answerBlock){
+                    answerBlock.forEach(element => {
+                        element.remove();
+                    });
+                }
+
+
+                getCalculation(scheme);
+                /* getCalculation( SaveScheme() ); */
+              }).catch( () => {
+                  console.log('reject');
               });
-
-          }).then(scheme => {
-            /* getCalculation(scheme); */
-            getCalculation( SaveScheme() );
-          }).finally(() => {
-            console.log('finnaly');
-          });
-          
-          console.log(promise1);
-          // expected output: [object Promise]
-
-        
-       /*  console.log(getscheme(ActiveBlocks)); *///////////////////////////////////////////////////////////////////////////////
-        console.log(SaveScheme());
-
-        
-
-/*         setTimeout(() => {
-            scheme = getscheme(ActiveBlocks);
-            console.log(scheme);
-          }, 500);
-
-          
-
-          setTimeout(() => {
-            console.log(scheme);
-            getCalculation(scheme);
-          }, 1500); */
-
-
-          /* getCalculation( scheme  *//* getscheme(ActiveBlocks) */ /* SaveScheme() */ /* ); */
+        }
     });
     
-
-
 };
 
 export default dragggrid;

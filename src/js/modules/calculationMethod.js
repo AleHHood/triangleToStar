@@ -4,6 +4,7 @@ import getMath from './mathExpression';
 const getCalculation = (branchs) => {
     console.log(branchs); ///////////////
     const formSettings = document.querySelector('.calculation__settings');
+    const answerSection = document.querySelector('.answer');
 
     let parameters = [],
     U = 0,
@@ -11,10 +12,12 @@ const getCalculation = (branchs) => {
     textArr = [],
     answer;
     class branchElements {
-        constructor(numberBranch, nameG, resistance, nameE, voltage, ...elements) {
+        constructor(numberBranch, nameR, resistance, nameG, conductance, nameE, voltage, ...elements) {
             this.numberBranch = numberBranch;
-            this.resistance = resistance;
+            this.conductance = conductance;
             this.nameG = nameG;
+            this.resistance = resistance;
+            this.nameR = nameR;
             this.voltage = voltage;
             this.nameE = nameE;
             this.elements = elements;
@@ -67,9 +70,10 @@ const getCalculation = (branchs) => {
 
 
     function getAnswerBlock(textArr) {
+        
         answer = document.createElement('div');
         answer.classList.add('Answer__block');
-        formSettings.append(answer);
+        answerSection.append(answer);
         textArr.forEach(element => {
             getMath(element, answer);
         });
@@ -84,13 +88,16 @@ const getCalculation = (branchs) => {
             
             textArr.push(`Найдём проводимость ветви №${numberBranch}`);
             textArr.push(`g${R[K].number} =~1/r${R[K].number}`);
-            textArr.push(`g${R[K].number} =~1/${R[K].resistance}~= ${1 / +R[K].resistance} См`);
+            textArr.push(`g${R[K].number} =~1/${R[K].resistance}~=`+
+            ` ${1 / +R[K].resistance} См`);
             getAnswerBlock(textArr);
             textArr = [];
 
 
             parameters[numberBranch].nameG = `g${R[K].number}`;
-            parameters[numberBranch].resistance = 1 / +R[K].resistance;
+            parameters[numberBranch].conductance = 1 / +R[K].resistance;
+            parameters[numberBranch].nameR = `r${R[K].number}`;
+            parameters[numberBranch].resistance = +R[K].resistance;
 
         } else {
 
@@ -109,12 +116,18 @@ const getCalculation = (branchs) => {
                 
             });
 
-            value = 1 / +value;
+            
             expression = `${expression}`.slice(2);
             expressionValue = `${expressionValue}`.slice(2);
 
-            parameters[numberBranch].nameG = `g${Name}`;
+            parameters[numberBranch].nameR = `r${Name}`;
             parameters[numberBranch].resistance = +value;
+
+            value = 1 / +value;
+
+            parameters[numberBranch].nameG = `g${Name}`;
+            parameters[numberBranch].conductance = +value;
+
 
             //Округляем число для вывода
             value = toFixed2(+value);
@@ -216,9 +229,14 @@ const getCalculation = (branchs) => {
         }
     }
 
-    function Arrow(branch){
-        
+/*     function Arrow(branchs){
+        branchs[0].elements.forEach(element => {
+            element.style.background = 'url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;';
+            console.log(478547);
+        });
     }
+
+    Arrow(branchs); */
 
 
     function toFixed2(num){ 
@@ -262,7 +280,7 @@ const getCalculation = (branchs) => {
 
     parameters.forEach(element => {
 
-        sumEG = sumEG + element.resistance * element.voltage;
+        sumEG = sumEG + element.conductance * element.voltage;
 
         if(element.voltage < 0) { 
             plus = '';
@@ -272,12 +290,12 @@ const getCalculation = (branchs) => {
 
         expressionEG = expressionEG + 
         `${plus} ${element.voltage}` +  
-        `⋅${ toFixed2(element.resistance) }`;
+        `⋅${ toFixed2(element.conductance) }`;
 
         a = a + `${element.nameE}` +  `⋅${element.nameG}`;
 
-        sumG = sumG + element.resistance;
-        expressionG = expressionG + ` + ${ toFixed2(element.resistance) }`;
+        sumG = sumG + element.conductance;
+        expressionG = expressionG + ` + ${ toFixed2(element.conductance) }`;
         b = b + ` + ${element.nameG}`;
 
     });
@@ -290,7 +308,8 @@ const getCalculation = (branchs) => {
         expressionEG = SliceElement(expressionEG, ' +');
 
         textArr.push(`Напряжение между узлами А-В равно:`);
-        textArr.push(`Uab =~${a}/${b}~=~${expressionEG}/${expressionG}~= ${toFixed2(U)} В`);
+        textArr.push(`Uab =~${a}/${b}~=~${expressionEG}/${expressionG}~= `+
+        `${toFixed2(U)} В`);
         getAnswerBlock(textArr);
         textArr = [];
     }
@@ -307,7 +326,7 @@ const getCalculation = (branchs) => {
         b = '',
         plus = '+'; 
         parameters.forEach((element, i) => {
-            I[i] = (element.voltage - U) * element.resistance;
+            I[i] = (element.voltage - U) * element.conductance;
             I[i] = toFixed2(I[i]);
 
             if(U < 0) { 
@@ -316,20 +335,69 @@ const getCalculation = (branchs) => {
                 plus = ' -';
             }
     
-            expressionEU =  `${element.voltage}` + `${plus} ${toFixed2(U)}`;
+            expressionEU =  `${element.voltage}` + `${plus} ${Math.abs(toFixed2(U))}`;
 
-            a = `${element.nameE}` + `${plus} U`;
+            a = `${element.nameE}` + ` - U`;
             b = `${element.nameG}`;
 
             a = SliceElement(a, ' +');
 
-        console.log(textArr); ///////////////
-        textArr.push(`Найдём ток в ветви №:${i}`);
-        textArr.push(`I${i} = ${a}⋅${b} = (${expressionEU})⋅${toFixed2(element.resistance)} = ${I[i]} А`);
+        textArr.push(`Найдём ток в ветви №${i}`);
+        textArr.push(`I${i} = ${a}⋅${b} = `+
+        `(${expressionEU})⋅${toFixed2(element.conductance)} = ${I[i]} А`);
         getAnswerBlock(textArr);
         textArr = [];
         });
     }
+
+
+    function getBalance(parameters){
+        let sumEI = 0,
+        sumRII = 0,
+        expressionEI = '',
+        expressionRII = '',
+        a = '',
+        b = '',
+        plus = '+';
+
+        parameters.forEach((element, i) => {
+
+            
+            sumEI = sumEI + element.voltage * I[i];
+            sumRII = sumRII + (I[i] * I[i]) * element.resistance;
+        
+            
+            // добавляем скобки к отрицательным токам
+            if(I[i] < 0) { 
+                I[i] = `(${I[i]})`;
+            }
+
+            a = a + `${element.nameE} ⋅ I${i}`;
+            expressionEI = expressionEI + ` + ${element.resistance} ⋅ ${I[i]}`;
+
+            b = b + ` + I${i}<sup>2</sup> ⋅ ${element.nameR}`;
+            expressionRII = expressionRII + ` + ${I[i]}<sup>2</sup> ⋅ ${element.resistance}`;
+        });
+
+        a = SliceElement(a, ' +');
+        b = SliceElement(b, ' +');
+        expressionEI = SliceElement(expressionEI, ' +');
+        expressionRII = SliceElement(expressionRII, ' +');
+
+        textArr.push(`Для проверки правильности решения составим баланс мощностей.`);
+        textArr.push(`${a} = ${b}`);
+        textArr.push(`${expressionEI} = ${expressionRII}`);
+        textArr.push(`${toFixed2(sumEI)} = ${toFixed2(sumRII)}`);
+        if(Math.abs(((sumEI - sumRII)/ sumEI)) < 0.03){
+            textArr.push(`Баланс сошелся.`);
+        }else{
+            textArr.push(`ОШИБКА.`);
+        }
+        getAnswerBlock(textArr);
+        textArr = [];
+    }
+
+
 
 
     
@@ -337,21 +405,12 @@ const getCalculation = (branchs) => {
     getParametrsBranch (branchs);
     GetVoltageSсheme();
     FindCurrent();
+    getBalance(parameters);
 
-    let sumEI = 0,
-        sumRII = 0;
 
-    parameters.forEach((element, i) => {
-        sumEI = sumEI + element.voltage * I[i];
-        sumRII = sumRII + (I[i] * I[i]) / element.resistance;
-    });
 
-    console.log(sumEI);
-    console.log(sumRII);
 
-    
-    
-    getMath('1/I1~=~1/5~+~1/6', formSettings);
+
 };
 
 
