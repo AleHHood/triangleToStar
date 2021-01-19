@@ -563,25 +563,6 @@ function getForm(target){
             
             const promise1 = new Promise((resolve, reject) => {
                 getActiveBlocks();
-
-
-                function Arrow(ActiveBlocks){
-                    ActiveBlocks.forEach((element,i) => {
-                        const span = document.createElement('span');
-                        span.classList.add("top");
-                        span.textContent = `I${i}`;
-                        element.element.append(span);
-                        element.element.style.cssText = 
-                        `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
-                        background-size: 92px;`;
-                        console.log(element.element);
-                    });
-                }
-
-                Arrow(ActiveBlocks);
-
-
-
                 resolve(ActiveBlocks);
               }).then(value => {
                   return new Promise((resolve, reject) => {

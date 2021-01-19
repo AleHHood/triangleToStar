@@ -48,6 +48,7 @@ const getCalculation = (branchs) => {
                 branchs[0].elements.forEach((knot, number) => {
                     if(knot.y === block.y){
                         numberBranch = number + 1;
+                        Arrow(knot, numberBranch);
                     }
                 });
                 
@@ -130,7 +131,7 @@ const getCalculation = (branchs) => {
 
 
             //Округляем число для вывода
-            value = toFixed2(+value);
+            value = toFixed3(+value);
             
             
             textArr.push(`Найдём проводимость ветви №${numberBranch}`);
@@ -229,34 +230,52 @@ const getCalculation = (branchs) => {
         }
     }
 
-/*     function Arrow(branchs){
-        branchs[0].elements.forEach(element => {
-            element.style.background = 'url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;';
-            console.log(478547);
-        });
+    function Arrow(block, numberBranch){
+            if(block.element.firstChild){
+                block.element.firstChild.remove();
+            }
+            const span = document.createElement('span');
+            span.classList.add('top');
+            span.textContent = `I${numberBranch}`;
+            block.element.append(span);
+            block.element.style.cssText = 
+            `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
+            background-size: 92px;`;
     }
 
-    Arrow(branchs); */
 
 
-    function toFixed2(num){ 
-        num = num.toFixed(2);
+    function toFixed3(num){ 
         let x = 0;
-        x = num.length;
-        if(num.slice(-1) == '0'){
+        for (let n = 5; n >= 0; --n) {
+            num = +num;
+            num = num.toFixed(n);
+            x = num.length;
             x = x - 1;
-            num = num.slice(0, x);
+
+            //Исправляем ошибку с округлением 5
+            if(n > 3){
+                if(num.slice(-1) == '5'){
+                    num = num.slice(0, x) + `6`;
+                }
+                continue;
+            }
+
             if(num.slice(-1) == '0'){
-                x = x - 2;
                 num = num.slice(0, x);
-                return num;
+                if(num.slice(-1) == '0'){
+                    continue;
+                } else {
+                    num = +num;
+                    return num;
+                }
             } else {
+                num = +num;
                 return num;
             }
-        } else {
-            return num;
         }
     }
+
 
 
     function SliceElement(str, element){
@@ -290,12 +309,12 @@ const getCalculation = (branchs) => {
 
         expressionEG = expressionEG + 
         `${plus} ${element.voltage}` +  
-        `⋅${ toFixed2(element.conductance) }`;
+        `⋅${ toFixed3(element.conductance) }`;
 
         a = a + `${element.nameE}` +  `⋅${element.nameG}`;
 
         sumG = sumG + element.conductance;
-        expressionG = expressionG + ` + ${ toFixed2(element.conductance) }`;
+        expressionG = expressionG + ` + ${ toFixed3(element.conductance) }`;
         b = b + ` + ${element.nameG}`;
 
     });
@@ -309,7 +328,7 @@ const getCalculation = (branchs) => {
 
         textArr.push(`Напряжение между узлами А-В равно:`);
         textArr.push(`Uab =~${a}/${b}~=~${expressionEG}/${expressionG}~= `+
-        `${toFixed2(U)} В`);
+        `${toFixed3(U)} В`);
         getAnswerBlock(textArr);
         textArr = [];
     }
@@ -327,7 +346,7 @@ const getCalculation = (branchs) => {
         plus = '+'; 
         parameters.forEach((element, i) => {
             I[i] = (element.voltage - U) * element.conductance;
-            I[i] = toFixed2(I[i]);
+            I[i] = toFixed3(I[i]);
 
             if(U < 0) { 
                 plus = ' +';
@@ -335,7 +354,7 @@ const getCalculation = (branchs) => {
                 plus = ' -';
             }
     
-            expressionEU =  `${element.voltage}` + `${plus} ${Math.abs(toFixed2(U))}`;
+            expressionEU =  `${element.voltage}` + `${plus} ${Math.abs(toFixed3(U))}`;
 
             a = `${element.nameE}` + ` - U`;
             b = `${element.nameG}`;
@@ -344,7 +363,7 @@ const getCalculation = (branchs) => {
 
         textArr.push(`Найдём ток в ветви №${i}`);
         textArr.push(`I${i} = ${a}⋅${b} = `+
-        `(${expressionEU})⋅${toFixed2(element.conductance)} = ${I[i]} А`);
+        `(${expressionEU})⋅${toFixed3(element.conductance)} = ${I[i]} А`);
         getAnswerBlock(textArr);
         textArr = [];
         });
@@ -387,7 +406,7 @@ const getCalculation = (branchs) => {
         textArr.push(`Для проверки правильности решения составим баланс мощностей.`);
         textArr.push(`${a} = ${b}`);
         textArr.push(`${expressionEI} = ${expressionRII}`);
-        textArr.push(`${toFixed2(sumEI)} = ${toFixed2(sumRII)}`);
+        textArr.push(`${toFixed3(sumEI)} = ${toFixed3(sumRII)}`);
         if(Math.abs(((sumEI - sumRII)/ sumEI)) < 0.03){
             textArr.push(`Баланс сошелся.`);
         }else{

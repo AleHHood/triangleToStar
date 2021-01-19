@@ -6574,6 +6574,7 @@ var getCalculation = function getCalculation(branchs) {
         branchs[0].elements.forEach(function (knot, number) {
           if (knot.y === block.y) {
             numberBranch = number + 1;
+            Arrow(knot, numberBranch);
           }
         });
 
@@ -6717,15 +6718,18 @@ var getCalculation = function getCalculation(branchs) {
       parameters[numberBranch].voltage = +value;
     }
   }
-  /*     function Arrow(branchs){
-          branchs[0].elements.forEach(element => {
-              element.style.background = 'url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;';
-              console.log(478547);
-          });
-      }
-  
-      Arrow(branchs); */
 
+  function Arrow(block, numberBranch) {
+    if (block.element.firstChild) {
+      block.element.firstChild.remove();
+    }
+
+    var span = document.createElement('span');
+    span.classList.add('top');
+    span.textContent = "I".concat(numberBranch);
+    block.element.append(span);
+    block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n            background-size: 92px;";
+  }
 
   function toFixed2(num) {
     num = num.toFixed(2);
@@ -7723,19 +7727,6 @@ var dragggrid = function dragggrid() {
 
       var promise1 = new Promise(function (resolve, reject) {
         getActiveBlocks();
-
-        function Arrow(ActiveBlocks) {
-          ActiveBlocks.forEach(function (element, i) {
-            var span = document.createElement('span');
-            span.classList.add("top");
-            span.textContent = "I".concat(i);
-            element.element.append(span);
-            element.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n                        background-size: 92px;";
-            console.log(element.element);
-          });
-        }
-
-        Arrow(ActiveBlocks);
         resolve(ActiveBlocks);
       }).then(function (value) {
         return new Promise(function (resolve, reject) {
