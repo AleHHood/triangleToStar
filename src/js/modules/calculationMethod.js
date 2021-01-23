@@ -12,7 +12,10 @@ const getCalculation = (branchs) => {
     textArr = [],
     answer;
     class branchElements {
-        constructor(numberBranch, nameR, resistance, nameG, conductance, nameE, voltage, ...elements) {
+        constructor(
+            numberBranch, nameR, resistance, nameG, 
+            conductance, nameE, voltage, ...elements
+            ) {
             this.numberBranch = numberBranch;
             this.conductance = conductance;
             this.nameG = nameG;
@@ -86,19 +89,24 @@ const getCalculation = (branchs) => {
         parameters[numberBranch] = new branchElements(numberBranch);
 
         if(K < 2){
-            
-            textArr.push(`Найдём проводимость ветви №${numberBranch}`);
-            textArr.push(`g${R[K].number} =~1/r${R[K].number}`);
-            textArr.push(`g${R[K].number} =~1/${R[K].resistance}~=`+
-            ` ${1 / +R[K].resistance} См`);
-            getAnswerBlock(textArr);
-            textArr = [];
-
 
             parameters[numberBranch].nameG = `g${R[K].number}`;
             parameters[numberBranch].conductance = 1 / +R[K].resistance;
             parameters[numberBranch].nameR = `r${R[K].number}`;
             parameters[numberBranch].resistance = +R[K].resistance;
+
+            let resistance = +R[K].resistance;
+            let answer = toFixed3(1 / +R[K].resistance);
+            
+            textArr.push(`Найдём проводимость ветви №${numberBranch}`);
+            textArr.push(`g${R[K].number} =~1/r${R[K].number}`);
+            textArr.push(`g${R[K].number} =~1/${resistance}~=`+
+            ` ${answer} См`);
+            getAnswerBlock(textArr);
+            textArr = [];
+
+
+
 
         } else {
 
@@ -189,7 +197,7 @@ const getCalculation = (branchs) => {
             Name = '';
             
             R.forEach(EDS => {
-                let EDSname = '+ E',
+                let EDSname = ' + E',
                 plus = '+';
                 
 
@@ -199,7 +207,7 @@ const getCalculation = (branchs) => {
                 console.log(EDS.rotate);
                 if(EDS.rotate == 0){
                     voltage = -voltage;
-                    EDSname = '- E';
+                    EDSname = ' - E';
                     plus = '-';
                 }
 
@@ -230,17 +238,37 @@ const getCalculation = (branchs) => {
         }
     }
 
-    function Arrow(block, numberBranch){
-            if(block.element.firstChild){
-                block.element.firstChild.remove();
+    function Arrow(block, numberBranch, revers = 0){
+
+            // Удаляем все содержимое блоков(название токов)
+            while (block.element.firstChild) {
+                block.element.removeChild(block.element.firstChild);
             }
+
+            // Заново добавляем название узла
+            if(numberBranch === 2){ 
+                const spanText = document.createElement('span');
+                spanText.classList.add('knot-text');
+                spanText.textContent = `A`;
+                block.element.append(spanText);
+            }
+
             const span = document.createElement('span');
             span.classList.add('top');
             span.textContent = `I${numberBranch}`;
             block.element.append(span);
-            block.element.style.cssText = 
-            `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
-            background-size: 92px;`;
+            if(!revers){
+                block.element.style.cssText = 
+                `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
+                background-size: 92px;`;   
+            } else {
+                console.log('revers');
+                block.element.style.cssText = 
+                `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
+                background-size: 92px;`;
+            }
+
+
     }
 
 
@@ -282,6 +310,7 @@ const getCalculation = (branchs) => {
         if(str.substr(0, 2) == element){
             return str.slice(2);
         } else{
+            console.log(str);
             return str;
         }
     } 
@@ -347,6 +376,11 @@ const getCalculation = (branchs) => {
         parameters.forEach((element, i) => {
             I[i] = (element.voltage - U) * element.conductance;
             I[i] = toFixed3(I[i]);
+            
+            //Меняем направление тока на схеме при отрицательных значениях
+/*             if(I[i] < 0) {
+                Arrow(branchs[0].elements[i-1], i, 1);
+            } */
 
             if(U < 0) { 
                 plus = ' +';
@@ -354,7 +388,8 @@ const getCalculation = (branchs) => {
                 plus = ' -';
             }
     
-            expressionEU =  `${element.voltage}` + `${plus} ${Math.abs(toFixed3(U))}`;
+            expressionEU =  `${element.voltage}` + 
+            `${plus} ${Math.abs(toFixed3(U))}`;
 
             a = `${element.nameE}` + ` - U`;
             b = `${element.nameG}`;
@@ -364,6 +399,13 @@ const getCalculation = (branchs) => {
         textArr.push(`Найдём ток в ветви №${i}`);
         textArr.push(`I${i} = ${a}⋅${b} = `+
         `(${expressionEU})⋅${toFixed3(element.conductance)} = ${I[i]} А`);
+        if(I[i] < 0) {
+            textArr.push(
+            `Так как ток I${i} получился с отрицательным 
+            значением - реальное направление тока в цепи, будет от узла
+             В к узлу А, то есть противоположно изначально принятому.`
+            );
+        }
         getAnswerBlock(textArr);
         textArr = [];
         });
@@ -387,26 +429,64 @@ const getCalculation = (branchs) => {
         
             
             // добавляем скобки к отрицательным токам
-            if(I[i] < 0) { 
+/*             if(I[i] < 0) { 
                 I[i] = `(${I[i]})`;
+            } */
+
+
+
+            //Если напрвление токов не совпадает с направлеием ЭДС
+            if((element.voltage * I[i]) < 0){
+
+                if(element.voltage > 0){
+                    element.voltage = element.voltage * -1; 
+                    element.nameE = SliceElement(element.nameE, ' +');
+                    element.nameE = ` - ${element.nameE}`;
+                }
+                
+            } else {      
+
+                if(element.voltage < 0){
+                    element.voltage = element.voltage * -1;
+                    element.nameE = SliceElement(element.nameE, ' -');
+                    element.nameE = ` + ${element.nameE}`;
+                }
+            }
+
+            if(I[i] < 0) { 
+                I[i] = I[i] * -1;
+            }
+
+            if(element.voltage < 0){
+                plus = '';
+            } else {
+                plus = '+';
             }
 
             a = a + `${element.nameE} ⋅ I${i}`;
-            expressionEI = expressionEI + ` + ${element.resistance} ⋅ ${I[i]}`;
+            expressionEI = expressionEI + 
+            ` ${plus}${element.voltage} ⋅ ${I[i]}`;
 
             b = b + ` + I${i}<sup>2</sup> ⋅ ${element.nameR}`;
-            expressionRII = expressionRII + ` + ${I[i]}<sup>2</sup> ⋅ ${element.resistance}`;
+            expressionRII = expressionRII + 
+            ` + ${I[i]}<sup>2</sup> ⋅ ${element.resistance}`;
         });
 
         a = SliceElement(a, ' +');
         b = SliceElement(b, ' +');
-        expressionEI = SliceElement(expressionEI, ' +');
+
+        expressionEI = SliceElement(expressionEI, ` +`);
         expressionRII = SliceElement(expressionRII, ' +');
 
-        textArr.push(`Для проверки правильности решения составим баланс мощностей.`);
+        textArr.push(
+            `Для проверки правильности решения составим 
+            <a href="https://electrikam.com/balans` +
+            `-moshhnostej-v-cepi-postoyannogo-toka/">
+            баланс мощностей</a>.`
+        );
         textArr.push(`${a} = ${b}`);
         textArr.push(`${expressionEI} = ${expressionRII}`);
-        textArr.push(`${toFixed3(sumEI)} = ${toFixed3(sumRII)}`);
+        textArr.push(`${toFixed3(sumEI)} Вт = ${toFixed3(sumRII)} Вт`);
         if(Math.abs(((sumEI - sumRII)/ sumEI)) < 0.03){
             textArr.push(`Баланс сошелся.`);
         }else{

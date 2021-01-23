@@ -21,7 +21,8 @@ const getMath = (expression, appendBlock) => {
         split = expression.split('/');
 
         if(split.length == 2){
-            newBlock.innerHTML += `<span class="fraction" ><span class="fraction__top">` + 
+            newBlock.innerHTML += 
+            `<span class="fraction" ><span class="fraction__top">` + 
             `${split[0]}` + 
             `</span><span class="fraction__bottom">` + 
             `${split[1]}</span></span>`;

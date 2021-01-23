@@ -6606,15 +6606,19 @@ var getCalculation = function getCalculation(branchs) {
     parameters[numberBranch] = new branchElements(numberBranch);
 
     if (K < 2) {
-      textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u043F\u0440\u043E\u0432\u043E\u0434\u0438\u043C\u043E\u0441\u0442\u044C \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
-      textArr.push("g".concat(R[K].number, " =~1/r").concat(R[K].number));
-      textArr.push("g".concat(R[K].number, " =~1/").concat(R[K].resistance, "~=") + " ".concat(1 / +R[K].resistance, " \u0421\u043C"));
-      getAnswerBlock(textArr);
-      textArr = [];
       parameters[numberBranch].nameG = "g".concat(R[K].number);
       parameters[numberBranch].conductance = 1 / +R[K].resistance;
       parameters[numberBranch].nameR = "r".concat(R[K].number);
       parameters[numberBranch].resistance = +R[K].resistance;
+      var resistance = +R[K].resistance;
+
+      var _answer = toFixed3(1 / +R[K].resistance);
+
+      textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u043F\u0440\u043E\u0432\u043E\u0434\u0438\u043C\u043E\u0441\u0442\u044C \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
+      textArr.push("g".concat(R[K].number, " =~1/r").concat(R[K].number));
+      textArr.push("g".concat(R[K].number, " =~1/").concat(resistance, "~=") + " ".concat(_answer, " \u0421\u043C"));
+      getAnswerBlock(textArr);
+      textArr = [];
     } else {
       var Name = '',
           value = 0,
@@ -6636,7 +6640,7 @@ var getCalculation = function getCalculation(branchs) {
       parameters[numberBranch].nameG = "g".concat(Name);
       parameters[numberBranch].conductance = +value; //Округляем число для вывода
 
-      value = toFixed2(+value);
+      value = toFixed3(+value);
       textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u043F\u0440\u043E\u0432\u043E\u0434\u0438\u043C\u043E\u0441\u0442\u044C \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
       textArr.push("g".concat(Name, " =~1/").concat(expression));
       textArr.push("g".concat(Name, " =~1/").concat(expressionValue, "~= ").concat(value, " \u0421\u043C"));
@@ -6684,7 +6688,7 @@ var getCalculation = function getCalculation(branchs) {
           expression = '';
       Name = '';
       R.forEach(function (EDS) {
-        var EDSname = '+ E',
+        var EDSname = ' + E',
             plus = '+';
         Name = "".concat(Name) + "".concat(EDS.number);
         voltage = +EDS.voltage;
@@ -6692,7 +6696,7 @@ var getCalculation = function getCalculation(branchs) {
 
         if (EDS.rotate == 0) {
           voltage = -voltage;
-          EDSname = '- E';
+          EDSname = ' - E';
           plus = '-';
         }
 
@@ -6720,35 +6724,64 @@ var getCalculation = function getCalculation(branchs) {
   }
 
   function Arrow(block, numberBranch) {
-    if (block.element.firstChild) {
-      block.element.firstChild.remove();
+    var revers = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+    // Удаляем все содержимое блоков(название токов)
+    while (block.element.firstChild) {
+      block.element.removeChild(block.element.firstChild);
+    } // Заново добавляем название узла
+
+
+    if (numberBranch === 2) {
+      var spanText = document.createElement('span');
+      spanText.classList.add('knot-text');
+      spanText.textContent = "A";
+      block.element.append(spanText);
     }
 
     var span = document.createElement('span');
     span.classList.add('top');
     span.textContent = "I".concat(numberBranch);
     block.element.append(span);
-    block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n            background-size: 92px;";
+
+    if (!revers) {
+      block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n                background-size: 92px;";
+    } else {
+      console.log('revers');
+      block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n                background-size: 92px;";
+    }
   }
 
-  function toFixed2(num) {
-    num = num.toFixed(2);
+  function toFixed3(num) {
     var x = 0;
-    x = num.length;
 
-    if (num.slice(-1) == '0') {
-      x = x - 1;
-      num = num.slice(0, x);
+    for (var n = 5; n >= 0; --n) {
+      num = +num;
+      num = num.toFixed(n);
+      x = num.length;
+      x = x - 1; //Исправляем ошибку с округлением 5
+
+      if (n > 3) {
+        if (num.slice(-1) == '5') {
+          num = num.slice(0, x) + "6";
+        }
+
+        continue;
+      }
 
       if (num.slice(-1) == '0') {
-        x = x - 2;
         num = num.slice(0, x);
-        return num;
+
+        if (num.slice(-1) == '0') {
+          continue;
+        } else {
+          num = +num;
+          return num;
+        }
       } else {
+        num = +num;
         return num;
       }
-    } else {
-      return num;
     }
   }
 
@@ -6756,6 +6789,7 @@ var getCalculation = function getCalculation(branchs) {
     if (str.substr(0, 2) == element) {
       return str.slice(2);
     } else {
+      console.log(str);
       return str;
     }
   }
@@ -6777,10 +6811,10 @@ var getCalculation = function getCalculation(branchs) {
         plus = ' + ';
       }
 
-      expressionEG = expressionEG + "".concat(plus, " ").concat(element.voltage) + "\u22C5".concat(toFixed2(element.conductance));
+      expressionEG = expressionEG + "".concat(plus, " ").concat(element.voltage) + "\u22C5".concat(toFixed3(element.conductance));
       a = a + "".concat(element.nameE) + "\u22C5".concat(element.nameG);
       sumG = sumG + element.conductance;
-      expressionG = expressionG + " + ".concat(toFixed2(element.conductance));
+      expressionG = expressionG + " + ".concat(toFixed3(element.conductance));
       b = b + " + ".concat(element.nameG);
     });
     U = sumEG / sumG;
@@ -6789,7 +6823,7 @@ var getCalculation = function getCalculation(branchs) {
     expressionG = SliceElement(expressionG, ' +');
     expressionEG = SliceElement(expressionEG, ' +');
     textArr.push("\u041D\u0430\u043F\u0440\u044F\u0436\u0435\u043D\u0438\u0435 \u043C\u0435\u0436\u0434\u0443 \u0443\u0437\u043B\u0430\u043C\u0438 \u0410-\u0412 \u0440\u0430\u0432\u043D\u043E:");
-    textArr.push("Uab =~".concat(a, "/").concat(b, "~=~").concat(expressionEG, "/").concat(expressionG, "~= ") + "".concat(toFixed2(U), " \u0412"));
+    textArr.push("Uab =~".concat(a, "/").concat(b, "~=~").concat(expressionEG, "/").concat(expressionG, "~= ") + "".concat(toFixed3(U), " \u0412"));
     getAnswerBlock(textArr);
     textArr = [];
   }
@@ -6804,7 +6838,11 @@ var getCalculation = function getCalculation(branchs) {
         plus = '+';
     parameters.forEach(function (element, i) {
       I[i] = (element.voltage - U) * element.conductance;
-      I[i] = toFixed2(I[i]);
+      I[i] = toFixed3(I[i]); //Меняем направление тока на схеме при отрицательных значениях
+
+      /*             if(I[i] < 0) {
+                      Arrow(branchs[0].elements[i-1], i, 1);
+                  } */
 
       if (U < 0) {
         plus = ' +';
@@ -6812,12 +6850,17 @@ var getCalculation = function getCalculation(branchs) {
         plus = ' -';
       }
 
-      expressionEU = "".concat(element.voltage) + "".concat(plus, " ").concat(Math.abs(toFixed2(U)));
+      expressionEU = "".concat(element.voltage) + "".concat(plus, " ").concat(Math.abs(toFixed3(U)));
       a = "".concat(element.nameE) + " - U";
       b = "".concat(element.nameG);
       a = SliceElement(a, ' +');
       textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u0442\u043E\u043A \u0432 \u0432\u0435\u0442\u0432\u0438 \u2116".concat(i));
-      textArr.push("I".concat(i, " = ").concat(a, "\u22C5").concat(b, " = ") + "(".concat(expressionEU, ")\u22C5").concat(toFixed2(element.conductance), " = ").concat(I[i], " \u0410"));
+      textArr.push("I".concat(i, " = ").concat(a, "\u22C5").concat(b, " = ") + "(".concat(expressionEU, ")\u22C5").concat(toFixed3(element.conductance), " = ").concat(I[i], " \u0410"));
+
+      if (I[i] < 0) {
+        textArr.push("\u0422\u0430\u043A \u043A\u0430\u043A \u0442\u043E\u043A I".concat(i, " \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u0441\u044F \u0441 \u043E\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u043C \n            \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435\u043C - \u0440\u0435\u0430\u043B\u044C\u043D\u043E\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0442\u043E\u043A\u0430 \u0432 \u0446\u0435\u043F\u0438, \u0431\u0443\u0434\u0435\u0442 \u043E\u0442 \u0443\u0437\u043B\u0430\n             \u0412 \u043A \u0443\u0437\u043B\u0443 \u0410, \u0442\u043E \u0435\u0441\u0442\u044C \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u043E \u0438\u0437\u043D\u0430\u0447\u0430\u043B\u044C\u043D\u043E \u043F\u0440\u0438\u043D\u044F\u0442\u043E\u043C\u0443."));
+      }
+
       getAnswerBlock(textArr);
       textArr = [];
     });
@@ -6835,23 +6878,48 @@ var getCalculation = function getCalculation(branchs) {
       sumEI = sumEI + element.voltage * I[i];
       sumRII = sumRII + I[i] * I[i] * element.resistance; // добавляем скобки к отрицательным токам
 
+      /*             if(I[i] < 0) { 
+                      I[i] = `(${I[i]})`;
+                  } */
+      //Если напрвление токов не совпадает с направлеием ЭДС
+
+      if (element.voltage * I[i] < 0) {
+        if (element.voltage > 0) {
+          element.voltage = element.voltage * -1;
+          element.nameE = SliceElement(element.nameE, ' +');
+          element.nameE = " - ".concat(element.nameE);
+        }
+      } else {
+        if (element.voltage < 0) {
+          element.voltage = element.voltage * -1;
+          element.nameE = SliceElement(element.nameE, ' -');
+          element.nameE = " + ".concat(element.nameE);
+        }
+      }
+
       if (I[i] < 0) {
-        I[i] = "(".concat(I[i], ")");
+        I[i] = I[i] * -1;
+      }
+
+      if (element.voltage < 0) {
+        plus = '';
+      } else {
+        plus = '+';
       }
 
       a = a + "".concat(element.nameE, " \u22C5 I").concat(i);
-      expressionEI = expressionEI + " + ".concat(element.resistance, " \u22C5 ").concat(I[i]);
+      expressionEI = expressionEI + " ".concat(plus).concat(element.voltage, " \u22C5 ").concat(I[i]);
       b = b + " + I".concat(i, "<sup>2</sup> \u22C5 ").concat(element.nameR);
       expressionRII = expressionRII + " + ".concat(I[i], "<sup>2</sup> \u22C5 ").concat(element.resistance);
     });
     a = SliceElement(a, ' +');
     b = SliceElement(b, ' +');
-    expressionEI = SliceElement(expressionEI, ' +');
+    expressionEI = SliceElement(expressionEI, " +");
     expressionRII = SliceElement(expressionRII, ' +');
-    textArr.push("\u0414\u043B\u044F \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E\u0441\u0442\u0438 \u0440\u0435\u0448\u0435\u043D\u0438\u044F \u0441\u043E\u0441\u0442\u0430\u0432\u0438\u043C \u0431\u0430\u043B\u0430\u043D\u0441 \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0435\u0439.");
+    textArr.push("\u0414\u043B\u044F \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E\u0441\u0442\u0438 \u0440\u0435\u0448\u0435\u043D\u0438\u044F \u0441\u043E\u0441\u0442\u0430\u0432\u0438\u043C \n            <a href=\"https://electrikam.com/balans" + "-moshhnostej-v-cepi-postoyannogo-toka/\">\n            \u0431\u0430\u043B\u0430\u043D\u0441 \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0435\u0439</a>.");
     textArr.push("".concat(a, " = ").concat(b));
     textArr.push("".concat(expressionEI, " = ").concat(expressionRII));
-    textArr.push("".concat(toFixed2(sumEI), " = ").concat(toFixed2(sumRII)));
+    textArr.push("".concat(toFixed3(sumEI), " \u0412\u0442 = ").concat(toFixed3(sumRII), " \u0412\u0442"));
 
     if (Math.abs((sumEI - sumRII) / sumEI) < 0.03) {
       textArr.push("\u0411\u0430\u043B\u0430\u043D\u0441 \u0441\u043E\u0448\u0435\u043B\u0441\u044F.");
@@ -7466,6 +7534,16 @@ var dragggrid = function dragggrid() {
     });
   }
 
+  function removeOldAnswerBlock(classBlock) {
+    var removeBlock = document.querySelectorAll(classBlock);
+
+    if (removeBlock) {
+      removeBlock.forEach(function (element) {
+        element.remove();
+      });
+    }
+  }
+
   function SaveScheme() {
     var branchs = [{
       "elements": [{
@@ -7717,14 +7795,7 @@ var dragggrid = function dragggrid() {
     if (target && target.classList.contains('btn__calculate')) {
       GetFormSettings(); //Удаялем старые ошибки (если они есть)
 
-      var errorBlock = document.querySelectorAll('.Error__block');
-
-      if (errorBlock) {
-        errorBlock.forEach(function (element) {
-          element.remove();
-        });
-      }
-
+      removeOldAnswerBlock('.Error__block');
       var promise1 = new Promise(function (resolve, reject) {
         getActiveBlocks();
         resolve(ActiveBlocks);
@@ -7741,17 +7812,12 @@ var dragggrid = function dragggrid() {
         });
       }).then(function (scheme) {
         //Удаляем старый ответ (если он есть)
-        var answerBlock = document.querySelectorAll('.Answer__block');
-
-        if (answerBlock) {
-          answerBlock.forEach(function (element) {
-            element.remove();
-          });
-        }
-
+        removeOldAnswerBlock('.Answer__block');
         Object(_calculationMethod__WEBPACK_IMPORTED_MODULE_15__["default"])(scheme);
         /* getCalculation( SaveScheme() ); */
       }).catch(function () {
+        //Удаляем старый ответ (если он есть)
+        removeOldAnswerBlock('.Answer__block');
         console.log('reject');
       });
     }
@@ -7844,7 +7910,7 @@ var getscheme = function getscheme(blocks) {
         if (element.type === ActiveBlock.type && element.number === ActiveBlock.number) {
           if (element.number && element.id != ActiveBlock.id) {
             element.error = 'number';
-            getErrorBlock("\u041E\u0448\u0438\u0431\u043A\u0430! \u0421\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442 \u043D\u043E\u043C\u0435\u0440\u0430 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432: ".concat(element.number));
+            getErrorBlock("\u041E\u0448\u0438\u0431\u043A\u0430! \u0421\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442 \u043D\u043E\u043C\u0435\u0440\u0430 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432: \n                    ".concat(element.number));
             error = error + 1;
           }
         }
@@ -8127,7 +8193,8 @@ var getscheme = function getscheme(blocks) {
       getErrorMessagePosition('Е', message);
       return 'error';
     }
-  }
+  } //Удаляем из ветвей перемычки block b
+
 
   function DeleteElementBranch(branchs) {
     branchs.forEach(function (branch) {
@@ -8157,6 +8224,7 @@ var getscheme = function getscheme(blocks) {
     }
   }
 
+  console.log(returnValue);
   return returnValue;
 };
 

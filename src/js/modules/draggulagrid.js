@@ -531,7 +531,14 @@ function getForm(target){
         });        
     }
 
-
+    function removeOldAnswerBlock(classBlock){
+        const removeBlock = document.querySelectorAll(classBlock);
+        if(removeBlock){
+            removeBlock.forEach(element => {
+                element.remove();
+            });
+        }
+    }
     
     function SaveScheme(){
    
@@ -553,13 +560,7 @@ function getForm(target){
             GetFormSettings();
 
             //Удаялем старые ошибки (если они есть)
-            const errorBlock = document.querySelectorAll('.Error__block');
-            if(errorBlock){
-                errorBlock.forEach(element => {
-                    element.remove();
-                });
-            }
-
+            removeOldAnswerBlock('.Error__block');
             
             const promise1 = new Promise((resolve, reject) => {
                 getActiveBlocks();
@@ -579,18 +580,15 @@ function getForm(target){
               }).then(scheme => {
 
                 //Удаляем старый ответ (если он есть)
-                const answerBlock = document.querySelectorAll('.Answer__block');
-                if(answerBlock){
-                    answerBlock.forEach(element => {
-                        element.remove();
-                    });
-                }
+                removeOldAnswerBlock('.Answer__block');
 
 
                 getCalculation(scheme);
                 /* getCalculation( SaveScheme() ); */
               }).catch( () => {
-                  console.log('reject');
+                //Удаляем старый ответ (если он есть)
+                removeOldAnswerBlock('.Answer__block');
+                console.log('reject');
               });
         }
     });

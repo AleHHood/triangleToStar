@@ -70,7 +70,10 @@ const getscheme = (blocks) => {
             ) {
                 if(element.number && (element.id != ActiveBlock.id)){
                     element.error = 'number';
-                    getErrorBlock(`Ошибка! Совпадают номера элементов: ${element.number}`);
+                    
+                    getErrorBlock(`Ошибка! Совпадают номера элементов: 
+                    ${element.number}`);
+
                     error = error + 1;    
                     }
                 }
@@ -374,6 +377,7 @@ const getscheme = (blocks) => {
         }
     }
 
+    //Удаляем из ветвей перемычки block b
     function DeleteElementBranch(branchs) {
         branchs.forEach(branch => {        
             branch.elements.forEach((element, i) => {
@@ -404,6 +408,11 @@ const getscheme = (blocks) => {
         }
         
     }
+    console.log(returnValue);
     return returnValue;
 };
 export default getscheme;
+
+
+
+
