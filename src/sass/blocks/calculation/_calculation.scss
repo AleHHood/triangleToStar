@@ -3,15 +3,16 @@
         display: flex;
         flex-direction: row;
         width: 100vw;
-        height: 100vh;
+        height: calc(100vh - 68px);
+        min-height: 420px;
         background-color:aliceblue;
     }
     &__workTable{
         position: relative;
-        width: 1000px;
+        /* width: 1000px;
         height: 100%;
         background: repeating-linear-gradient(0deg, rgb(221, 221, 221) 0px, rgb(221, 221, 221) 1px,transparent 1px, transparent 20px),repeating-linear-gradient(90deg, rgb(221, 221, 221) 0px, rgb(221, 221, 221) 1px,transparent 1px, transparent 20px);
-        display: flex;
+ */     display: flex;
         flex-direction: column;
     }
     &__settings{
@@ -19,23 +20,26 @@
         height: 15%;
     }
     &__blockBar{
-        width: 22%;
-        max-width: 70px;
+        width: 19.5%;
+        min-width: 70px;
+        max-width: 167.857px;
+        max-height: 359px;
         height: 100%;
-        background-color:bisque;
+        background-color: #fff;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
+        align-items: center;
         flex-direction: column;
     }
 
     &__block{
         width: 70px;
         height: 70px;
-        border: black solid 1px;
         z-index: 1;
         background-color:white;
         position: relative;
         overflow: hidden;
+
 
         &-R{
             order: 1;
@@ -140,7 +144,7 @@
         }
     }
     &__blocksettings{
-        height: 100vh;
+        height: calc(100vh - 68px);
         width: 25%;
     }
 }
@@ -169,7 +173,7 @@
 
 .blocksettings{
     &__container{
-        height: 100vh;
+        height: calc(100vh - 68px);
         background-color:#F2F6F9;
         display: none;
         flex-direction: column;
@@ -363,6 +367,29 @@
 .active{
     border: 2px red dotted;
 };
+
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+}
+  .gu-hide {
+    display: none !important;
+}
+  .gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+  .gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+}
 
 .fraction{
     display: inline-block;

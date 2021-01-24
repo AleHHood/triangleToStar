@@ -187,7 +187,8 @@ const dragggrid = () => {
     const drake = dragula([blockBar, ...cell], {
         accepts: function (el, target) {
           return target !== blockBar;
-        }
+        },
+        mirrorContainer: container, 
       });
  
 
@@ -304,22 +305,55 @@ const dragggrid = () => {
             }
         });
     }
+    
 
     
     function ShowBlock(classBlock){
         let x = 0;
         let hiddenBlock = 0;
+        let removeBlock = 0;
         blockBar.children.forEach((element, i) => {
             if(element.classList == `calculation__block none ${classBlock}`){
-                hiddenBlock = i;
+                hiddenBlock = element;
             }
-            if(element.classList == `calculation__block ${classBlock}`){
+
+            //проверяем на дублирующие блоки
+            if(
+                element.classList == `calculation__block ${classBlock}` ||
+                element.classList == 
+                `calculation__block ${classBlock} active gu-transit` ||
+                element.classList == `calculation__block ${classBlock} active`
+            ){
+                //х - кол-во дублирующих блоков
                 x = x + 1;
+
+                //Записываем лишний элемент
+                if(element.classList == `calculation__block ${classBlock}`){
+                    removeBlock = element;
+                }
             }
         });
 
-        if(x == 0){
-            blockBar.children[hiddenBlock].classList.remove('none');
+        if(x === 0){
+            if(!hiddenBlock){
+                render(classBlock);
+                blockBar.children.forEach(element => {
+                    if(
+                        element.classList == 
+                        `calculation__block ${classBlock} none`
+                    ){
+                        element.classList.remove('none');
+                    }
+                });
+                
+            } else {
+                hiddenBlock.classList.remove('none');
+            }
+        }
+
+        //Удаляем дублирующие блоки в блокбар
+        if(x === 2){
+            removeBlock.classList.add('none');
         }
     }
 
@@ -550,7 +584,7 @@ function getForm(target){
     GetNewBlock();
     LimitingByDragging();
     MobileLimitingByDragging();
-    setInterval( () => ShowBlocks(), 500);  //Не забыть остановить
+    setInterval( () => ShowBlocks(), 100);  //Не забыть остановить
     getValueFromForm();
     GetRemoveOrRotateBlock();
     formSettings.addEventListener('click', (event) => {

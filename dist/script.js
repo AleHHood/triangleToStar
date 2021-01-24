@@ -6588,6 +6588,13 @@ var getCalculation = function getCalculation(branchs) {
           E[N] = block;
         }
       });
+
+      if (numberBranch === 1) {
+        textArr.push("\u0422\u0430\u043A \u043A\u0430\u043A \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F \n                    \u0442\u043E\u043A\u043E\u0432 \u0434\u043E \u0440\u0430\u0441\u0447\u0451\u0442\u0430 \u0446\u0435\u043F\u0438 \u043D\u0430\u043C \u043D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u044B \u2014 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u043B\u044C\u043D\u043E \n                    \u0443\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u043C \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F \u0442\u043E\u043A\u043E\u0432 \u0432 \u0432\u0435\u0442\u0432\u044F\u0445,");
+        getAnswerBlock(textArr);
+        textArr = [];
+      }
+
       GetValueResist(R, K, numberBranch);
       GetValueVoltage(E, N, numberBranch);
     });
@@ -6654,10 +6661,10 @@ var getCalculation = function getCalculation(branchs) {
     var Name = '';
 
     if (K === 0) {
-      textArr.push("\u042D\u0434\u0441 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
-      textArr.push("0 \u0412");
-      getAnswerBlock(textArr);
-      textArr = [];
+      /*             textArr.push(`Эдс для ветви №${numberBranch}`);
+                  textArr.push(`0 В`);
+                  getAnswerBlock(textArr);
+                  textArr = []; */
       parameters[numberBranch].nameE = " + 0";
       parameters[numberBranch].voltage = 0;
       return;
@@ -6666,17 +6673,18 @@ var getCalculation = function getCalculation(branchs) {
     if (K < 2) {
       voltage = +R[K].voltage;
 
-      if (R[K].rotate == 0) {
+      if (R[K].rotate == 2) {
         voltage = -voltage;
       }
+      /*             textArr.push(`Эдс для ветви №${numberBranch}`);
+                  textArr.push(`E${R[K].number} = ${voltage} В`);
+                  getAnswerBlock(textArr);
+                  textArr = []; */
 
-      textArr.push("\u042D\u0434\u0441 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
-      textArr.push("E".concat(R[K].number, " = ").concat(voltage, " \u0412"));
-      getAnswerBlock(textArr);
-      textArr = [];
+
       Name = " + E".concat(R[K].number);
 
-      if (R[K].rotate == 0) {
+      if (R[K].rotate == 2) {
         Name = " - E".concat(R[K].number);
       }
 
@@ -6694,7 +6702,7 @@ var getCalculation = function getCalculation(branchs) {
         voltage = +EDS.voltage;
         console.log(EDS.rotate);
 
-        if (EDS.rotate == 0) {
+        if (EDS.rotate == 2) {
           voltage = -voltage;
           EDSname = ' - E';
           plus = '-';
@@ -6706,7 +6714,7 @@ var getCalculation = function getCalculation(branchs) {
       });
       expression = SliceElement("".concat(expression), '+ ');
       expressionValue = SliceElement("".concat(expressionValue), '+ ');
-      textArr.push("\u042D\u0434\u0441 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
+      textArr.push("\u042D\u0414\u0421 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
       textArr.push("E".concat(Name, " = ").concat(expression));
       textArr.push("E".concat(Name, " = ").concat(expressionValue, " = ").concat(value, " \u0412"));
       getAnswerBlock(textArr);
@@ -6742,7 +6750,7 @@ var getCalculation = function getCalculation(branchs) {
     var span = document.createElement('span');
     span.classList.add('top');
     span.textContent = "I".concat(numberBranch);
-    block.element.append(span);
+    block.element.prepend(span);
 
     if (!revers) {
       block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n                background-size: 92px;";
@@ -6824,6 +6832,7 @@ var getCalculation = function getCalculation(branchs) {
     expressionEG = SliceElement(expressionEG, ' +');
     textArr.push("\u041D\u0430\u043F\u0440\u044F\u0436\u0435\u043D\u0438\u0435 \u043C\u0435\u0436\u0434\u0443 \u0443\u0437\u043B\u0430\u043C\u0438 \u0410-\u0412 \u0440\u0430\u0432\u043D\u043E:");
     textArr.push("Uab =~".concat(a, "/").concat(b, "~=~").concat(expressionEG, "/").concat(expressionG, "~= ") + "".concat(toFixed3(U), " \u0412"));
+    textArr.push("*\u042D\u0414\u0421 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043D\u0430\u044F \u043A \u0443\u0437\u043B\u0443 A, \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \xAB+\xBB, \n        \u0435\u0441\u043B\u0438 \u0432 \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u0443\u044E \u0441\u0442\u043E\u0440\u043E\u043D\u0443, \u0442\u043E \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \xAB-\xBB.");
     getAnswerBlock(textArr);
     textArr = [];
   }
@@ -6858,7 +6867,7 @@ var getCalculation = function getCalculation(branchs) {
       textArr.push("I".concat(i, " = ").concat(a, "\u22C5").concat(b, " = ") + "(".concat(expressionEU, ")\u22C5").concat(toFixed3(element.conductance), " = ").concat(I[i], " \u0410"));
 
       if (I[i] < 0) {
-        textArr.push("\u0422\u0430\u043A \u043A\u0430\u043A \u0442\u043E\u043A I".concat(i, " \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u0441\u044F \u0441 \u043E\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u043C \n            \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435\u043C - \u0440\u0435\u0430\u043B\u044C\u043D\u043E\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0442\u043E\u043A\u0430 \u0432 \u0446\u0435\u043F\u0438, \u0431\u0443\u0434\u0435\u0442 \u043E\u0442 \u0443\u0437\u043B\u0430\n             \u0412 \u043A \u0443\u0437\u043B\u0443 \u0410, \u0442\u043E \u0435\u0441\u0442\u044C \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u043E \u0438\u0437\u043D\u0430\u0447\u0430\u043B\u044C\u043D\u043E \u043F\u0440\u0438\u043D\u044F\u0442\u043E\u043C\u0443."));
+        textArr.push("\u0422\u0430\u043A \u043A\u0430\u043A \u0442\u043E\u043A I".concat(i, " \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u0441\u044F \u0441 \u043E\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u043C \n            \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435\u043C - \u0440\u0435\u0430\u043B\u044C\u043D\u043E\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0442\u043E\u043A\u0430 \u0432 \u0446\u0435\u043F\u0438, \u0431\u0443\u0434\u0435\u0442 \u043E\u0442 \u0443\u0437\u043B\u0430\n             A \u043A \u0443\u0437\u043B\u0443 B, \u0442\u043E \u0435\u0441\u0442\u044C \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u043E \u0438\u0437\u043D\u0430\u0447\u0430\u043B\u044C\u043D\u043E \u043F\u0440\u0438\u043D\u044F\u0442\u043E\u043C\u0443."));
       }
 
       getAnswerBlock(textArr);
@@ -6874,6 +6883,7 @@ var getCalculation = function getCalculation(branchs) {
         a = '',
         b = '',
         plus = '+';
+    textArr.push("\u0414\u043B\u044F \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E\u0441\u0442\u0438 \u0440\u0435\u0448\u0435\u043D\u0438\u044F \u0441\u043E\u0441\u0442\u0430\u0432\u0438\u043C \n            <a href=\"https://electrikam.com/balans" + "-moshhnostej-v-cepi-postoyannogo-toka/\">\n            \u0431\u0430\u043B\u0430\u043D\u0441 \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0435\u0439</a>.");
     parameters.forEach(function (element, i) {
       sumEI = sumEI + element.voltage * I[i];
       sumRII = sumRII + I[i] * I[i] * element.resistance; // добавляем скобки к отрицательным токам
@@ -6881,9 +6891,12 @@ var getCalculation = function getCalculation(branchs) {
       /*             if(I[i] < 0) { 
                       I[i] = `(${I[i]})`;
                   } */
-      //Если напрвление токов не совпадает с направлеием ЭДС
+      //Если напрвление токов не совпадает с направлением ЭДС
 
       if (element.voltage * I[i] < 0) {
+        textArr.push("\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A ".concat(SliceElement(element.nameE, ' -'), " \u043F\u043E\u0442\u0440\u0435\u0431\u043B\u044F\u0435\u0442 \n                    \u044D\u043B\u0435\u043A\u0442\u0440\u0438\u0447\u0435\u0441\u043A\u0443\u044E \u044D\u043D\u0435\u0440\u0433\u0438\u044E, \u0442.\u043A. \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u042D\u0414\u0421 \u043D\u0435 \u0441\u043E\u0432\u043F\u0430\u0434\u0430\u0435\u0442 \u0441 \n                    \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435\u043C \u0442\u043E\u043A\u0430 \u0432 \u0432\u0435\u0442\u0432\u044F\u0445.\n                "));
+        textArr.push("\u0421\u043B\u0435\u0434\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u043D\u043E, \u0432 \u0431\u0430\u043B\u0430\u043D\u0441 \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0435\u0439 \u042D\u0414\u0421 \n                    ".concat(SliceElement(element.nameE, ' -'), " \n                    \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \u043C\u0438\u043D\u0443\u0441.\n                "));
+
         if (element.voltage > 0) {
           element.voltage = element.voltage * -1;
           element.nameE = SliceElement(element.nameE, ' +');
@@ -6916,7 +6929,6 @@ var getCalculation = function getCalculation(branchs) {
     b = SliceElement(b, ' +');
     expressionEI = SliceElement(expressionEI, " +");
     expressionRII = SliceElement(expressionRII, ' +');
-    textArr.push("\u0414\u043B\u044F \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E\u0441\u0442\u0438 \u0440\u0435\u0448\u0435\u043D\u0438\u044F \u0441\u043E\u0441\u0442\u0430\u0432\u0438\u043C \n            <a href=\"https://electrikam.com/balans" + "-moshhnostej-v-cepi-postoyannogo-toka/\">\n            \u0431\u0430\u043B\u0430\u043D\u0441 \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0435\u0439</a>.");
     textArr.push("".concat(a, " = ").concat(b));
     textArr.push("".concat(expressionEI, " = ").concat(expressionRII));
     textArr.push("".concat(toFixed3(sumEI), " \u0412\u0442 = ").concat(toFixed3(sumRII), " \u0412\u0442"));
@@ -7203,7 +7215,8 @@ var dragggrid = function dragggrid() {
   var drake = dragula__WEBPACK_IMPORTED_MODULE_13___default()([blockBar].concat(_toConsumableArray(cell)), {
     accepts: function accepts(el, target) {
       return target !== blockBar;
-    }
+    },
+    mirrorContainer: container
   });
   drake.containers.forEach(function (element) {
     copyDrakeContainers.push(element);
@@ -7317,18 +7330,39 @@ var dragggrid = function dragggrid() {
   function ShowBlock(classBlock) {
     var x = 0;
     var hiddenBlock = 0;
+    var removeBlock = 0;
     blockBar.children.forEach(function (element, i) {
       if (element.classList == "calculation__block none ".concat(classBlock)) {
-        hiddenBlock = i;
-      }
+        hiddenBlock = element;
+      } //проверяем на дублирующие блоки
 
-      if (element.classList == "calculation__block ".concat(classBlock)) {
-        x = x + 1;
+
+      if (element.classList == "calculation__block ".concat(classBlock) || element.classList == "calculation__block ".concat(classBlock, " active gu-transit") || element.classList == "calculation__block ".concat(classBlock, " active")) {
+        //х - кол-во дублирующих блоков
+        x = x + 1; //Записываем лишний элемент
+
+        if (element.classList == "calculation__block ".concat(classBlock)) {
+          removeBlock = element;
+        }
       }
     });
 
-    if (x == 0) {
-      blockBar.children[hiddenBlock].classList.remove('none');
+    if (x === 0) {
+      if (!hiddenBlock) {
+        render(classBlock);
+        blockBar.children.forEach(function (element) {
+          if (element.classList == "calculation__block ".concat(classBlock, " none")) {
+            element.classList.remove('none');
+          }
+        });
+      } else {
+        hiddenBlock.classList.remove('none');
+      }
+    } //Удаляем дублирующие блоки в блокбар
+
+
+    if (x === 2) {
+      removeBlock.classList.add('none');
     }
   }
 
@@ -7784,7 +7818,7 @@ var dragggrid = function dragggrid() {
   MobileLimitingByDragging();
   setInterval(function () {
     return ShowBlocks();
-  }, 500); //Не забыть остановить
+  }, 100); //Не забыть остановить
 
   getValueFromForm();
   GetRemoveOrRotateBlock();

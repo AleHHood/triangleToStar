@@ -67,6 +67,16 @@ const getCalculation = (branchs) => {
 
             });
         
+            if(numberBranch === 1){
+                textArr.push(
+                    `Так как действительные направления 
+                    токов до расчёта цепи нам неизвестны — произвольно 
+                    указываем направления токов в ветвях,`
+                );
+                getAnswerBlock(textArr);
+                textArr = [];
+            }
+
             GetValueResist(R, K, numberBranch);
             GetValueVoltage(E, N, numberBranch);
         });
@@ -157,10 +167,10 @@ const getCalculation = (branchs) => {
 
         if(K === 0){
 
-            textArr.push(`Эдс для ветви №${numberBranch}`);
+/*             textArr.push(`Эдс для ветви №${numberBranch}`);
             textArr.push(`0 В`);
             getAnswerBlock(textArr);
-            textArr = [];
+            textArr = []; */
 
 
             parameters[numberBranch].nameE = ` + 0`;
@@ -171,17 +181,17 @@ const getCalculation = (branchs) => {
         if(K < 2){
 
             voltage = +(R[K].voltage);
-            if(R[K].rotate == 0){
+            if(R[K].rotate == 2){
                 voltage = -voltage;
             }
                 
-            textArr.push(`Эдс для ветви №${numberBranch}`);
+/*             textArr.push(`Эдс для ветви №${numberBranch}`);
             textArr.push(`E${R[K].number} = ${voltage} В`);
             getAnswerBlock(textArr);
-            textArr = [];
+            textArr = []; */
 
             Name = ` + E${R[K].number}`;
-            if(R[K].rotate == 0){
+            if(R[K].rotate == 2){
                 Name = ` - E${R[K].number}`;
             }
 
@@ -205,7 +215,7 @@ const getCalculation = (branchs) => {
 
                 voltage = +EDS.voltage;
                 console.log(EDS.rotate);
-                if(EDS.rotate == 0){
+                if(EDS.rotate == 2){
                     voltage = -voltage;
                     EDSname = ' - E';
                     plus = '-';
@@ -221,7 +231,7 @@ const getCalculation = (branchs) => {
                 expressionValue = SliceElement(`${expressionValue}`, '+ ');
 
 
-            textArr.push(`Эдс для ветви №${numberBranch}`);
+            textArr.push(`ЭДС для ветви №${numberBranch}`);
             textArr.push(`E${Name} = ${expression}`);
             textArr.push(`E${Name} = ${expressionValue} = ${value} В`);
             getAnswerBlock(textArr);
@@ -256,7 +266,7 @@ const getCalculation = (branchs) => {
             const span = document.createElement('span');
             span.classList.add('top');
             span.textContent = `I${numberBranch}`;
-            block.element.append(span);
+            block.element.prepend(span);
             if(!revers){
                 block.element.style.cssText = 
                 `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
@@ -267,8 +277,6 @@ const getCalculation = (branchs) => {
                 `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
                 background-size: 92px;`;
             }
-
-
     }
 
 
@@ -354,10 +362,14 @@ const getCalculation = (branchs) => {
         b = SliceElement(b, ' +');
         expressionG = SliceElement(expressionG, ' +');
         expressionEG = SliceElement(expressionEG, ' +');
-
+        
         textArr.push(`Напряжение между узлами А-В равно:`);
         textArr.push(`Uab =~${a}/${b}~=~${expressionEG}/${expressionG}~= `+
         `${toFixed3(U)} В`);
+        textArr.push(
+        `*ЭДС направленная к узлу A, записывается со знаком «+», 
+        если в противоположную сторону, то со знаком «-».`
+        );
         getAnswerBlock(textArr);
         textArr = [];
     }
@@ -403,7 +415,7 @@ const getCalculation = (branchs) => {
             textArr.push(
             `Так как ток I${i} получился с отрицательным 
             значением - реальное направление тока в цепи, будет от узла
-             В к узлу А, то есть противоположно изначально принятому.`
+             A к узлу B, то есть противоположно изначально принятому.`
             );
         }
         getAnswerBlock(textArr);
@@ -421,6 +433,13 @@ const getCalculation = (branchs) => {
         b = '',
         plus = '+';
 
+        textArr.push(
+            `Для проверки правильности решения составим 
+            <a href="https://electrikam.com/balans` +
+            `-moshhnostej-v-cepi-postoyannogo-toka/">
+            баланс мощностей</a>.`
+        );
+
         parameters.forEach((element, i) => {
 
             
@@ -434,10 +453,20 @@ const getCalculation = (branchs) => {
             } */
 
 
-
-            //Если напрвление токов не совпадает с направлеием ЭДС
+            //Если напрвление токов не совпадает с направлением ЭДС
             if((element.voltage * I[i]) < 0){
 
+                textArr.push(
+                    `Источник ${SliceElement(element.nameE, ' -')} потребляет 
+                    электрическую энергию, т.к. направление ЭДС не совпадает с 
+                    направлением тока в ветвях.
+                `);
+                textArr.push(
+                    `Следовательно, в баланс мощностей ЭДС 
+                    ${SliceElement(element.nameE, ' -')} 
+                    записывается со знаком минус.
+                `);
+                
                 if(element.voltage > 0){
                     element.voltage = element.voltage * -1; 
                     element.nameE = SliceElement(element.nameE, ' +');
@@ -478,12 +507,6 @@ const getCalculation = (branchs) => {
         expressionEI = SliceElement(expressionEI, ` +`);
         expressionRII = SliceElement(expressionRII, ' +');
 
-        textArr.push(
-            `Для проверки правильности решения составим 
-            <a href="https://electrikam.com/balans` +
-            `-moshhnostej-v-cepi-postoyannogo-toka/">
-            баланс мощностей</a>.`
-        );
         textArr.push(`${a} = ${b}`);
         textArr.push(`${expressionEI} = ${expressionRII}`);
         textArr.push(`${toFixed3(sumEI)} Вт = ${toFixed3(sumRII)} Вт`);
@@ -495,11 +518,7 @@ const getCalculation = (branchs) => {
         getAnswerBlock(textArr);
         textArr = [];
     }
-
-
-
-
-    
+ 
 
     getParametrsBranch (branchs);
     GetVoltageSсheme();
