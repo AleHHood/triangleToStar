@@ -5,7 +5,6 @@
         width: 100vw;
         height: calc(100vh - 68px);
         min-height: 420px;
-        background-color:aliceblue;
     }
     &__workTable{
         position: relative;
@@ -20,21 +19,24 @@
         height: 15%;
     }
     &__blockBar{
-        width: 19.5%;
+        width: 20.5%;
+        height: 472px;
         min-width: 70px;
         max-width: 167.857px;
-        max-height: 359px;
-        height: 100%;
-        background-color: #fff;
+        padding: 25px 0px 25px 0px;
+        background-color: #f2f6f9;
         display: flex;
         justify-content: space-around;
         align-items: center;
         flex-direction: column;
+        .calculation__block{
+            background-color:#f2f6f9;
+        }
     }
 
     &__block{
-        width: 70px;
-        height: 70px;
+        width: 85px;
+        height: 85px;
         z-index: 1;
         background-color:white;
         position: relative;
@@ -48,8 +50,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -71%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/R.SVG") 0 0 repeat;
               }
@@ -63,8 +65,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -71%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/E.SVG") 0 0 repeat;
               }
@@ -77,8 +79,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -71%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/B.SVG") 0 0 repeat;
               }
@@ -118,8 +120,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -71%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/K.SVG") 0 0 repeat;
               }
@@ -136,17 +138,17 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -71%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/Corner.SVG") 0 0 repeat;
               }
         }
     }
-    &__blocksettings{
+/*     &__blocksettings{
         height: calc(100vh - 68px);
         width: 25%;
-    }
+    } */
 }
 
 .none{
@@ -164,33 +166,52 @@
         display: flex;
     }
     &__cell{
-        width: 70px;
-        height: 70px;
+        width: 85px;
+        height: 85px;
         background-color: white;
-        border:rgb(83, 37, 161) 1px solid;
+        border:rgb(83, 37, 161) 1px dotted;
     }
 }
 
 .blocksettings{
     &__container{
-        height: calc(100vh - 68px);
+        width: calc(100vw - 1134.848px);
+        height: 472px;
+        padding: 25px 5px 25px 5px;
         background-color:#F2F6F9;
         display: none;
         flex-direction: column;
         align-items: center;
         justify-content: start;
     }
+    &__input{
+/*         font-family: 'Roboto', sans-serif;
+        font-size: 1rem;
+        line-height: 1.5; */
+        width: 238px;
+        padding-left: 10px;
+        padding-right: 10px;
+        height: 30px;
+        border: 1px solid rgba(51, 51, 51, 0.1);
+        border-radius: 5px;
+    }
     &__wrapper-N{
         display: none;
+        width: 260px;
     }
     &__wrapper-R{
         display: none;
+        width: 260px;
     }
     &__wrapper-E{
         display: none;
+        width: 260px;
     }
 }
 
+
+
+//Ротация Блоков
 .rotate{
     &-0{
         &:before {
@@ -198,8 +219,8 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            top: -71%;
-            left: -29%;
+            top: -50%;
+            left: -50%;
             z-index: -1;
             background: url("../img/svg/R.SVG") 0 0 repeat;
             transform: rotate(0.25turn);
@@ -211,8 +232,8 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            top: -71%;
-            left: -29%;
+            top: -50%;
+            left: -50%;
             z-index: -1;
             background: url("../img/svg/E.SVG") 0 0 repeat;
             transform: rotate(0.25turn);
@@ -223,8 +244,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -29%;
-                left: -29%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/E.SVG") 0 0 repeat;
                 transform: rotate(0.5turn);
@@ -236,8 +257,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -29%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/E.SVG") 0 0 repeat;
                 transform: rotate(0.75turn);
@@ -250,8 +271,8 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            top: -71%;
-            left: -29%;
+            top: -50%;
+            left: -50%;
             z-index: -3;
             background: url("../img/svg/B.SVG") 0 0 repeat;
             transform: rotate(0.25turn);
@@ -262,8 +283,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -29%;
-                left: -29%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/B.SVG") 0 0 repeat;
                 transform: rotate(0.5turn);
@@ -275,8 +296,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -29%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/B.SVG") 0 0 repeat;
                 transform: rotate(0.75turn);
@@ -289,8 +310,8 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            top: -71%;
-            left: -29%;
+            top: -50%;
+            left: -50%;
             z-index: -2;
             background: url("../img/svg/K.SVG") 0 0 repeat;
             transform: rotate(0.25turn);
@@ -301,8 +322,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -29%;
-                left: -29%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/K.SVG") 0 0 repeat;
                 transform: rotate(0.5turn);
@@ -314,8 +335,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -29%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/K.SVG") 0 0 repeat;
                 transform: rotate(0.75turn);
@@ -328,8 +349,8 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            top: -71%;
-            left: -29%;
+            top: -50%;
+            left: -50%;
             z-index: -2;
             background: url("../img/svg/Corner.SVG") 0 0 repeat;
             transform: rotate(0.25turn);
@@ -340,8 +361,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -29%;
-                left: -29%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/Corner.SVG") 0 0 repeat;
                 transform: rotate(0.5turn);
@@ -353,8 +374,8 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                top: -29%;
-                left: -72%;
+                top: -50%;
+                left: -50%;
                 z-index: -1;
                 background: url("../img/svg/Corner.SVG") 0 0 repeat;
                 transform: rotate(0.75turn);
