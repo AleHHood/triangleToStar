@@ -781,6 +781,32 @@ module.exports = function (target, source) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/correct-is-regexp-logic.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/core-js/internals/correct-is-regexp-logic.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "./node_modules/core-js/internals/well-known-symbol.js");
+
+var MATCH = wellKnownSymbol('match');
+
+module.exports = function (METHOD_NAME) {
+  var regexp = /./;
+  try {
+    '/./'[METHOD_NAME](regexp);
+  } catch (error1) {
+    try {
+      regexp[MATCH] = false;
+      return '/./'[METHOD_NAME](regexp);
+    } catch (error2) { /* empty */ }
+  } return false;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/correct-prototype-getter.js":
 /*!********************************************************************!*\
   !*** ./node_modules/core-js/internals/correct-prototype-getter.js ***!
@@ -2152,6 +2178,24 @@ var PromiseCapability = function (C) {
 // 25.4.1.5 NewPromiseCapability(C)
 module.exports.f = function (C) {
   return new PromiseCapability(C);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/not-a-regexp.js":
+/*!********************************************************!*\
+  !*** ./node_modules/core-js/internals/not-a-regexp.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isRegExp = __webpack_require__(/*! ../internals/is-regexp */ "./node_modules/core-js/internals/is-regexp.js");
+
+module.exports = function (it) {
+  if (isRegExp(it)) {
+    throw TypeError("The method doesn't accept regular expressions");
+  } return it;
 };
 
 
@@ -4623,6 +4667,50 @@ fixRegExpWellKnownSymbolLogic('split', 2, function (SPLIT, nativeSplit, maybeCal
 
 /***/ }),
 
+/***/ "./node_modules/core-js/modules/es.string.starts-with.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/modules/es.string.starts-with.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var getOwnPropertyDescriptor = __webpack_require__(/*! ../internals/object-get-own-property-descriptor */ "./node_modules/core-js/internals/object-get-own-property-descriptor.js").f;
+var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
+var notARegExp = __webpack_require__(/*! ../internals/not-a-regexp */ "./node_modules/core-js/internals/not-a-regexp.js");
+var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js/internals/require-object-coercible.js");
+var correctIsRegExpLogic = __webpack_require__(/*! ../internals/correct-is-regexp-logic */ "./node_modules/core-js/internals/correct-is-regexp-logic.js");
+var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "./node_modules/core-js/internals/is-pure.js");
+
+var nativeStartsWith = ''.startsWith;
+var min = Math.min;
+
+var CORRECT_IS_REGEXP_LOGIC = correctIsRegExpLogic('startsWith');
+// https://github.com/zloirock/core-js/pull/702
+var MDN_POLYFILL_BUG = !IS_PURE && !CORRECT_IS_REGEXP_LOGIC && !!function () {
+  var descriptor = getOwnPropertyDescriptor(String.prototype, 'startsWith');
+  return descriptor && !descriptor.writable;
+}();
+
+// `String.prototype.startsWith` method
+// https://tc39.github.io/ecma262/#sec-string.prototype.startswith
+$({ target: 'String', proto: true, forced: !MDN_POLYFILL_BUG && !CORRECT_IS_REGEXP_LOGIC }, {
+  startsWith: function startsWith(searchString /* , position = 0 */) {
+    var that = String(requireObjectCoercible(this));
+    notARegExp(searchString);
+    var index = toLength(min(arguments.length > 1 ? arguments[1] : undefined, that.length));
+    var search = String(searchString);
+    return nativeStartsWith
+      ? nativeStartsWith.call(that, search, index)
+      : that.slice(index, index + search.length) === search;
+  }
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/modules/es.symbol.description.js":
 /*!***************************************************************!*\
   !*** ./node_modules/core-js/modules/es.symbol.description.js ***!
@@ -6590,7 +6678,7 @@ var getCalculation = function getCalculation(branchs) {
       });
 
       if (numberBranch === 1) {
-        textArr.push("\u0422\u0430\u043A \u043A\u0430\u043A \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F \n                    \u0442\u043E\u043A\u043E\u0432 \u0434\u043E \u0440\u0430\u0441\u0447\u0451\u0442\u0430 \u0446\u0435\u043F\u0438 \u043D\u0430\u043C \u043D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u044B \u2014 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u043B\u044C\u043D\u043E \n                    \u0443\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u043C \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F \u0442\u043E\u043A\u043E\u0432 \u0432 \u0432\u0435\u0442\u0432\u044F\u0445,");
+        textArr.push("\u0422\u0430\u043A \u043A\u0430\u043A \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F \n                    \u0442\u043E\u043A\u043E\u0432 \u0434\u043E \u0440\u0430\u0441\u0447\u0451\u0442\u0430 \u0446\u0435\u043F\u0438 \u043D\u0430\u043C \u043D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u044B \u2014 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u043B\u044C\u043D\u043E \n                    \u0443\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u043C \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F \u0442\u043E\u043A\u043E\u0432 \u0432 \u0432\u0435\u0442\u0432\u044F\u0445.");
         getAnswerBlock(textArr);
         textArr = [];
       }
@@ -6602,7 +6690,7 @@ var getCalculation = function getCalculation(branchs) {
 
   function getAnswerBlock(textArr) {
     answer = document.createElement('div');
-    answer.classList.add('Answer__block');
+    answer.classList.add('answer__block');
     answerSection.append(answer);
     textArr.forEach(function (element) {
       Object(_mathExpression__WEBPACK_IMPORTED_MODULE_4__["default"])(element, answer);
@@ -6622,8 +6710,8 @@ var getCalculation = function getCalculation(branchs) {
       var _answer = toFixed3(1 / +R[K].resistance);
 
       textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u043F\u0440\u043E\u0432\u043E\u0434\u0438\u043C\u043E\u0441\u0442\u044C \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
-      textArr.push("g".concat(R[K].number, " =~1/r").concat(R[K].number));
-      textArr.push("g".concat(R[K].number, " =~1/").concat(resistance, "~=") + " ".concat(_answer, " \u0421\u043C"));
+      textArr.push("tac g".concat(R[K].number, " =~1/r").concat(R[K].number));
+      textArr.push("tac g".concat(R[K].number, " =~1/").concat(resistance, "~=") + " ".concat(_answer, " \u0421\u043C"));
       getAnswerBlock(textArr);
       textArr = [];
     } else {
@@ -6715,8 +6803,8 @@ var getCalculation = function getCalculation(branchs) {
       expression = SliceElement("".concat(expression), '+ ');
       expressionValue = SliceElement("".concat(expressionValue), '+ ');
       textArr.push("\u042D\u0414\u0421 \u0434\u043B\u044F \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
-      textArr.push("E".concat(Name, " = ").concat(expression));
-      textArr.push("E".concat(Name, " = ").concat(expressionValue, " = ").concat(value, " \u0412"));
+      textArr.push("tac E".concat(Name, " = ").concat(expression));
+      textArr.push("tac E".concat(Name, " = ").concat(expressionValue, " = ").concat(value, " \u0412"));
       getAnswerBlock(textArr);
       textArr = [];
 
@@ -6753,10 +6841,10 @@ var getCalculation = function getCalculation(branchs) {
     block.element.prepend(span);
 
     if (!revers) {
-      block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n                background-size: 92px;";
+      block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -130% -90% no-repeat;\n                background-size: 97px;";
     } else {
       console.log('revers');
-      block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;\n                background-size: 92px;";
+      block.element.style.cssText = "background: url(../img/svg/Arrow.SVG) -130% -90% no-repeat;\n                background-size: 97px;";
     }
   }
 
@@ -6831,7 +6919,7 @@ var getCalculation = function getCalculation(branchs) {
     expressionG = SliceElement(expressionG, ' +');
     expressionEG = SliceElement(expressionEG, ' +');
     textArr.push("\u041D\u0430\u043F\u0440\u044F\u0436\u0435\u043D\u0438\u0435 \u043C\u0435\u0436\u0434\u0443 \u0443\u0437\u043B\u0430\u043C\u0438 \u0410-\u0412 \u0440\u0430\u0432\u043D\u043E:");
-    textArr.push("Uab =~".concat(a, "/").concat(b, "~=~").concat(expressionEG, "/").concat(expressionG, "~= ") + "".concat(toFixed3(U), " \u0412"));
+    textArr.push("tac Uab =~".concat(a, "/").concat(b, "~=~").concat(expressionEG, "/").concat(expressionG, "~= ") + "".concat(toFixed3(U), " \u0412"));
     textArr.push("*\u042D\u0414\u0421 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043D\u0430\u044F \u043A \u0443\u0437\u043B\u0443 A, \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \xAB+\xBB, \n        \u0435\u0441\u043B\u0438 \u0432 \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u0443\u044E \u0441\u0442\u043E\u0440\u043E\u043D\u0443, \u0442\u043E \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \xAB-\xBB.");
     getAnswerBlock(textArr);
     textArr = [];
@@ -6864,7 +6952,7 @@ var getCalculation = function getCalculation(branchs) {
       b = "".concat(element.nameG);
       a = SliceElement(a, ' +');
       textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u0442\u043E\u043A \u0432 \u0432\u0435\u0442\u0432\u0438 \u2116".concat(i));
-      textArr.push("I".concat(i, " = ").concat(a, "\u22C5").concat(b, " = ") + "(".concat(expressionEU, ")\u22C5").concat(toFixed3(element.conductance), " = ").concat(I[i], " \u0410"));
+      textArr.push("tac I".concat(i, " = ").concat(a, "\u22C5").concat(b, " = ") + "(".concat(expressionEU, ")\u22C5").concat(toFixed3(element.conductance), " = ").concat(I[i], " \u0410"));
 
       if (I[i] < 0) {
         textArr.push("\u0422\u0430\u043A \u043A\u0430\u043A \u0442\u043E\u043A I".concat(i, " \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u0441\u044F \u0441 \u043E\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u043C \n            \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435\u043C - \u0440\u0435\u0430\u043B\u044C\u043D\u043E\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0442\u043E\u043A\u0430 \u0432 \u0446\u0435\u043F\u0438, \u0431\u0443\u0434\u0435\u0442 \u043E\u0442 \u0443\u0437\u043B\u0430\n             A \u043A \u0443\u0437\u043B\u0443 B, \u0442\u043E \u0435\u0441\u0442\u044C \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u043E \u0438\u0437\u043D\u0430\u0447\u0430\u043B\u044C\u043D\u043E \u043F\u0440\u0438\u043D\u044F\u0442\u043E\u043C\u0443."));
@@ -6929,9 +7017,9 @@ var getCalculation = function getCalculation(branchs) {
     b = SliceElement(b, ' +');
     expressionEI = SliceElement(expressionEI, " +");
     expressionRII = SliceElement(expressionRII, ' +');
-    textArr.push("".concat(a, " = ").concat(b));
-    textArr.push("".concat(expressionEI, " = ").concat(expressionRII));
-    textArr.push("".concat(toFixed3(sumEI), " \u0412\u0442 = ").concat(toFixed3(sumRII), " \u0412\u0442"));
+    textArr.push("tac ".concat(a, " = ").concat(b));
+    textArr.push("tac ".concat(expressionEI, " = ").concat(expressionRII));
+    textArr.push("tac ".concat(toFixed3(sumEI), " \u0412\u0442 = ").concat(toFixed3(sumRII), " \u0412\u0442"));
 
     if (Math.abs((sumEI - sumRII) / sumEI) < 0.03) {
       textArr.push("\u0411\u0430\u043B\u0430\u043D\u0441 \u0441\u043E\u0448\u0435\u043B\u0441\u044F.");
@@ -8275,18 +8363,32 @@ var getscheme = function getscheme(blocks) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.split */ "./node_modules/core-js/modules/es.string.split.js");
-/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.string.split */ "./node_modules/core-js/modules/es.string.split.js");
+/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.string.starts-with */ "./node_modules/core-js/modules/es.string.starts-with.js");
+/* harmony import */ var core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_starts_with__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
 
 
 
+
+
+// ~ начала дроби
+// tac добавляет class .tac данному p
 var getMath = function getMath(expression, appendBlock) {
   function GetExpression(expression, appendBlock) {
     var split;
+    var newBlock = document.createElement('p'); // Если есть tac - добавляем class .tac
+
+    if (expression.startsWith('tac')) {
+      expression = expression.slice(4);
+      newBlock.classList.add('tac');
+    }
+
     split = expression.split('~');
-    var newBlock = document.createElement('p');
     split.forEach(function (element) {
       if (!GetFrac(element, newBlock)) {
         newBlock.innerHTML += element;

@@ -1,9 +1,21 @@
+// ~ начала дроби
+// tac добавляет class .tac данному p
+
 const getMath = (expression, appendBlock) => {
 
     function GetExpression (expression, appendBlock){
         let split;
-        split = expression.split('~');
+        
+
         const newBlock = document.createElement('p');
+
+        // Если есть tac - добавляем class .tac
+        if(expression.startsWith('tac')){
+            expression = expression.slice(4);
+            newBlock.classList.add('tac');
+            }
+
+        split = expression.split('~');
 
         split.forEach(element => {
             if(!GetFrac(element, newBlock)){

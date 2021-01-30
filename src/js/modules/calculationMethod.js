@@ -71,7 +71,7 @@ const getCalculation = (branchs) => {
                 textArr.push(
                     `Так как действительные направления 
                     токов до расчёта цепи нам неизвестны — произвольно 
-                    указываем направления токов в ветвях,`
+                    указываем направления токов в ветвях.`
                 );
                 getAnswerBlock(textArr);
                 textArr = [];
@@ -86,7 +86,7 @@ const getCalculation = (branchs) => {
     function getAnswerBlock(textArr) {
         
         answer = document.createElement('div');
-        answer.classList.add('Answer__block');
+        answer.classList.add('answer__block');
         answerSection.append(answer);
         textArr.forEach(element => {
             getMath(element, answer);
@@ -109,8 +109,8 @@ const getCalculation = (branchs) => {
             let answer = toFixed3(1 / +R[K].resistance);
             
             textArr.push(`Найдём проводимость ветви №${numberBranch}`);
-            textArr.push(`g${R[K].number} =~1/r${R[K].number}`);
-            textArr.push(`g${R[K].number} =~1/${resistance}~=`+
+            textArr.push(`tac g${R[K].number} =~1/r${R[K].number}`);
+            textArr.push(`tac g${R[K].number} =~1/${resistance}~=`+
             ` ${answer} См`);
             getAnswerBlock(textArr);
             textArr = [];
@@ -232,8 +232,8 @@ const getCalculation = (branchs) => {
 
 
             textArr.push(`ЭДС для ветви №${numberBranch}`);
-            textArr.push(`E${Name} = ${expression}`);
-            textArr.push(`E${Name} = ${expressionValue} = ${value} В`);
+            textArr.push(`tac E${Name} = ${expression}`);
+            textArr.push(`tac E${Name} = ${expressionValue} = ${value} В`);
             getAnswerBlock(textArr);
             textArr = [];
 
@@ -269,13 +269,13 @@ const getCalculation = (branchs) => {
             block.element.prepend(span);
             if(!revers){
                 block.element.style.cssText = 
-                `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
-                background-size: 92px;`;   
+                `background: url(../img/svg/Arrow.SVG) -130% -90% no-repeat;
+                background-size: 97px;`;
             } else {
                 console.log('revers');
                 block.element.style.cssText = 
-                `background: url(../img/svg/Arrow.SVG) -34% -1100% no-repeat;
-                background-size: 92px;`;
+                `background: url(../img/svg/Arrow.SVG) -130% -90% no-repeat;
+                background-size: 97px;`;
             }
     }
 
@@ -364,7 +364,7 @@ const getCalculation = (branchs) => {
         expressionEG = SliceElement(expressionEG, ' +');
         
         textArr.push(`Напряжение между узлами А-В равно:`);
-        textArr.push(`Uab =~${a}/${b}~=~${expressionEG}/${expressionG}~= `+
+        textArr.push(`tac Uab =~${a}/${b}~=~${expressionEG}/${expressionG}~= `+
         `${toFixed3(U)} В`);
         textArr.push(
         `*ЭДС направленная к узлу A, записывается со знаком «+», 
@@ -409,7 +409,7 @@ const getCalculation = (branchs) => {
             a = SliceElement(a, ' +');
 
         textArr.push(`Найдём ток в ветви №${i}`);
-        textArr.push(`I${i} = ${a}⋅${b} = `+
+        textArr.push(`tac I${i} = ${a}⋅${b} = `+
         `(${expressionEU})⋅${toFixed3(element.conductance)} = ${I[i]} А`);
         if(I[i] < 0) {
             textArr.push(
@@ -507,9 +507,9 @@ const getCalculation = (branchs) => {
         expressionEI = SliceElement(expressionEI, ` +`);
         expressionRII = SliceElement(expressionRII, ' +');
 
-        textArr.push(`${a} = ${b}`);
-        textArr.push(`${expressionEI} = ${expressionRII}`);
-        textArr.push(`${toFixed3(sumEI)} Вт = ${toFixed3(sumRII)} Вт`);
+        textArr.push(`tac ${a} = ${b}`);
+        textArr.push(`tac ${expressionEI} = ${expressionRII}`);
+        textArr.push(`tac ${toFixed3(sumEI)} Вт = ${toFixed3(sumRII)} Вт`);
         if(Math.abs(((sumEI - sumRII)/ sumEI)) < 0.03){
             textArr.push(`Баланс сошелся.`);
         }else{
