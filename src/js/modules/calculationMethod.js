@@ -3,7 +3,6 @@ import getMath from './mathExpression';
 
 const getCalculation = (branchs) => {
     console.log(branchs); ///////////////
-    const formSettings = document.querySelector('.calculation__settings');
     const answerSection = document.querySelector('.answer');
 
     let parameters = [],

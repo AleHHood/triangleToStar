@@ -10,12 +10,11 @@
 }
 
 .answer{
-    font-size: 19px;
-    /* font-size: 1rem; */
+    font-size: 1rem;
     text-align: justify;
-    padding: 30px 48px 5px 40px;
+    padding: 30px 5px 10px 5px;
     margin: 0 auto;
-    width: 780px;
+    width: 100vw;
 
     &__block{
         margin-top: 2rem;
@@ -23,5 +22,20 @@
 
     .tac{
         text-align: center;
+    }
+}
+
+
+@media (min-width: 560px){
+ 
+    .answer{
+        text-align: justify;
+        padding: 30px 48px 5px 40px;
+        margin: 0 auto;
+        width: 780px;
+    
+        &__block{
+            margin-top: 2rem;
+        }
     }
 }

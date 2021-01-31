@@ -191,19 +191,7 @@
                         <div data-x="10" data-y="5" class="grid__cell"></div>
                     </div>
                 </div>
-                <form class="calculation__settings">
-                    Цепи постоянного тока
-                    <select name="choiceMethod">
-                        <option>Метод двух узлов</option>
-                        <option>Пункт 2</option>
-                      </select>
-                    <button id="calculate" type="submit" class="btn btn__calculate">Рассчитать</button>
-                    
-                        <div class="calculation__eror"></div>
-                </form>
-                <div class="error"></div>
-                <section class="answer"></section>
-            </div>
+            </div>            
             <div class="calculation__blocksettings">
                 <div class="blocksettings__container">
                     <!-- <div data-close class="blocksettings__close">x</div> -->
@@ -237,6 +225,18 @@
                 </div>
             </div>
         </div>
+        <form class="calculation__settings">
+            Цепи постоянного тока
+            <select name="choiceMethod">
+                <option>Метод двух узлов</option>
+                <option>Пункт 2</option>
+              </select>
+            <button id="calculate" type="submit" class="btn btn__calculate">Рассчитать</button>
+            
+                <div class="calculation__eror"></div>
+        </form>
+        <div class="error"></div>
+        <section class="answer"></section>
         <script src="script.js"></script>
     </body>
 </html>

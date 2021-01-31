@@ -6618,7 +6618,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var getCalculation = function getCalculation(branchs) {
   console.log(branchs); ///////////////
 
-  var formSettings = document.querySelector('.calculation__settings');
   var answerSection = document.querySelector('.answer');
   var parameters = [],
       U = 0,
@@ -7117,8 +7116,11 @@ var dragggrid = function dragggrid() {
       blockHome = document.querySelectorAll('.calculation__block'),
       container = document.querySelector('.calculation__container'),
       workTable = document.querySelector('.calculation__workTable'),
+      calcBlocksettings = document.querySelector('.calculation__blocksettings'),
       blockSettings = document.querySelector('.blocksettings__container'),
-      cell = document.querySelectorAll('.grid__cell'),
+
+  /*     header = document.querySelector('.header'), */
+  cell = document.querySelectorAll('.grid__cell'),
       wrapperFormN = document.querySelector('.blocksettings__wrapper-N'),
       wrapperFormKnots = document.querySelector('.blocksettings__wrapper-Knots'),
       wrapperFormR = document.querySelector('.blocksettings__wrapper-R'),
@@ -7333,7 +7335,10 @@ var dragggrid = function dragggrid() {
       }
 
       if (target && target.classList.contains('grid__cell')) {
-        blockSettings.style.display = 'none';
+        blockSettings.classList.remove('blocksettings-show');
+        setTimeout(function () {
+          return calcBlocksettings.classList.remove('calculation-show');
+        }, 301);
         blocks.forEach(function (element) {
           element.element.classList.remove('active');
         });
@@ -7365,6 +7370,7 @@ var dragggrid = function dragggrid() {
     var classesBlock = 0;
     blockBar.addEventListener('mousedown', function (event) {
       var target = event.target;
+      console.log(event.target);
       matchBlocks('calculation__block-R');
 
       if (target && target.classList.contains('calculation__block-R')) {
@@ -7515,8 +7521,11 @@ var dragggrid = function dragggrid() {
           elem.getErrorMessage();
         }
       });
-      blockSettings.style.display = 'flex';
+      blockSettings.classList.add('blocksettings-show');
+      calcBlocksettings.classList.add('calculation-show');
       target.classList.add('active');
+      console.log(target);
+      console.log('fbnh');
     }
   }
 
@@ -7585,7 +7594,10 @@ var dragggrid = function dragggrid() {
         blocks.forEach(function (element) {
           if (element.element.classList.contains('active')) {
             element.element.remove();
-            blockSettings.style.display = 'none';
+            blockSettings.classList.remove('blocksettings-show');
+            setTimeout(function () {
+              return calcBlocksettings.classList.remove('calculation-show');
+            }, 301);
           }
         });
       }

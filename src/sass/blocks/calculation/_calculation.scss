@@ -1,17 +1,21 @@
 .calculation{
     &__container{
+        touch-action: none;
+        width: 100vw;
+        /* height: 425px; */
+        overflow: hidden;
         margin: 0 auto;
+        /* height: calc(100vh - 55px); */
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        flex-wrap: wrap;
         width: 100vw;
-        max-width: 1600px;
-        height: calc(100vh - 68px);
-        min-height: 420px;
+        border-bottom: 2px solid #094B85;
     }
     &__workTable{
         position: relative;
-        width: 963px;
+        width: 282px;
         /* width: 1000px;
         height: 100%;
         background: repeating-linear-gradient(0deg, rgb(221, 221, 221) 0px, rgb(221, 221, 221) 1px,transparent 1px, transparent 20px),repeating-linear-gradient(90deg, rgb(221, 221, 221) 0px, rgb(221, 221, 221) 1px,transparent 1px, transparent 20px);
@@ -23,11 +27,8 @@
         height: 15%;
     }
     &__blockBar{
-        width: 20.5%;
-        height: 472px;
-        min-width: 70px;
-        max-width: 167.857px;
-        padding: 25px 0px 25px 0px;
+        width: 87px;
+        height: 425px;
         background-color: #f2f6f9;
         display: flex;
         justify-content: space-around;
@@ -150,9 +151,13 @@
         }
     }
     &__blocksettings{
-        width: 23%;
-        max-width: 338px;
-        height: 472px;
+        position: fixed;
+        bottom: 0px;
+        overflow: hidden;
+        z-index: -1;
+    }
+    &-show{
+        z-index: 1;
     }
 }
 
@@ -171,10 +176,13 @@
         display: flex;
     }
     &__cell{
-        width: 85px;
-        height: 85px;
+        width: 69px;
+        height: 69px;
         background-color: white;
         border:#094b85 1px dotted;
+    }
+    &__cell[data-x='4'], &__cell[data-x='5'], &__cell[data-x='6'], &__cell[data-x='7'], &__cell[data-x='8'], &__cell[data-x='9'], &__cell[data-x='10']{
+        display: none;
     }
 }
 
@@ -388,3 +396,74 @@
     filter: alpha(opacity=20);
 }
 
+
+
+
+
+
+
+@media (max-width: 400px){
+    .calculation{
+        &__block{
+            transform: scale(.8);
+            transform-origin: 0 0;
+        }
+        &__blockBar{
+            .calculation__block{
+                margin-left: 14px;
+            }
+        }
+    }
+}
+
+
+
+
+
+@media (min-width: 560px){
+    .calculation{
+        &__container{
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100vw;
+            max-width: 1600px;
+            /* height: calc(100vh - 68px); */
+            min-height: 420px;
+        }
+        &__workTable{
+            position: relative;
+            width: 963px;
+            display: flex;
+            flex-direction: column;
+        }
+        &__settings{
+            width: 100%;
+            height: 15%;
+        }
+        &__blockBar{
+            width: 20.5%;
+            height: 472px;
+            max-width: 167.857px;
+            padding: 25px 0px 25px 0px;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        &__blocksettings{
+            width: 23%;
+            max-width: 338px;
+            height: 472px;
+        }
+    }
+
+    .grid{
+        &__cell{
+            width: 85px;
+            height: 85px;
+        }
+        &__cell[data-x='4'], &__cell[data-x='5'], &__cell[data-x='6'], &__cell[data-x='7'], &__cell[data-x='8'], &__cell[data-x='9'], &__cell[data-x='10']{
+            display: block;
+        }
+    }
+}

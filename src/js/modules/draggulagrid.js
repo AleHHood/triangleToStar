@@ -2,14 +2,15 @@ import dragula from 'dragula';
 import getscheme from './getScheme';
 import getCalculation from './calculationMethod';
 
-
 const dragggrid = () => {
 
     const blockBar = document.querySelector('.calculation__blockBar'),
     blockHome = document.querySelectorAll('.calculation__block'),
     container = document.querySelector('.calculation__container'),
     workTable = document.querySelector('.calculation__workTable'),
+    calcBlocksettings = document.querySelector('.calculation__blocksettings'),
     blockSettings = document.querySelector('.blocksettings__container'),
+/*     header = document.querySelector('.header'), */
     cell = document.querySelectorAll('.grid__cell'),
     wrapperFormN = document.querySelector('.blocksettings__wrapper-N'),
     wrapperFormKnots = document.querySelector('.blocksettings__wrapper-Knots'),
@@ -200,7 +201,6 @@ const dragggrid = () => {
         container.addEventListener('mousedown', function(event) {
             const target = event.target;
 
-
             if(target && target.classList.contains('calculation__block')) {
                 blocks.forEach(element => {
                     element.element.classList.remove('active');
@@ -225,7 +225,12 @@ const dragggrid = () => {
                 target && 
                 target.classList.contains('grid__cell')
             ) {
-                blockSettings.style.display = 'none';
+                blockSettings.classList.remove('blocksettings-show');
+
+                setTimeout(() => 
+                calcBlocksettings.classList.remove('calculation-show'), 
+                301);
+
                 blocks.forEach(element => {
                     element.element.classList.remove('active');
                 });
@@ -255,11 +260,11 @@ const dragggrid = () => {
         });
     }
 
-
     function GetNewBlock () {
         let classesBlock = 0;
         blockBar.addEventListener('mousedown', function(event) {
             const target = event.target;
+            console.log(event.target);
             matchBlocks('calculation__block-R');
             if(target && target.classList.contains('calculation__block-R')) {
                 classesBlock = 'calculation__block-R';
@@ -414,8 +419,11 @@ function getForm(target){
                 elem.getErrorMessage();
             }
         });
-        blockSettings.style.display = 'flex';
+        blockSettings.classList.add('blocksettings-show');
+        calcBlocksettings.classList.add('calculation-show');
         target.classList.add('active');
+        console.log(target);
+        console.log('fbnh');
     }
 }
 
@@ -483,7 +491,11 @@ function getForm(target){
                 blocks.forEach(element => {
                     if(element.element.classList.contains('active')){
                         element.element.remove();                
-                        blockSettings.style.display = 'none';
+                        blockSettings.classList.remove('blocksettings-show');
+
+                        setTimeout(() => 
+                        calcBlocksettings.classList.remove('calculation-show'), 
+                        301);
                     }
                 });
             }
@@ -540,7 +552,6 @@ function getForm(target){
     }
    
 
-
     function GetFormSettings(target){
         if(target && target.classList.contains('btn__calculate')) {      
             formData = new FormData(formSettings);      
@@ -580,7 +591,6 @@ function getForm(target){
         return branchs;
     }
 
-
     GetNewBlock();
     LimitingByDragging();
     MobileLimitingByDragging();
@@ -616,7 +626,6 @@ function getForm(target){
                 //Удаляем старый ответ (если он есть)
                 removeOldAnswerBlock('.Answer__block');
 
-
                 getCalculation(scheme);
                 /* getCalculation( SaveScheme() ); */
               }).catch( () => {
@@ -630,3 +639,4 @@ function getForm(target){
 };
 
 export default dragggrid;
+
