@@ -1,5 +1,6 @@
 // ~ начала дроби
 // tac добавляет class .tac данному p
+// notice добавляет class notice
 
 const getMath = (expression, appendBlock) => {
 
@@ -14,6 +15,13 @@ const getMath = (expression, appendBlock) => {
             expression = expression.slice(4);
             newBlock.classList.add('tac');
             }
+
+        // Если есть notice - добавляем class .notice
+        if(expression.startsWith('notice')){
+            expression = expression.slice(7);
+            newBlock.classList.add('notice');
+            }
+            
 
         split = expression.split('~');
 

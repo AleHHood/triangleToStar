@@ -366,7 +366,7 @@ const getCalculation = (branchs) => {
         textArr.push(`tac Uab =~${a}/${b}~=~${expressionEG}/${expressionG}~= `+
         `${toFixed3(U)} В`);
         textArr.push(
-        `*ЭДС направленная к узлу A, записывается со знаком «+», 
+        `notice ЭДС направленная к узлу A, записывается со знаком «+», 
         если в противоположную сторону, то со знаком «-».`
         );
         getAnswerBlock(textArr);
@@ -412,7 +412,7 @@ const getCalculation = (branchs) => {
         `(${expressionEU})⋅${toFixed3(element.conductance)} = ${I[i]} А`);
         if(I[i] < 0) {
             textArr.push(
-            `Так как ток I${i} получился с отрицательным 
+            `notice Так как ток I${i} получился с отрицательным 
             значением - реальное направление тока в цепи, будет от узла
              A к узлу B, то есть противоположно изначально принятому.`
             );
@@ -456,12 +456,12 @@ const getCalculation = (branchs) => {
             if((element.voltage * I[i]) < 0){
 
                 textArr.push(
-                    `Источник ${SliceElement(element.nameE, ' -')} потребляет 
+                    `notice Источник ${SliceElement(element.nameE, ' -')} потребляет 
                     электрическую энергию, т.к. направление ЭДС не совпадает с 
                     направлением тока в ветвях.
                 `);
                 textArr.push(
-                    `Следовательно, в баланс мощностей ЭДС 
+                    `notice Следовательно, в баланс мощностей ЭДС 
                     ${SliceElement(element.nameE, ' -')} 
                     записывается со знаком минус.
                 `);
@@ -510,7 +510,7 @@ const getCalculation = (branchs) => {
         textArr.push(`tac ${expressionEI} = ${expressionRII}`);
         textArr.push(`tac ${toFixed3(sumEI)} Вт = ${toFixed3(sumRII)} Вт`);
         if(Math.abs(((sumEI - sumRII)/ sumEI)) < 0.03){
-            textArr.push(`Баланс сошелся.`);
+            textArr.push(`tac Баланс сошелся.`);
         }else{
             textArr.push(`ОШИБКА.`);
         }

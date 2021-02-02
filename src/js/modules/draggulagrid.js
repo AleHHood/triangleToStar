@@ -327,16 +327,21 @@ const dragggrid = () => {
                 element.classList == `calculation__block ${classBlock}` ||
                 element.classList == 
                 `calculation__block ${classBlock} active gu-transit` ||
-                element.classList == `calculation__block ${classBlock} active`
+                element.classList == `calculation__block ${classBlock} active` ||
+                element.classList.contains(classBlock) &&
+                element.classList.contains(`active`)
+
             ){
                 //х - кол-во дублирующих блоков
                 x = x + 1;
-
+                console.log(x);
+                
                 //Записываем лишний элемент
                 if(element.classList == `calculation__block ${classBlock}`){
                     removeBlock = element;
                 }
             }
+
         });
 
         if(x === 0){

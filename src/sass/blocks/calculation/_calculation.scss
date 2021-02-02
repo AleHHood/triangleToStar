@@ -1,6 +1,5 @@
 .calculation{
     &__container{
-        touch-action: none;
         width: 100vw;
         /* height: 425px; */
         overflow: hidden;
@@ -9,22 +8,36 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        flex-wrap: wrap;
         width: 100vw;
-        border-bottom: 2px solid #094B85;
     }
     &__workTable{
-        position: relative;
+/*         position: relative; */
         width: 282px;
         /* width: 1000px;
         height: 100%;
         background: repeating-linear-gradient(0deg, rgb(221, 221, 221) 0px, rgb(221, 221, 221) 1px,transparent 1px, transparent 20px),repeating-linear-gradient(90deg, rgb(221, 221, 221) 0px, rgb(221, 221, 221) 1px,transparent 1px, transparent 20px);
  */     display: flex;
         flex-direction: column;
+        overflow: scroll;
     }
     &__settings{
         width: 100%;
-        height: 15%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        font-size: 1.2rem;
+        height: calc(100vh - 485px);
+        border-bottom: 2px solid #094b85;
+        border-top: 2px solid #094b85;
+        select{
+            width: 280px;
+            height: 31px;
+            font-size: 1.2rem;
+            border: 1px solid #094b85;
+            background-color: #f2f6f9;
+            border-radius: 5px;
+        }
     }
     &__blockBar{
         width: 87px;
@@ -40,6 +53,7 @@
     }
 
     &__block{
+        touch-action: none;
         width: 85px;
         height: 85px;
         z-index: 1;
@@ -159,6 +173,29 @@
     &-show{
         z-index: 1;
     }
+    &__formtop{
+        display: flex;
+        width: 360px;    
+    }
+    &__formheader{
+        margin-right: auto;
+        margin-left: auto;
+        padding-left: 40px;
+        display: flex;
+        align-items: center;
+        font-size: 22px;
+    }
+    &__help{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 5px;
+        text-decoration: none;
+        background-color: #f2f6f9;
+        font-size: 25px;
+    }
 }
 
 .none{
@@ -171,6 +208,7 @@
         flex-direction: column;
         justify-content: center;
         align-self: center;
+        margin-left: auto;
     }
     &__row{
         display: flex;
@@ -181,7 +219,7 @@
         background-color: white;
         border:#094b85 1px dotted;
     }
-    &__cell[data-x='4'], &__cell[data-x='5'], &__cell[data-x='6'], &__cell[data-x='7'], &__cell[data-x='8'], &__cell[data-x='9'], &__cell[data-x='10']{
+    /* &__cell[data-x='4'], &__cell[data-x='5'], &__cell[data-x='6'], */ &__cell[data-x='7'], &__cell[data-x='8'], &__cell[data-x='9'], &__cell[data-x='10']{
         display: none;
     }
 }
@@ -466,4 +504,23 @@
             display: block;
         }
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.notice{
+	border-left: 3px solid #094B85;
+    padding: 10px;
+    margin-left: 20px;
+    background-color: #F2F6F9;
+    margin-right: 20px;
 }

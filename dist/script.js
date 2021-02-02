@@ -6919,7 +6919,7 @@ var getCalculation = function getCalculation(branchs) {
     expressionEG = SliceElement(expressionEG, ' +');
     textArr.push("\u041D\u0430\u043F\u0440\u044F\u0436\u0435\u043D\u0438\u0435 \u043C\u0435\u0436\u0434\u0443 \u0443\u0437\u043B\u0430\u043C\u0438 \u0410-\u0412 \u0440\u0430\u0432\u043D\u043E:");
     textArr.push("tac Uab =~".concat(a, "/").concat(b, "~=~").concat(expressionEG, "/").concat(expressionG, "~= ") + "".concat(toFixed3(U), " \u0412"));
-    textArr.push("*\u042D\u0414\u0421 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043D\u0430\u044F \u043A \u0443\u0437\u043B\u0443 A, \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \xAB+\xBB, \n        \u0435\u0441\u043B\u0438 \u0432 \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u0443\u044E \u0441\u0442\u043E\u0440\u043E\u043D\u0443, \u0442\u043E \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \xAB-\xBB.");
+    textArr.push("notice \u042D\u0414\u0421 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043D\u0430\u044F \u043A \u0443\u0437\u043B\u0443 A, \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \xAB+\xBB, \n        \u0435\u0441\u043B\u0438 \u0432 \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u0443\u044E \u0441\u0442\u043E\u0440\u043E\u043D\u0443, \u0442\u043E \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \xAB-\xBB.");
     getAnswerBlock(textArr);
     textArr = [];
   }
@@ -6954,7 +6954,7 @@ var getCalculation = function getCalculation(branchs) {
       textArr.push("tac I".concat(i, " = ").concat(a, "\u22C5").concat(b, " = ") + "(".concat(expressionEU, ")\u22C5").concat(toFixed3(element.conductance), " = ").concat(I[i], " \u0410"));
 
       if (I[i] < 0) {
-        textArr.push("\u0422\u0430\u043A \u043A\u0430\u043A \u0442\u043E\u043A I".concat(i, " \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u0441\u044F \u0441 \u043E\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u043C \n            \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435\u043C - \u0440\u0435\u0430\u043B\u044C\u043D\u043E\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0442\u043E\u043A\u0430 \u0432 \u0446\u0435\u043F\u0438, \u0431\u0443\u0434\u0435\u0442 \u043E\u0442 \u0443\u0437\u043B\u0430\n             A \u043A \u0443\u0437\u043B\u0443 B, \u0442\u043E \u0435\u0441\u0442\u044C \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u043E \u0438\u0437\u043D\u0430\u0447\u0430\u043B\u044C\u043D\u043E \u043F\u0440\u0438\u043D\u044F\u0442\u043E\u043C\u0443."));
+        textArr.push("notice \u0422\u0430\u043A \u043A\u0430\u043A \u0442\u043E\u043A I".concat(i, " \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u0441\u044F \u0441 \u043E\u0442\u0440\u0438\u0446\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u043C \n            \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u0435\u043C - \u0440\u0435\u0430\u043B\u044C\u043D\u043E\u0435 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0442\u043E\u043A\u0430 \u0432 \u0446\u0435\u043F\u0438, \u0431\u0443\u0434\u0435\u0442 \u043E\u0442 \u0443\u0437\u043B\u0430\n             A \u043A \u0443\u0437\u043B\u0443 B, \u0442\u043E \u0435\u0441\u0442\u044C \u043F\u0440\u043E\u0442\u0438\u0432\u043E\u043F\u043E\u043B\u043E\u0436\u043D\u043E \u0438\u0437\u043D\u0430\u0447\u0430\u043B\u044C\u043D\u043E \u043F\u0440\u0438\u043D\u044F\u0442\u043E\u043C\u0443."));
       }
 
       getAnswerBlock(textArr);
@@ -6981,8 +6981,8 @@ var getCalculation = function getCalculation(branchs) {
       //Если напрвление токов не совпадает с направлением ЭДС
 
       if (element.voltage * I[i] < 0) {
-        textArr.push("\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A ".concat(SliceElement(element.nameE, ' -'), " \u043F\u043E\u0442\u0440\u0435\u0431\u043B\u044F\u0435\u0442 \n                    \u044D\u043B\u0435\u043A\u0442\u0440\u0438\u0447\u0435\u0441\u043A\u0443\u044E \u044D\u043D\u0435\u0440\u0433\u0438\u044E, \u0442.\u043A. \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u042D\u0414\u0421 \u043D\u0435 \u0441\u043E\u0432\u043F\u0430\u0434\u0430\u0435\u0442 \u0441 \n                    \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435\u043C \u0442\u043E\u043A\u0430 \u0432 \u0432\u0435\u0442\u0432\u044F\u0445.\n                "));
-        textArr.push("\u0421\u043B\u0435\u0434\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u043D\u043E, \u0432 \u0431\u0430\u043B\u0430\u043D\u0441 \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0435\u0439 \u042D\u0414\u0421 \n                    ".concat(SliceElement(element.nameE, ' -'), " \n                    \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \u043C\u0438\u043D\u0443\u0441.\n                "));
+        textArr.push("notice \u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A ".concat(SliceElement(element.nameE, ' -'), " \u043F\u043E\u0442\u0440\u0435\u0431\u043B\u044F\u0435\u0442 \n                    \u044D\u043B\u0435\u043A\u0442\u0440\u0438\u0447\u0435\u0441\u043A\u0443\u044E \u044D\u043D\u0435\u0440\u0433\u0438\u044E, \u0442.\u043A. \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u042D\u0414\u0421 \u043D\u0435 \u0441\u043E\u0432\u043F\u0430\u0434\u0430\u0435\u0442 \u0441 \n                    \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435\u043C \u0442\u043E\u043A\u0430 \u0432 \u0432\u0435\u0442\u0432\u044F\u0445.\n                "));
+        textArr.push("notice \u0421\u043B\u0435\u0434\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u043D\u043E, \u0432 \u0431\u0430\u043B\u0430\u043D\u0441 \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0435\u0439 \u042D\u0414\u0421 \n                    ".concat(SliceElement(element.nameE, ' -'), " \n                    \u0437\u0430\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0441\u043E \u0437\u043D\u0430\u043A\u043E\u043C \u043C\u0438\u043D\u0443\u0441.\n                "));
 
         if (element.voltage > 0) {
           element.voltage = element.voltage * -1;
@@ -7021,7 +7021,7 @@ var getCalculation = function getCalculation(branchs) {
     textArr.push("tac ".concat(toFixed3(sumEI), " \u0412\u0442 = ").concat(toFixed3(sumRII), " \u0412\u0442"));
 
     if (Math.abs((sumEI - sumRII) / sumEI) < 0.03) {
-      textArr.push("\u0411\u0430\u043B\u0430\u043D\u0441 \u0441\u043E\u0448\u0435\u043B\u0441\u044F.");
+      textArr.push("tac \u0411\u0430\u043B\u0430\u043D\u0441 \u0441\u043E\u0448\u0435\u043B\u0441\u044F.");
     } else {
       textArr.push("\u041E\u0428\u0418\u0411\u041A\u0410.");
     }
@@ -7431,9 +7431,10 @@ var dragggrid = function dragggrid() {
       } //проверяем на дублирующие блоки
 
 
-      if (element.classList == "calculation__block ".concat(classBlock) || element.classList == "calculation__block ".concat(classBlock, " active gu-transit") || element.classList == "calculation__block ".concat(classBlock, " active")) {
+      if (element.classList == "calculation__block ".concat(classBlock) || element.classList == "calculation__block ".concat(classBlock, " active gu-transit") || element.classList == "calculation__block ".concat(classBlock, " active") || element.classList.contains(classBlock) && element.classList.contains("active")) {
         //х - кол-во дублирующих блоков
-        x = x + 1; //Записываем лишний элемент
+        x = x + 1;
+        console.log(x); //Записываем лишний элемент
 
         if (element.classList == "calculation__block ".concat(classBlock)) {
           removeBlock = element;
@@ -8390,6 +8391,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // ~ начала дроби
 // tac добавляет class .tac данному p
+// notice добавляет class notice
 var getMath = function getMath(expression, appendBlock) {
   function GetExpression(expression, appendBlock) {
     var split;
@@ -8398,6 +8400,12 @@ var getMath = function getMath(expression, appendBlock) {
     if (expression.startsWith('tac')) {
       expression = expression.slice(4);
       newBlock.classList.add('tac');
+    } // Если есть notice - добавляем class .notice
+
+
+    if (expression.startsWith('notice')) {
+      expression = expression.slice(7);
+      newBlock.classList.add('notice');
     }
 
     split = expression.split('~');

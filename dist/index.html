@@ -199,22 +199,22 @@
                         <div class="blocksettings__title">Параметры элемента</div>
                         <div class="blocksettings__wrapper-N">
                             <label for="nblock">Номер элемента</label>
-                            <input id="nblock" required placeholder="" name="numberBlock" type="number" class="blocksettings__input">
+                            <input id="nblock" required placeholder="" name="numberBlock" type="number" autocomplete="off" class="blocksettings__input">
                             <div id="notifyN" class="blocsettings__notify"></div>
                         </div>
                         <div class="blocksettings__wrapper-Knots">
                             <label for="knotsblock">Узел</label>
-                            <input id="knotsblock" maxlength="2" required placeholder="" name="numberBlock" class="blocksettings__input">
+                            <input id="knotsblock" maxlength="2" required placeholder="" autocomplete="off" name="numberBlock" class="blocksettings__input">
                             <div id="notifyKnots" class="blocsettings__notify"></div>
                         </div>
                         <div class="blocksettings__wrapper-R">
                             <label for="rblock">Сопротивление, Ом</label>
-                            <input id="rblock" required placeholder="Сопротивление, Ом" name="resistance" type="number" class="blocksettings__input">
+                            <input id="rblock" autocomplete="off" required placeholder="Сопротивление, Ом" name="resistance" type="number" class="blocksettings__input">
                             <div id ="notifyR" class="blocsettings__notify"></div>
                         </div>
                         <div class="blocksettings__wrapper-E">
                             <label for="eblock">ЭДС источника, В</label>
-                            <input id="eblock" required placeholder="ЭДС источника, В" name="voltage" type="number" class="blocksettings__input">
+                            <input id="eblock" autocomplete="off" required placeholder="ЭДС источника, В" name="voltage" type="number" class="blocksettings__input">
                             <div id="notifyE" class="blocsettings__notify"></div>
                         </div>
                     </div>
@@ -225,8 +225,13 @@
                 </div>
             </div>
         </div>
+
         <form class="calculation__settings">
-            Цепи постоянного тока
+            <div class="calculation__formtop">
+                <div class="calculation__formheader">Цепи постоянного тока</div>
+                <a href="#" class="calculation__help">?</a>
+            </div>
+
             <select name="choiceMethod">
                 <option>Метод двух узлов</option>
                 <option>Пункт 2</option>
