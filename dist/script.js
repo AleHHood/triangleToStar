@@ -6606,12 +6606,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _mathExpression__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mathExpression */ "./src/js/modules/mathExpression.js");
+/* harmony import */ var _scrollTo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scrollTo */ "./src/js/modules/scrollTo.js");
 
 
 
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -6736,8 +6738,8 @@ var getCalculation = function getCalculation(branchs) {
 
       value = toFixed3(+value);
       textArr.push("\u041D\u0430\u0439\u0434\u0451\u043C \u043F\u0440\u043E\u0432\u043E\u0434\u0438\u043C\u043E\u0441\u0442\u044C \u0432\u0435\u0442\u0432\u0438 \u2116".concat(numberBranch));
-      textArr.push("g".concat(Name, " =~1/").concat(expression));
-      textArr.push("g".concat(Name, " =~1/").concat(expressionValue, "~= ").concat(value, " \u0421\u043C"));
+      textArr.push("tac g".concat(Name, " =~1/").concat(expression));
+      textArr.push("tac g".concat(Name, " =~1/").concat(expressionValue, "~= ").concat(value, " \u0421\u043C"));
       getAnswerBlock(textArr);
       textArr = [];
     }
@@ -7034,6 +7036,7 @@ var getCalculation = function getCalculation(branchs) {
   GetVoltageSсheme();
   FindCurrent();
   getBalance(parameters);
+  Object(_scrollTo__WEBPACK_IMPORTED_MODULE_5__["default"])(document.documentElement.clientHeight);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (getCalculation);
@@ -7115,7 +7118,7 @@ var dragggrid = function dragggrid() {
   var blockBar = document.querySelector('.calculation__blockBar'),
       blockHome = document.querySelectorAll('.calculation__block'),
       container = document.querySelector('.calculation__container'),
-      workTable = document.querySelector('.calculation__workTable'),
+      containerBottom = document.querySelector('.container__bottom'),
       calcBlocksettings = document.querySelector('.calculation__blocksettings'),
       blockSettings = document.querySelector('.blocksettings__container'),
 
@@ -7335,16 +7338,24 @@ var dragggrid = function dragggrid() {
       }
 
       if (target && target.classList.contains('grid__cell')) {
-        blockSettings.classList.remove('blocksettings-show');
-        setTimeout(function () {
-          return calcBlocksettings.classList.remove('calculation-show');
-        }, 301);
-        blocks.forEach(function (element) {
-          element.element.classList.remove('active');
-        });
+        closeBlockSettings();
       }
     });
   }
+
+  function closeBlockSettings() {
+    blockSettings.classList.remove('blocksettings-show');
+    setTimeout(function () {
+      return calcBlocksettings.classList.remove('calculation-show');
+    }, 301);
+    blocks.forEach(function (element) {
+      element.element.classList.remove('active');
+    });
+  }
+
+  containerBottom.addEventListener('click', function (event) {
+    closeBlockSettings();
+  });
 
   function MobileLimitingByDragging() {
     container.addEventListener('touchstart', function (event) {
@@ -7370,7 +7381,8 @@ var dragggrid = function dragggrid() {
     var classesBlock = 0;
     blockBar.addEventListener('mousedown', function (event) {
       var target = event.target;
-      console.log(event.target);
+      /*             console.log(event.target); */
+
       matchBlocks('calculation__block-R');
 
       if (target && target.classList.contains('calculation__block-R')) {
@@ -7431,10 +7443,9 @@ var dragggrid = function dragggrid() {
       } //проверяем на дублирующие блоки
 
 
-      if (element.classList == "calculation__block ".concat(classBlock) || element.classList == "calculation__block ".concat(classBlock, " active gu-transit") || element.classList == "calculation__block ".concat(classBlock, " active") || element.classList.contains(classBlock) && element.classList.contains("active")) {
+      if (element.classList.contains(classBlock) && !element.classList.contains('none')) {
         //х - кол-во дублирующих блоков
-        x = x + 1;
-        console.log(x); //Записываем лишний элемент
+        x = x + 1; //Записываем лишний элемент
 
         if (element.classList == "calculation__block ".concat(classBlock)) {
           removeBlock = element;
@@ -7524,6 +7535,7 @@ var dragggrid = function dragggrid() {
       });
       blockSettings.classList.add('blocksettings-show');
       calcBlocksettings.classList.add('calculation-show');
+      blockSettings.scrollTo(0, 0);
       target.classList.add('active');
       console.log(target);
       console.log('fbnh');
@@ -7643,7 +7655,8 @@ var dragggrid = function dragggrid() {
         });
       }
     });
-  }
+  } // на будущее - собирает данные с формы выбора метода
+
 
   function GetFormSettings(target) {
     if (target && target.classList.contains('btn__calculate')) {
@@ -7676,6 +7689,21 @@ var dragggrid = function dragggrid() {
       removeBlock.forEach(function (element) {
         element.remove();
       });
+    }
+  }
+
+  function trackScroll(scrollTo) {
+    var scrolled = window.pageYOffset;
+    var windowWidth = document.documentElement.clientWidth;
+    var windowHeight = document.documentElement.clientHeight;
+
+    if (windowHeight < 950 && windowWidth < 1200) {
+      window.scrollTo({
+        top: scrollTo,
+        behavior: "smooth"
+      });
+      console.log(scrolled);
+      console.log(windowWidth);
     }
   }
 
@@ -7928,9 +7956,12 @@ var dragggrid = function dragggrid() {
     var target = event.target;
 
     if (target && target.classList.contains('btn__calculate')) {
+      // на будущее - собирает данные с формы выбора метода
       GetFormSettings(); //Удаялем старые ошибки (если они есть)
 
-      removeOldAnswerBlock('.Error__block');
+      removeOldAnswerBlock('.Error__block'); //Удаляем старый ответ (если он есть)
+
+      removeOldAnswerBlock('.answer__block');
       var promise1 = new Promise(function (resolve, reject) {
         getActiveBlocks();
         resolve(ActiveBlocks);
@@ -7947,12 +7978,12 @@ var dragggrid = function dragggrid() {
         });
       }).then(function (scheme) {
         //Удаляем старый ответ (если он есть)
-        removeOldAnswerBlock('.Answer__block');
+        removeOldAnswerBlock('.answer__block');
         Object(_calculationMethod__WEBPACK_IMPORTED_MODULE_15__["default"])(scheme);
         /* getCalculation( SaveScheme() ); */
       }).catch(function () {
         //Удаляем старый ответ (если он есть)
-        removeOldAnswerBlock('.Answer__block');
+        removeOldAnswerBlock('.answer__block');
         console.log('reject');
       });
     }
@@ -7980,12 +8011,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _scrollTo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scrollTo */ "./src/js/modules/scrollTo.js");
 
 
 
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
 
 var getscheme = function getscheme(blocks) {
   var branchs = [],
@@ -8353,13 +8387,14 @@ var getscheme = function getscheme(blocks) {
     returnValue = 'error';
   } else {
     if (getValidationsPostions(blocks) === 'error') {
+      Object(_scrollTo__WEBPACK_IMPORTED_MODULE_4__["default"])(errorDiv.clientHeight + 32);
       return 'error';
     } else {
       returnValue = branchs;
     }
   }
 
-  console.log(returnValue);
+  Object(_scrollTo__WEBPACK_IMPORTED_MODULE_4__["default"])(errorDiv.clientHeight + 32);
   return returnValue;
 };
 
@@ -8436,6 +8471,36 @@ var getMath = function getMath(expression, appendBlock) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (getMath);
+
+/***/ }),
+
+/***/ "./src/js/modules/scrollTo.js":
+/*!************************************!*\
+  !*** ./src/js/modules/scrollTo.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var trackScroll = function trackScroll(scrollTo) {
+  var windowWidth = document.documentElement.clientWidth,
+      windowHeight = document.documentElement.clientHeight;
+
+  if (windowHeight < 950 && windowWidth < 1200) {
+    if (windowHeight < 665) {
+      scrollTo = 665 - windowHeight + scrollTo;
+      console.log(scrollTo);
+    }
+
+    window.scrollTo({
+      top: scrollTo,
+      behavior: "smooth"
+    });
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (trackScroll);
 
 /***/ })
 

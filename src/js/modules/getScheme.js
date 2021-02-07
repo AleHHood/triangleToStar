@@ -1,3 +1,5 @@
+import trackScroll from './scrollTo';
+
 const getscheme = (blocks) => {
     const branchs = [],
     errorDiv = document.querySelector('.error');
@@ -390,7 +392,6 @@ const getscheme = (blocks) => {
         console.log(branchs);
     }
 
-
     //Проверка на записсынные ошибки в блоках
     blocks.forEach(element => {
         error = getValidations(element);
@@ -402,13 +403,14 @@ const getscheme = (blocks) => {
         returnValue = 'error';
     } else {
         if(getValidationsPostions (blocks) === 'error'){
+            trackScroll(errorDiv.clientHeight + 32);
             return 'error';
         }else{
             returnValue = branchs;    
         }
         
     }
-    console.log(returnValue);
+    trackScroll(errorDiv.clientHeight + 32);
     return returnValue;
 };
 export default getscheme;

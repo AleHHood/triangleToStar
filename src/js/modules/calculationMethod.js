@@ -1,4 +1,5 @@
 import getMath from './mathExpression';
+import trackScroll from './scrollTo';
 
 
 const getCalculation = (branchs) => {
@@ -152,8 +153,8 @@ const getCalculation = (branchs) => {
             
             
             textArr.push(`Найдём проводимость ветви №${numberBranch}`);
-            textArr.push(`g${Name} =~1/${expression}`);
-            textArr.push(`g${Name} =~1/${expressionValue}~= ${value} См`);
+            textArr.push(`tac g${Name} =~1/${expression}`);
+            textArr.push(`tac g${Name} =~1/${expressionValue}~= ${value} См`);
             getAnswerBlock(textArr);
             textArr = [];
 
@@ -523,8 +524,7 @@ const getCalculation = (branchs) => {
     GetVoltageSсheme();
     FindCurrent();
     getBalance(parameters);
-
-
+    trackScroll(document.documentElement.clientHeight);
 
 
 

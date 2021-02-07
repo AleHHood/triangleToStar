@@ -28,6 +28,8 @@
         align-items: center;
         font-size: 1.2rem;
         height: calc(100vh - 485px);
+        max-height: 340px;
+        min-height: 182px;
         border-bottom: 2px solid #094b85;
         border-top: 2px solid #094b85;
         select{
@@ -37,6 +39,7 @@
             border: 1px solid #094b85;
             background-color: #f2f6f9;
             border-radius: 5px;
+            padding-left: 10px;
         }
     }
     &__blockBar{
@@ -51,7 +54,6 @@
             background-color:#f2f6f9;
         }
     }
-
     &__block{
         touch-action: none;
         width: 85px;
@@ -149,7 +151,7 @@
             order: 5;
             span{
                 &.top{
-                    margin-left: 43px;
+                    margin-left: 64px;
                 }
             }
             &:before {
@@ -196,6 +198,11 @@
         background-color: #f2f6f9;
         font-size: 25px;
     }
+}
+
+.error{
+    color: #d44113;
+    padding: 0 10px;
 }
 
 .none{
@@ -436,11 +443,7 @@
 
 
 
-
-
-
-
-@media (max-width: 400px){
+@media (max-width: 500px){
     .calculation{
         &__block{
             transform: scale(.8);
@@ -454,11 +457,163 @@
     }
 }
 
+/* @media (max-width: 700px) and (orientation: landscape){
+    .calculation{
+        &__block{
+            transform: scale(.8);
+            transform-origin: 0 0;
+        }
+        &__blockBar{
+            .calculation__block{
+                margin-left: 14px;
+                padding: 0px;
+            }
+        }
+    }
+    .grid{
+        &__cell{
+            width: 69px;
+            height: 69px;
+        }
+        &__cell[data-x='8'], &__cell[data-x='9'], &__cell[data-x='10']{
+            display: none;
+        }
+    }
+} */
+
+@media (min-width: 446px){
+    .calculation{
+        &__workTable{
+            width: 356px;
+        }
+    }
+}
+
+
+@media (min-width: 515px){
+    .calculation{
+        &__workTable{
+            width: 426px;
+        }
+    }
+}
 
 
 
 
 @media (min-width: 560px){
+    .calculation{
+        &__container{
+        }
+        &__workTable{
+            width: 435px;
+        }
+        &__settings{
+        }
+        &__blockBar{
+            width: 20.5%;
+            height: 472px;
+            max-width: 167.857px;
+            padding: 25px 0px 25px 0px;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        &__blocksettings{
+        }
+    }
+
+    .grid{
+        &__cell{
+            width: 85px;
+            height: 85px;
+        }
+        &__cell[data-x='4'], &__cell[data-x='5'], &__cell[data-x='6'], &__cell[data-x='7'] {
+            display: block;
+        }
+    }
+}
+
+@media (min-width: 660px){
+    .calculation{
+        &__workTable{
+            width: 523px;
+        }
+        &__settings{
+            flex-direction: row;
+            flex-wrap: wrap;
+            height: 200px;
+            justify-content: center;
+            select{
+                height: 50px;
+                margin-right: 11%;
+                padding: 10px;
+            }
+        }
+        &__formtop{
+            width: 90%;
+        }
+        
+    }
+}
+
+@media (min-width: 760px){
+    .calculation{
+        &__workTable{
+            width: 610px;
+        }
+    }
+}
+
+@media (min-width: 864px){
+    .calculation{
+        &__workTable{
+            width: 696px;
+        }
+    }
+}
+
+@media (min-width: 952px){
+    .calculation{
+        &__workTable{
+            width: 783px;
+        }
+    }
+    .grid{
+        &__cell[data-x='8']{
+            display: block;
+        }
+    }
+}
+
+@media (min-width: 1037px){
+    .calculation{
+        &__workTable{
+            width: 870px;
+        }
+    }
+    .grid{
+        &__cell[data-x='9']{
+            display: block;
+        }
+    }
+}
+
+@media (min-width: 1124px){
+    .calculation{
+        &__workTable{
+            width: 963px;
+        }
+    }
+    .grid{
+        &__cell[data-x='10']{
+            display: block;
+        }
+    }
+}
+
+@media (min-width: 1200px){
     .calculation{
         &__container{
             flex-direction: row;
@@ -470,9 +625,10 @@
         }
         &__workTable{
             position: relative;
-            width: 963px;
+            width: 783px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         &__settings{
             width: 100%;
@@ -489,25 +645,32 @@
         }
 
         &__blocksettings{
-            width: 23%;
+            min-width: 200px;   
+            width: 20%;
             max-width: 338px;
-            height: 472px;
-        }
-    }
-
-    .grid{
-        &__cell{
-            width: 85px;
-            height: 85px;
-        }
-        &__cell[data-x='4'], &__cell[data-x='5'], &__cell[data-x='6'], &__cell[data-x='7'], &__cell[data-x='8'], &__cell[data-x='9'], &__cell[data-x='10']{
-            display: block;
+            height: 521px;
+            position: inherit;
         }
     }
 }
 
+@media (min-width: 1300px){
+    .calculation{
+        &__workTable{
+            width: 870px;
+            overflow: hidden;
+        }
+    }
+}
 
-
+@media (min-width: 1402px){
+    .calculation{
+        &__workTable{
+            width: 963px;
+            overflow: hidden;
+        }
+    }
+}
 
 
 
@@ -524,3 +687,8 @@
     background-color: #F2F6F9;
     margin-right: 20px;
 }
+
+
+
+
+

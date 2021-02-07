@@ -7,7 +7,7 @@ const dragggrid = () => {
     const blockBar = document.querySelector('.calculation__blockBar'),
     blockHome = document.querySelectorAll('.calculation__block'),
     container = document.querySelector('.calculation__container'),
-    workTable = document.querySelector('.calculation__workTable'),
+    containerBottom = document.querySelector('.container__bottom'),
     calcBlocksettings = document.querySelector('.calculation__blocksettings'),
     blockSettings = document.querySelector('.blocksettings__container'),
 /*     header = document.querySelector('.header'), */
@@ -225,18 +225,27 @@ const dragggrid = () => {
                 target && 
                 target.classList.contains('grid__cell')
             ) {
-                blockSettings.classList.remove('blocksettings-show');
-
-                setTimeout(() => 
-                calcBlocksettings.classList.remove('calculation-show'), 
-                301);
-
-                blocks.forEach(element => {
-                    element.element.classList.remove('active');
-                });
+                closeBlockSettings();
             }
         });
     }
+    
+    function closeBlockSettings(){
+        blockSettings.classList.remove('blocksettings-show');
+
+        setTimeout(() => 
+        calcBlocksettings.classList.remove('calculation-show'), 
+        301);
+
+        blocks.forEach(element => {
+            element.element.classList.remove('active');
+        });
+    }
+
+    containerBottom.addEventListener('click', function (event){
+        closeBlockSettings();
+    });
+
 
     function MobileLimitingByDragging() {
         container.addEventListener('touchstart', function(event) {
@@ -264,7 +273,7 @@ const dragggrid = () => {
         let classesBlock = 0;
         blockBar.addEventListener('mousedown', function(event) {
             const target = event.target;
-            console.log(event.target);
+/*             console.log(event.target); */
             matchBlocks('calculation__block-R');
             if(target && target.classList.contains('calculation__block-R')) {
                 classesBlock = 'calculation__block-R';
@@ -324,18 +333,13 @@ const dragggrid = () => {
 
             //проверяем на дублирующие блоки
             if(
-                element.classList == `calculation__block ${classBlock}` ||
-                element.classList == 
-                `calculation__block ${classBlock} active gu-transit` ||
-                element.classList == `calculation__block ${classBlock} active` ||
                 element.classList.contains(classBlock) &&
-                element.classList.contains(`active`)
+                !element.classList.contains('none')
 
             ){
                 //х - кол-во дублирующих блоков
                 x = x + 1;
-                console.log(x);
-                
+
                 //Записываем лишний элемент
                 if(element.classList == `calculation__block ${classBlock}`){
                     removeBlock = element;
@@ -426,6 +430,7 @@ function getForm(target){
         });
         blockSettings.classList.add('blocksettings-show');
         calcBlocksettings.classList.add('calculation-show');
+        blockSettings.scrollTo(0, 0);
         target.classList.add('active');
         console.log(target);
         console.log('fbnh');
@@ -556,7 +561,7 @@ function getForm(target){
         });
     }
    
-
+// на будущее - собирает данные с формы выбора метода
     function GetFormSettings(target){
         if(target && target.classList.contains('btn__calculate')) {      
             formData = new FormData(formSettings);      
@@ -589,6 +594,21 @@ function getForm(target){
             });
         }
     }
+
+    function trackScroll(scrollTo) {
+        let scrolled = window.pageYOffset;
+        let windowWidth = document.documentElement.clientWidth;
+        let windowHeight = document.documentElement.clientHeight;
+
+        if(windowHeight < 950 && windowWidth < 1200){
+            window.scrollTo({
+                top: scrollTo,
+                behavior: "smooth"
+            });
+            console.log(scrolled);
+            console.log(windowWidth);
+        }
+      }
     
     function SaveScheme(){
    
@@ -606,10 +626,16 @@ function getForm(target){
         event.preventDefault();
         const target = event.target;
         if(target && target.classList.contains('btn__calculate')){
+
+            // на будущее - собирает данные с формы выбора метода
             GetFormSettings();
 
             //Удаялем старые ошибки (если они есть)
             removeOldAnswerBlock('.Error__block');
+
+            //Удаляем старый ответ (если он есть)
+            removeOldAnswerBlock('.answer__block');
+
             
             const promise1 = new Promise((resolve, reject) => {
                 getActiveBlocks();
@@ -629,13 +655,13 @@ function getForm(target){
               }).then(scheme => {
 
                 //Удаляем старый ответ (если он есть)
-                removeOldAnswerBlock('.Answer__block');
+                removeOldAnswerBlock('.answer__block');
 
                 getCalculation(scheme);
                 /* getCalculation( SaveScheme() ); */
               }).catch( () => {
                 //Удаляем старый ответ (если он есть)
-                removeOldAnswerBlock('.Answer__block');
+                removeOldAnswerBlock('.answer__block');
                 console.log('reject');
               });
         }

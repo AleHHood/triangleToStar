@@ -226,22 +226,25 @@
             </div>
         </div>
 
-        <form class="calculation__settings">
-            <div class="calculation__formtop">
-                <div class="calculation__formheader">Цепи постоянного тока</div>
-                <a href="#" class="calculation__help">?</a>
-            </div>
-
-            <select name="choiceMethod">
-                <option>Метод двух узлов</option>
-                <option>Пункт 2</option>
-              </select>
-            <button id="calculate" type="submit" class="btn btn__calculate">Рассчитать</button>
-            
+        <div class="container__bottom">
+            <form class="calculation__settings">
+                <div class="calculation__formtop">
+                    <div class="calculation__formheader">Цепи постоянного тока</div>
+                    <a href="#" class="calculation__help">?</a>
+                </div>
+                <select name="choiceMethod">
+                    <option>Метод двух узлов</option>
+                    <option>Пункт 2</option>
+                  </select>
+                <button id="calculate" type="submit" class="btn btn__calculate">Рассчитать</button>
                 <div class="calculation__eror"></div>
-        </form>
-        <div class="error"></div>
-        <section class="answer"></section>
+            </form>
+
+            <div class="error"></div>
+
+            <section class="answer"></section>
+        </div>
+        
         <script src="script.js"></script>
     </body>
 </html>
