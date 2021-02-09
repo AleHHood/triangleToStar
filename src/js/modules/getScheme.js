@@ -403,14 +403,14 @@ const getscheme = (blocks) => {
         returnValue = 'error';
     } else {
         if(getValidationsPostions (blocks) === 'error'){
-            trackScroll(errorDiv.clientHeight + 32);
+            trackScroll(errorDiv.clientHeight + 80);
             return 'error';
         }else{
             returnValue = branchs;    
         }
         
     }
-    trackScroll(errorDiv.clientHeight + 32);
+    trackScroll(errorDiv.clientHeight + 80);
     return returnValue;
 };
 export default getscheme;

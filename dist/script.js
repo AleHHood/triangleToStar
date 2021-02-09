@@ -7691,21 +7691,22 @@ var dragggrid = function dragggrid() {
       });
     }
   }
+  /* 
+      function trackScroll(scrollTo) {
+          let scrolled = window.pageYOffset;
+          let windowWidth = document.documentElement.clientWidth;
+          let windowHeight = document.documentElement.clientHeight;
+  
+          if(windowHeight < 950 && windowWidth < 1200){
+              window.scrollTo({
+                  top: scrollTo,
+                  behavior: "smooth"
+              });
+              console.log(scrolled);
+              console.log(windowWidth);
+          }
+        } */
 
-  function trackScroll(scrollTo) {
-    var scrolled = window.pageYOffset;
-    var windowWidth = document.documentElement.clientWidth;
-    var windowHeight = document.documentElement.clientHeight;
-
-    if (windowHeight < 950 && windowWidth < 1200) {
-      window.scrollTo({
-        top: scrollTo,
-        behavior: "smooth"
-      });
-      console.log(scrolled);
-      console.log(windowWidth);
-    }
-  }
 
   function SaveScheme() {
     var branchs = [{
@@ -8387,14 +8388,14 @@ var getscheme = function getscheme(blocks) {
     returnValue = 'error';
   } else {
     if (getValidationsPostions(blocks) === 'error') {
-      Object(_scrollTo__WEBPACK_IMPORTED_MODULE_4__["default"])(errorDiv.clientHeight + 32);
+      Object(_scrollTo__WEBPACK_IMPORTED_MODULE_4__["default"])(errorDiv.clientHeight + 80);
       return 'error';
     } else {
       returnValue = branchs;
     }
   }
 
-  Object(_scrollTo__WEBPACK_IMPORTED_MODULE_4__["default"])(errorDiv.clientHeight + 32);
+  Object(_scrollTo__WEBPACK_IMPORTED_MODULE_4__["default"])(errorDiv.clientHeight + 80);
   return returnValue;
 };
 

@@ -9,13 +9,13 @@
     }
 }
 
-.answer{
+.answer, .error{
     font-size: 1rem;
     text-align: justify;
-    padding: 30px 5px 10px 5px;
+    padding: 30px 15px 10px 15px;
     margin: 0 auto;
-    width: calc(100vw - 10px);
-
+    max-width: 100%;
+    box-sizing: border-box;
     &__block{
         margin-top: 2rem;
     }
@@ -25,10 +25,18 @@
     }
 }
 
+@media (min-width: 560px){
+    .answer, .error{
+        padding: 30px 30px 5px 30px;
+        max-width: 850px;
+        margin: 0 auto;
+    }
+}
+
 
 @media (min-width: 1200px){
  
-    .answer{
+    .answer, .error{
         text-align: justify;
         padding: 30px 48px 5px 40px;
         margin: 0 auto;

@@ -594,7 +594,7 @@ function getForm(target){
             });
         }
     }
-
+/* 
     function trackScroll(scrollTo) {
         let scrolled = window.pageYOffset;
         let windowWidth = document.documentElement.clientWidth;
@@ -608,7 +608,7 @@ function getForm(target){
             console.log(scrolled);
             console.log(windowWidth);
         }
-      }
+      } */
     
     function SaveScheme(){
    
