@@ -9,3 +9,27 @@
 @import './blocks/base/general';
 /* @import './blocks/base/typography'; */
 /* @import './blocks/import/normalize'; */
+
+.sidebar{
+    overflow-y: auto;
+    #form{
+        display: none;
+        height: 100%;
+        .m-prtnrsForm05{
+            height: 100%;
+            min-width: 208px;
+            background-color: #f2f6f9;
+        }
+        .m-prtnrsForm05__row{
+            margin-bottom: 25px;
+        }
+    }
+}
+
+@media(min-width: 992px){
+    .sidebar{
+        #form{
+            display: block;
+        }
+    }
+}
