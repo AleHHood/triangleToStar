@@ -202,6 +202,7 @@ const dragggrid = () => {
             const target = event.target;
 
             if(target && target.classList.contains('calculation__block')) {
+                console.log('mousedown');
                 blocks.forEach(element => {
                     element.element.classList.remove('active');
                 });
@@ -309,7 +310,6 @@ const dragggrid = () => {
         let x = 0;
         blockBar.children.forEach((element, i) => {
             if(
-            (element.classList == `calculation__block ${classBlock}`) || 
             (element.classList == `calculation__block none ${classBlock}`)
             ) {
                 x = x + 1;
@@ -623,6 +623,7 @@ function getForm(target){
     getValueFromForm();
     GetRemoveOrRotateBlock();
     formSettings.addEventListener('click', (event) => {
+
         event.preventDefault();
         const target = event.target;
         if(target && target.classList.contains('btn__calculate')){
