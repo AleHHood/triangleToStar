@@ -1,0 +1,74 @@
+.paper{
+    &__item{
+        padding: 30px 15px 5px 15px; 
+    }
+    &__text{
+        text-align: justify;
+    }
+    &__footer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+        flex-wrap: wrap;
+        padding: 20px 15px 20px 15px;
+        min-height: 10px;
+        background-color: $bg-color;
+        border-bottom: 2px solid $main-color;
+        a{
+            margin-left: 10px;
+            color: $main-color;
+        }
+    }
+    &__link{
+        font-size: 90%;
+        margin-left: 10px;
+        line-height: 1.7rem;
+    }
+    &__commers{
+        display: flex;
+        justify-content: center;
+    }
+}
+.icon-folder-open:before {
+    content: "\e930";
+  }
+  .icon-price-tag:before {
+    content: "\e935";
+  }
+  .icon-calendar:before {
+    content: "\e953";
+    margin-right: 10px;
+  }
+
+  .ads__block{
+      margin-bottom: 70px;
+  }
+
+  .commers{
+      &__footer{
+        border-bottom: 2px solid $main-color;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 90%;
+        padding: 20px 15px 20px 15px;
+      }
+      &__btn{
+        display: flex;
+        justify-content: center;
+        align-items:center;
+     width: 120px;
+        height: 50px;
+        background-color: $active-color;
+        margin-left: 15px;
+        border-radius: 3px;
+      }
+      &__link{
+        color:white;  
+        padding: 14px 29px;
+        &:hover{
+            color:white;
+        }
+      }
+  }

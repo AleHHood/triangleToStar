@@ -1,0 +1,32 @@
+.err{
+    &__descrp{
+        text-align: center;
+    }
+    &-numb-1{
+        animation: fadeIn404 2s;
+        font-size:150px;
+        color: $main-color;
+    }
+    &-numb-2{
+        animation: fadeIn404 2.5s;
+        font-size:150px;
+        color: $main-color;
+    }
+    &-numb-3{
+        animation: fadeIn404 1.5s;
+        font-size:150px;
+        color: $main-color; 
+    }
+    &__title{
+        animation: fadeIn404 3s;
+        text-align: center;
+    }
+    &__wrapper{
+        height: calc(100vh - 99px);
+        min-width: calc(100vw - 30px);
+        flex-direction: column;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

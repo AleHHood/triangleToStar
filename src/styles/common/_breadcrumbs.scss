@@ -1,0 +1,49 @@
+/* .breadcrumbs{
+    padding: 0px 0 0 0;
+    &__item{
+        display: inline;
+        &::before{
+            margin-right: 10px;
+            content: "/";
+        }
+        &:first-child{
+            color: red;
+            &::before{
+                margin-right: 0;
+                content:" ";
+            }
+        }
+        &_active{
+            
+        }
+    }
+    a{
+        font-size: 93%;
+        margin-left: 2px;
+        margin-right: 10px;
+        
+    }
+}
+.icon-folder-open:before {
+    content: "\e930";
+    
+  } */
+
+
+
+.breadcrumbs{
+    padding: 0px 0 1rem 0;
+    span{
+        color: $main-color;
+    }
+
+    .breadcrumbs__separator{
+        color:$color-text;
+    }
+    a{
+        font-size: 93%;
+        margin-left: 5px;
+        margin-right: 5px;
+        
+    }
+}

@@ -1,0 +1,77 @@
+/* .pagination{
+        padding: 20px 15px 30px 15px;
+        background-color: $bg-color;
+    &__ul{
+        margin: 0 auto;
+        max-width: 280px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        list-style-type: none;
+    }
+    &__link{
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        color:$color-text;
+        transition: background-color .3s;
+        float: left;
+        width: 40px;
+        height: 40px;
+        border-radius: 15%;
+        &_active{
+            background-color: $main-color;
+            color: white;
+        }
+    }
+} */
+
+.pagination{
+    padding: 20px 15px 30px 15px;
+    background-color: $bg-color;
+.nav-links{
+    margin: 0 auto;
+    max-width: 280px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.prev{
+    display: none;
+}
+a{
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color:$color-text;
+    transition: background-color .3s;
+    float: left;
+    width: 40px;
+    height: 40px;
+    border-radius: 15%;
+    &:hover{
+        background-color: $main-color;
+        color: white;
+    }
+    
+}
+.current{
+    background-color: $main-color;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    float: left;
+    width: 40px;
+    height: 40px;
+    border-radius: 15%;
+    &:hover{
+        cursor: pointer;
+    }
+}
+}

@@ -23,230 +23,457 @@
         <link rel="apple-touch-icon" sizes="167x167" href="img/favicons/apple-touch-icon-167x167.png">
         <link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon-180x180.png">
         <link rel="apple-touch-icon" sizes="1024x1024" href="img/favicons/apple-touch-icon-1024x1024.png">
-        <link rel="stylesheet" href="/css/style.min.css">
+        <link rel="stylesheet" href="css/style.min.css">
     </head>
     <body>
-        <header>
-            <div class="container">
-                <div class="header">
-                <nav class="header__nav">
-                    <h1 class="header__logo-block">
-                    <a class="header__logo" href="#">Электрикам</a>
-                    </h1>
-                    <ul class="header__menu">
-                    <li class="menu__item"><a class="menu__link" href="#">ТОЭ</a></li>
-                    <li class="menu__item">Электрические машины</li>
-                    <li class="menu__item">Решение задач
-                        <div class="header__dropdown">
-                            <a href="#" class="header__dropdown-item">Решение задач по ТОЭ онлайн</a>
-                            <a href="#" class="header__dropdown-item">Задачи с решением</a>
-                        </div>
-                    </li>
-                    <li class="menu__item">Ещё +
-                        <div class="header__dropdown">
-                            <a href="#" class="header__dropdown-item">СПТ</a>
-                            <a href="#" class="header__dropdown-item">Радиокоипоненты</a>
-                            <a href="#" class="header__dropdown-item">О сайте</a>
-                        </div>
-                    </li>     
-                </ul>
-                    
-                <div class="header__social">
-                    <script src="https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" async="async"></script>
-                    <script src="https://yastatic.net/share2/share.js" async="async"></script>
-                    <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
-                </div>
+<header>
+  <div class="container">
+      <div class="header">
+      <nav class="header__nav">
+          <h1 class="header__logo-block">
+          <a class="header__logo" href="#">Электрикам</a>
+          </h1>
+          <ul class="header__menu">
+          <li class="menu__item"><a class="menu__link" href="#">ТОЭ</a></li>
+          <li class="menu__item">Электрические машины</li>
+          <li class="menu__item">Решение задач
+              <div class="header__dropdown">
+                  <a href="#" class="header__dropdown-item">Решение задач по ТОЭ онлайн</a>
+                  <a href="#" class="header__dropdown-item">Задачи с решением</a>
+              </div>
+          </li>
+          <li class="menu__item">Ещё +
+              <div class="header__dropdown">
+                  <a href="#" class="header__dropdown-item">СПТ</a>
+                  <a href="#" class="header__dropdown-item">Радиокоипоненты</a>
+                  <a href="#" class="header__dropdown-item">О сайте</a>
+              </div>
+          </li>     
+      </ul>
+          
+          <div class="header__social">
+          <script src="https://yastatic.net/es5-shims/0.0.2/es5-shims.min.js" async="async"></script>
+          <script src="https://yastatic.net/share2/share.js" async="async"></script>
+          <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir,twitter"></div>
+          </div>
+
+          
+          <form class="search__form-desctop">
+              <input class="search__input" type="search" placeholder="Поиск..." aria-label="Search">
+              <button class="search__button" type="submit"><span class="icon-search"></span></button>
+          </form>
+          
+
+          
+
+          <div class="header__button">
+              <div class="header__hamburger">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+              </div>
+              <div class="header__search">
+                  <span class="icon-search"></span>
+                  <span></span>
+                  <span></span>
+              </div>
+          </div>
+      </nav>
+      <div class="nav">
+          <nav class="nav__wrapper">
+              <form class="search__form">
+                  <input class="search__input" type="search" placeholder="Поиск..." aria-label="Search">
+                  <button class="search__button" type="submit"><span class="icon-search"></span></button>
+                </form>
+              <ul>
+                  <li class="menu-item"><a href="#">главная</a></li>
+                  <li class="menu-item"><a href="#">тоэ</a></li>
+                  <li class="menu-item"><a href="#">электрические машины</a></li>
+                  <li class="menu-item"><a href="#">спт</a></li>
+                  <li class="menu-item"><a href="#">О сайте</a></li>
+                  <li class="menu-item"><a href="#">решение задач по тоэ онлайн</a></li>
+                  <li class="menu-item"><a href="#">радиокомпоненты</a></li>
+              </ul>
+          </nav>
+      </div>
+  </div>
+  </div>
+</header>
+<div class="main-container">
+    <div class="sidebar">
+        <nav>
+    
+              <details class="sidebar__details">
+                <summary class="sidebar__first">ТоЭ</summary>
+                        <details class="sidebar__details-half">   
+                          <summary class="sidebar__half">Задачи по ТОЭ</summary>                 
+                          <ul>
+                            <li class="sidebar__second"><a class="active" href="#">Цепи переменного тока</a></li>
+                            <li class="sidebar__second"><a href="#">Цепи постоянного тока</a></li>
+                          </ul>
+                        </details>
+    
+          
+                        <details class="sidebar__details-half">
+                          <summary class="sidebar__half">Основы ТОЭ</summary>
+                            <ul>
+                              <li class="sidebar__second"><a href="#">Цепи переменного тока</a></li>
+                              <li class="sidebar__second"><a href="#">Цепи постоянного тока</a></li>
+                            </ul>
+                        </details>
+    
+              </details>    
+    
+              <details>
+                <summary class="sidebar__first">Цепи постоянного тока</summary>
+              </details>
+    
+                <details  class="sidebar__details">
+                  <summary class="sidebar__first">Решение задач</summary>
+                    <ul>
+                        <li class="sidebar__second"><a href="#">Решение задач по тоэ онлайн бесплатно</a></li>
+                        <li class="sidebar__second"><a href="#">Задачи с решением</a></li>
+                    </ul>
+                </details>
+    
+                <li class="sidebar__first"><span><a href="#">СПТ</a></span></li>
+                <li class="sidebar__first"><span><a href="#">О сайте</a></span></li>
+    
+    
+    
+    
+              <ul>
+                <li class="sidebar__first">
+                    <span><a href="#">ТОЭ</a></span>
+                  <ul>
+                    <li class="sidebar__second"><a href="#">Цепи переменного тока</a></li>
+                    <li class="sidebar__second"><a href="#">Цепи постоянного тока</a></li>
+                  </ul>
+                </li>
+                <li class="sidebar__first"><span><a href="#">Цепи постоянного тока</a></span></li>
+                <li class="sidebar__first"><span><a href="#">Решение задач</a></span>
+                    <ul>
+                        <li class="sidebar__second"><a href="#">Решение задач по тоэ онлайн бесплатно</a></li>
+                        <li class="sidebar__second"><a href="#">Задачи с решением</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar__first"><span><a href="#">СПТ</a></span></li>
+                <li class="sidebar__first"><span><a href="#">О сайте</a></span></li>
+              </ul>
+              
+                  
+              <ul>
+                <li class="sidebar__first">
+                    <span><a href="#">ТОЭ</a></span>
+                  <ul>
+                    <li class="sidebar__second"><a href="#">Цепи переменного тока</a></li>
+                    <li class="sidebar__second"><a href="#">Цепи постоянного тока</a></li>
+                  </ul>
+                </li>
+                <li class="sidebar__first"><span><a href="#">Цепи постоянного тока</a></span></li>
+                <li class="sidebar__first"><span><a href="#">Решение задач</a></span>
+                    <ul>
+                        <li class="sidebar__second"><a href="#">Решение задач по тоэ онлайн бесплатно</a></li>
+                        <li class="sidebar__second"><a href="#">Задачи с решением</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar__first"><span><a href="#">СПТ</a></span></li>
+                <li class="sidebar__first"><span><a href="#">О сайте</a></span></li>
+              </ul>
+            </nav>
+    </div>
+    <div class="content-container">
+        <section class="paper">
+                <div class="paper__item">
+                    <h2>Как выбрать мультиметр? Лучший мультиметр 2019 года</h2>
         
-                    
-                    <form class="search__form-desctop">
-                        <input class="search__input" type="search" placeholder="Поиск..." aria-label="Search">
-                        <button class="search__button" type="submit"><span class="icon-search"></span></button>
-                    </form>
-                    
+                    <div class="paper__breadcrumbs"></div>
+        <!--             <div class="paper__commers">
+                        <a href="https://zchnk.ru/NkYMN"><img src="https://rbs.r-money.ru/b/zaochnik_order/88132e01/6ebbbd69/c76a034d-888f-4299-bd40-b17424e82356.png"></a>
+                    </div> -->
+                    <div class="paper__text">
+                        <P>
+                        В этом статье представлен список лучших мультиметров на апрель 2019 года, для домашнего использования. Рейтинг составлен по техническим характеристикам, соотношению «цена-качество», отзывам и популярности. В обзор вошли модели не дороже 30$ известных мировых производителей, таких как UNI-T и RICHMETERS.</p>
         
+                    <p>Мультиметр – это многофункциональный измерительный прибор необходимый каждому электрику, автомобилисту или строителю.<a href="#" class="paper__more">Читать далее ➔</a></p>
                     
-        
-                    <div class="header__button">
-                        <div class="header__hamburger">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                        <div class="header__search">
-                            <span class="icon-search"></span>
-                            <span></span>
-                            <span></span>
-                        </div>
                     </div>
-                </nav>
-                <div class="nav">
-                    <nav class="nav__wrapper">
-                        <form class="search__form">
-                            <input class="search__input" type="search" placeholder="Поиск..." aria-label="Search">
-                            <button class="search__button" type="submit"><span class="icon-search"></span></button>
-                          </form>
-                        <ul>
-                            <li class="menu-item"><a href="#">главная</a></li>
-                            <li class="menu-item"><a href="#">тоэ</a></li>
-                            <li class="menu-item"><a href="#">электрические машины</a></li>
-                            <li class="menu-item"><a href="#">спт</a></li>
-                            <li class="menu-item"><a href="#">О сайте</a></li>
-                            <li class="menu-item"><a href="#">решение задач по тоэ онлайн</a></li>
-                            <li class="menu-item"><a href="#">радиокомпоненты</a></li>
+                </div>
+                <div class="paper__footer">
+                    <div class="paper__link"><span class="icon-calendar"></span>08.02.2020</div>
+                    <div class="paper__link"></div>
+                    <div class="paper__link"><span class="icon-price-tag"></span><a href="#">Задачи с решением?</a></div>
+                    <div class="paper__link"><span class="icon-folder-open"></span><a href="#">Задачи по ТОЭ</a></div>
+                </div>
+                <div class="commers__footer">
+                    <div class="commers__text">
+                    Не получилось решить задачу?<br>
+                    <b>Держи скидку 11% на выполнение любой студенческой работы!</b>
+                </div>
+                    <div class="commers__btn"><a href="https://zchnk.ru/R6PZw" rel="nofollow" class="commers__link">СКИДКА</a></div>
+                </div>
+                <div class="paper__item commt">
+                    <div class="ads__block">
+                        
+                    </div>
+        
+                    <ul class="commt__list">
+                        
+                        <li id="comment-1203" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+                            <article id="div-comment-1203" class="comment-body">
+                                <footer class="comment-meta">
+                                    <div class="comment-author vcard"> 
+                                        <img alt="" src="https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=56&amp;d=mm&amp;r=g" data-lazy-type="image" data-src="https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=56&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=112&amp;d=mm&amp;r=g 2x" data-srcset="" class="avatar avatar-56 photo lazy-loaded" width="56" height="56">
+                                        <noscript>
+                                            <img alt='' src='https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=56&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=112&#038;d=mm&#038;r=g 2x' class='avatar avatar-56 photo' height='56' width='56' />
+                                        </noscript> 
+                                        <b class="fn">admin</b>
+                                        <span class="says">:</span>
+                                    </div>
+                                    <div class="comment-metadata"> 
+                                        <a href="https://electrikam/balans-moshhnostej-v-cepi-postoyannogo-toka/#comment-1203"> 
+                                            <time datetime="2014-01-19T12:43:32+03:00"> 19.01.2014 в 12:43 пп </time> 
+                                        </a> 
+                                        <span class="edit-link">
+                                            <a class="comment-edit-link" href="https://electrikam/wp-admin/comment.php?action=editcomment&amp;c=1203">Изменить</a>
+                                        </span>
+                                    </div>
+                                </footer>
+                                <div class="comment-content">
+                                    <p>Блин все ошибки найдут, в условии должно быть Е1 = 20, Е2 = 30.<br> P.S. Сейчас исправлю, спасибо за внимательность</p>
+                                </div>
+                                <div class="reply">
+                                    <a rel="nofollow" class="comment-reply-link" href="/balans-moshhnostej-v-cepi-postoyannogo-toka/?replytocom=1203#respond" data-commentid="1203" data-postid="178" data-belowelement="div-comment-1203" data-respondelement="respond" aria-label="Комментарий к записи admin">Ответить</a>
+                                </div>
+                            </article>
+                        </li>
+                    
+                    
+                    
+                    
+                        
+                        <li id="comment-14116" class="comment odd alt thread-odd thread-alt depth-1 parent">
+                            <article id="div-comment-14116" class="comment-body">
+                                <footer class="comment-meta">
+                                    <div class="comment-author vcard"> 
+                                        <img alt="" src="https://secure.gravatar.com/avatar/4fa6d4a465e7ce9c40812b3a580d6c41?s=56&amp;d=mm&amp;r=g" data-lazy-type="image" data-src="https://secure.gravatar.com/avatar/4fa6d4a465e7ce9c40812b3a580d6c41?s=56&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/4fa6d4a465e7ce9c40812b3a580d6c41?s=112&amp;d=mm&amp;r=g 2x" data-srcset="" class="avatar avatar-56 photo lazy-loaded" width="56" height="56">
+                                        <noscript>
+                                            <img alt='' src='https://secure.gravatar.com/avatar/4fa6d4a465e7ce9c40812b3a580d6c41?s=56&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/4fa6d4a465e7ce9c40812b3a580d6c41?s=112&#038;d=mm&#038;r=g 2x' class='avatar avatar-56 photo' height='56' width='56' />
+                                        </noscript> 
+                                        <b class="fn">НеЭлектрик</b>
+                                        <span class="says">:</span>
+                                    </div>
+                                    <div class="comment-metadata"> 
+                                        <a href="https://electrikam/balans-moshhnostej-v-cepi-postoyannogo-toka/#comment-14116"> 
+                                            <time datetime="2015-02-07T17:21:38+03:00"> 07.02.2015 в 5:21 пп </time> 
+                                        </a> 
+                                        <span class="edit-link">
+                                            <a class="comment-edit-link" href="https://electrikam/wp-admin/comment.php?action=editcomment&amp;c=14116">Изменить</a>
+                                        </span>
+                                    </div>
+                                </footer>
+                                <div class="comment-content">
+                                    <p>Какова допустимая погрешность?? У меня выходит 0,561</p>
+                                </div>
+                                <div class="reply">
+                                    <a rel="nofollow" class="comment-reply-link" href="/balans-moshhnostej-v-cepi-postoyannogo-toka/?replytocom=14116#respond" data-commentid="14116" data-postid="178" data-belowelement="div-comment-14116" data-respondelement="respond" aria-label="Комментарий к записи НеЭлектрик">Ответить</a>
+                                </div>
+                            </article>
+                            <ul class="children">
+                    
+                        <!------------------------------------- ОТвет на коментарий ------------------------------------------------>
+                    
+                    
+                                <li id="comment-14128" class="comment byuser comment-author-admin bypostauthor even depth-2">
+                                    <article id="div-comment-14128" class="comment-body">
+                                        <footer class="comment-meta"><div class="comment-author vcard"> 
+                                            <img alt="" src="https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=56&amp;d=mm&amp;r=g" data-lazy-type="image" data-src="https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=56&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=112&amp;d=mm&amp;r=g 2x" data-srcset="" class="avatar avatar-56 photo lazy-loaded" width="56" height="56">
+                                            <noscript>
+                                                <img alt='' src='https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=56&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/0098dab864c73fec3172058e0aedc49d?s=112&#038;d=mm&#038;r=g 2x' class='avatar avatar-56 photo' height='56' width='56' />
+                                            </noscript> <b class="fn">admin</b>
+                                            <span class="says">:</span>
+                                        </div>
+                                        <div class="comment-metadata"> 
+                                            <a href="https://electrikam/balans-moshhnostej-v-cepi-postoyannogo-toka/#comment-14128"> 
+                                                <time datetime="2015-02-08T18:18:30+03:00"> 08.02.2015 в 6:18 пп </time> 
+                                            </a> 
+                                            <span class="edit-link">
+                                                <a class="comment-edit-link" href="https://electrikam/wp-admin/comment.php?action=editcomment&amp;c=14128">Изменить</a>
+                                            </span>
+                                        </div>
+                                    </footer>
+                                    <div class="comment-content">
+                                        <p>По идее баланс мощности должен равняться нулю, но так как мы округляем некоторые значения при расчете — возникает погрешность, которая может составлять примерно 0,1 — 5% от потребляемой мощности.</p>
+                                    </div>
+                                </article>
+                            </li>
                         </ul>
-                    </nav>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    </ul>
+                    <div id="respond" class="comment-respond">
+                        <h3 id="reply-title" class="comment-reply-title">Добавить комментарий <small>
+                            <a rel="nofollow" id="cancel-comment-reply-link" href="/balans-moshhnostej-v-cepi-postoyannogo-toka/#respond" style="display:none;">Отменить ответ</a></small>
+                        </h3>
+                        
+                        <form action="https://electrikam/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate=""><p class="comment-notes">
+                            <span id="email-notes">
+                                Ваш e-mail не будет опубликован.
+                            </span>
+                        </p>
+                        <p class="comment-form-comment">
+                            <label for="comment">
+                                Комментарий
+                            </label>
+                            
+                            <textarea autocomplete="nope" id="comment" name="b4808a9de6" cols="45" rows="8" maxlength="65525" required="required">
+                            </textarea>
+                            
+                            <textarea id="a78ab6aa45bdc2ffcfd78473bc5561d1" aria-hidden="true" name="comment" autocomplete="nope" style="padding:0;clip:rect(1px, 1px, 1px, 1px);position:absolute !important;white-space:nowrap;height:1px;width:1px;overflow:hidden;" tabindex="-1">
+                            </textarea>
+                            </p>
+                            <p class="comment-form-author">
+                                <label for="author">Имя</label> 
+                                <input id="author" name="author" type="text" value="" size="30" maxlength="245">
+                            </p>
+                            <p class="comment-form-email">
+                                <label for="email">
+                                    E-mail
+                                </label> 
+                                <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes">
+                            </p>
+                            <p class="comment-form-url">
+                                <label for="url">
+                                    Сайт
+                                </label> 
+                                <input id="url" name="url" type="url" value="" size="30" maxlength="200">
+                            </p>
+                            <p class="comment-form-cookies-consent">
+                                <input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes">
+                                <label for="wp-comment-cookies-consent">
+                                    Сохранить моё имя, email и адрес сайта в этом браузере для последующих моих комментариев.
+                                </label>
+                            </p>
+                            <p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Отправить комментарий"> <input type="hidden" name="comment_post_ID" value="178" id="comment_post_ID"> 
+                                <input type="hidden" name="comment_parent" id="comment_parent" value="0">
+                            </p>
+                        </form>
+                    
+                    </div>
+                    
                 </div>
-            </div>
-            </div>
-        </header>
-        <div class="calculation__container">
-            <div class="calculation__blockBar">
-                <div id="0" class="calculation__block calculation__block-R"></div>
-                <div id="3" class="calculation__block calculation__block-K">
-<!--                     <span class="left">I2</span>
-                    <span class="right">I3</span> -->
-                </div>
-                <div id="1" class="calculation__block calculation__block-E"></div>
-                <div id="2" class="calculation__block calculation__block-B"></div>
-                <div id="4" class="calculation__block calculation__block-Corner"></div>
-            </div>
-            <div class="calculation__workTable">
-                <div class="grid__container">
-                    <div class="grid__row">
-                        <div data-x="0" data-y="0" class="grid__cell"></div>
-                        <div data-x="1" data-y="0" class="grid__cell"></div>
-                        <div data-x="2" data-y="0" class="grid__cell"></div>
-                        <div data-x="3" data-y="0" class="grid__cell"></div>
-                        <div data-x="4" data-y="0" class="grid__cell"></div>
-                        <div data-x="5" data-y="0" class="grid__cell"></div>
-                        <div data-x="6" data-y="0" class="grid__cell"></div>
-                        <div data-x="7" data-y="0" class="grid__cell"></div>
-                        <div data-x="8" data-y="0" class="grid__cell"></div>
-                        <div data-x="9" data-y="0" class="grid__cell"></div>
-                        <div data-x="10" data-y="0" class="grid__cell"></div>
-                    </div>
-                    <div class="grid__row">
-                        <div data-x="0" data-y="1" class="grid__cell"></div>
-                        <div data-x="1" data-y="1" class="grid__cell"></div>
-                        <div data-x="2" data-y="1" class="grid__cell"></div>
-                        <div data-x="3" data-y="1" class="grid__cell"></div>
-                        <div data-x="4" data-y="1" class="grid__cell"></div>
-                        <div data-x="5" data-y="1" class="grid__cell"></div>
-                        <div data-x="6" data-y="1" class="grid__cell"></div>
-                        <div data-x="7" data-y="1" class="grid__cell"></div>
-                        <div data-x="8" data-y="1" class="grid__cell"></div>
-                        <div data-x="9" data-y="1" class="grid__cell"></div>
-                        <div data-x="10" data-y="1" class="grid__cell"></div>
-                    </div>
-                    <div class="grid__row">
-                        <div data-x="0" data-y="2" class="grid__cell"></div>
-                        <div data-x="1" data-y="2" class="grid__cell"></div>
-                        <div data-x="2" data-y="2" class="grid__cell"></div>
-                        <div data-x="3" data-y="2" class="grid__cell"></div>
-                        <div data-x="4" data-y="2" class="grid__cell"></div>
-                        <div data-x="5" data-y="2" class="grid__cell"></div>
-                        <div data-x="6" data-y="2" class="grid__cell"></div>
-                        <div data-x="7" data-y="2" class="grid__cell"></div>
-                        <div data-x="8" data-y="2" class="grid__cell"></div>
-                        <div data-x="9" data-y="2" class="grid__cell"></div>
-                        <div data-x="10" data-y="2" class="grid__cell"></div>
-                    </div>
-                    <div class="grid__row">
-                        <div data-x="0" data-y="3" class="grid__cell"></div>
-                        <div data-x="1" data-y="3" class="grid__cell"></div>
-                        <div data-x="2" data-y="3" class="grid__cell"></div>
-                        <div data-x="3" data-y="3" class="grid__cell"></div>
-                        <div data-x="4" data-y="3" class="grid__cell"></div>
-                        <div data-x="5" data-y="3" class="grid__cell"></div>
-                        <div data-x="6" data-y="3" class="grid__cell"></div>
-                        <div data-x="7" data-y="3" class="grid__cell"></div>
-                        <div data-x="8" data-y="3" class="grid__cell"></div>
-                        <div data-x="9" data-y="3" class="grid__cell"></div>
-                        <div data-x="10" data-y="3" class="grid__cell"></div>
-                    </div>
-                    <div class="grid__row">
-                        <div data-x="0" data-y="4" class="grid__cell"></div>
-                        <div data-x="1" data-y="4" class="grid__cell"></div>
-                        <div data-x="2" data-y="4" class="grid__cell"></div>
-                        <div data-x="3" data-y="4" class="grid__cell"></div>
-                        <div data-x="4" data-y="4" class="grid__cell"></div>
-                        <div data-x="5" data-y="4" class="grid__cell"></div>
-                        <div data-x="6" data-y="4" class="grid__cell"></div>
-                        <div data-x="7" data-y="4" class="grid__cell"></div>
-                        <div data-x="8" data-y="4" class="grid__cell"></div>
-                        <div data-x="9" data-y="4" class="grid__cell"></div>
-                        <div data-x="10" data-y="4" class="grid__cell"></div>
-                    </div>
-                    <div class="grid__row">
-                        <div data-x="0" data-y="5" class="grid__cell"></div>
-                        <div data-x="1" data-y="5" class="grid__cell"></div>
-                        <div data-x="2" data-y="5" class="grid__cell"></div>
-                        <div data-x="3" data-y="5" class="grid__cell"></div>
-                        <div data-x="4" data-y="5" class="grid__cell"></div>
-                        <div data-x="5" data-y="5" class="grid__cell"></div>
-                        <div data-x="6" data-y="5" class="grid__cell"></div>
-                        <div data-x="7" data-y="5" class="grid__cell"></div>
-                        <div data-x="8" data-y="5" class="grid__cell"></div>
-                        <div data-x="9" data-y="5" class="grid__cell"></div>
-                        <div data-x="10" data-y="5" class="grid__cell"></div>
-                    </div>
-                </div>
-            </div>            
-            <div class="calculation__blocksettings">
-                <div class="blocksettings__container">
-                    <!-- <div data-close class="blocksettings__close">x</div> -->
-                    <div class="blocksettings__top">
-                        <div class="blocksettings__title">Параметры элемента</div>
-                        <div class="blocksettings__wrapper-N">
-                            <label for="nblock">Номер элемента</label>
-                            <input id="nblock" required placeholder="" name="numberBlock" type="number" autocomplete="off" class="blocksettings__input">
-                            <div id="notifyN" class="blocsettings__notify"></div>
-                        </div>
-                        <div class="blocksettings__wrapper-Knots">
-                            <label for="knotsblock">Узел</label>
-                            <input id="knotsblock" maxlength="2" required placeholder="" autocomplete="off" name="numberBlock" class="blocksettings__input">
-                            <div id="notifyKnots" class="blocsettings__notify"></div>
-                        </div>
-                        <div class="blocksettings__wrapper-R">
-                            <label for="rblock">Сопротивление, Ом</label>
-                            <input id="rblock" autocomplete="off" required placeholder="Сопротивление, Ом" name="resistance" type="number" class="blocksettings__input">
-                            <div id ="notifyR" class="blocsettings__notify"></div>
-                        </div>
-                        <div class="blocksettings__wrapper-E">
-                            <label for="eblock">ЭДС источника, В</label>
-                            <input id="eblock" autocomplete="off" required placeholder="ЭДС источника, В" name="voltage" type="number" class="blocksettings__input">
-                            <div id="notifyE" class="blocsettings__notify"></div>
-                        </div>
-                    </div>
-                    <div class="blocksettings__bottom">
-                        <button id="rotate" class="btn btn__rotate">Повернуть элемент</button>
-                        <button id="remove" class="btn btn__remove">Удалить элемент</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container__bottom">
-            <form class="calculation__settings">
-                <div class="calculation__formtop">
-                    <div class="calculation__formheader">Цепи постоянного тока</div>
-                    <a href="https://electrikam.com/kak-ispolzovat-programmu-dlya-rascheta-elektricheskix-cepej-onlajn/" class="calculation__help" onclick="window.open(this.href);
- return false">?</a>
-                </div>
-                <select name="choiceMethod">
-                    <option>Метод двух узлов</option>
-                    <option>Пункт 2</option>
-                  </select>
-                <button id="calculate" type="submit" class="btn btn__calculate">Рассчитать</button>
-                <div class="calculation__eror"></div>
-            </form>
-
-            <div class="error"></div>
-
-            <section class="answer"></section>
-        </div>
         
-        <script src="script.js"></script>
-    </body>
-</html>
+                <div class="paper__item">
+                    <h2>Как выбрать мультиметр? Лучший мультиметр 2019 года </h2>
+                    <div class="paper__breadcrumbs">
+                        
+                        
+                        <nav>
+                          <div class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                            <span itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                              <a  href="http://childhood/" itemprop="item">
+                                <span itemprop="name">Главная</span>
+                              </a>
+                              <meta itemprop="position" content="1">
+                            </span>
+                        
+                              <span class="breadcrumbs__separator"> › </span>
+                        
+                              <span itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                                <a class="breadcrumbs__item" href="http://childhood/category/%d0%b1%d0%b5%d0%b7-%d1%80%d1%83%d0%b1%d1%80%d0%b8%d0%ba%d0%b8/" itemprop="item">
+                                  <span itemprop="name">Без рубрики</span>
+                                </a>
+                                <meta itemprop="position" content="2">
+                              </span>
+                          
+                          </div>
+                        
+                        </nav>
+                    </div>
+                    <div class="paper__text">
+                        <P>
+                        В этом статье представлен список лучших мультиметров на апрель 2019 года, для домашнего использования. Рейтинг составлен по техническим характеристикам, соотношению «цена-качество», отзывам и популярности. В обзор вошли модели не дороже 30$ известных мировых производителей, таких как UNI-T и RICHMETERS.</p>
+        
+                    <p>Мультиметр – это многофункциональный измерительный прибор необходимый каждому электрику, автомобилисту или строителю.</p>
+                    </div>
+                </div>
+                <div class="paper__footer">
+                    <div class="paper__link"><span class="icon-calendar"></span>08.02.2020</div>
+                    <div class="paper__link"></div>
+                    <div class="paper__link"><span class="icon-price-tag"></span><a href="#">Задачи с решением?</a></div>
+                    <div class="paper__link"><span class="icon-folder-open"></span><a href="#">Задачи по ТОЭ</a></div>
+                </div>
+                
+        
+                <div class="paper__item">
+                    <h2>Как выбрать мультиметр? Лучший мультиметр 2019 года</h2>
+                    <div class="paper__breadcrumbs"></div>
+                    <div class="paper__text">
+                        <P>
+                        В этом статье представлен список лучших мультиметров на апрель 2019 года, для домашнего использования. Рейтинг составлен по техническим характеристикам, соотношению «цена-качество», отзывам и популярности. В обзор вошли модели не дороже 30$ известных мировых производителей, таких как UNI-T и RICHMETERS.</p>
+        
+                    <p>Мультиметр – это многофункциональный измерительный прибор необходимый каждому электрику, автомобилисту или строителю.</p>
+                    </div>
+                </div>
+                <div class="paper__footer">
+                    <div class="paper__link"><span class="icon-calendar"></span>08.02.2020</div>
+                    <div class="paper__link"></div>
+                    <div class="paper__link"><span class="icon-price-tag"></span><a href="#">Задачи с решением?</a></div>
+                    <div class="paper__link"><span class="icon-folder-open"></span><a href="#">Задачи по ТОЭ</a></div>
+                </div>
+        
+                <div class="paper__item">
+                    <h2>Как выбрать мультиметр? Лучший мультиметр 2019 года </h2>
+                    <div class="paper__breadcrumbs"></div>
+                    <div class="paper__text">
+                        <p style="text-align: justify;">В этом статье представлен список лучших мультиметров на апрель 2019 года, для домашнего использования. Рейтинг составлен по техническим характеристикам, соотношению "цена-качество", отзывам и популярности. В обзор вошли модели не дороже 30$ известных мировых производителей, таких как UNI-T и RICHMETERS.</p>
+                        <p style="padding-left: 40px; text-align: justify;"><em><strong>Мультиметр</strong> – это многофункциональный измерительный прибор необходимый каждому электрику, автомобилисту или строителю.</em></p>
+                        <p style="padding-left: 40px; text-align: justify;"><em>Все представленные в данной статье мультиметры можно купить на aliexpress.</em><!--more--></p></div>
+                </div>
+                <div class="paper__footer">
+                    <div class="paper__link"><span class="icon-calendar"></span>08.02.2020</div>
+                    <div class="paper__link"></div>
+                    <div class="paper__link"><span class="icon-price-tag"></span><a href="#">Задачи с решением?</a></div>
+                    <div class="paper__link"><span class="icon-folder-open"></span><a href="#">Задачи по ТОЭ</a></div>
+                </div>
+        
+        
+                <!-- <nav class="pagination">
+                    <ul class="pagination__ul">
+                      <li class="pagination__item"><a class="pagination__link pagination__link_active" href="#">1</a></li>
+                      <li class="pagination__item"><a class="pagination__link" href="#">2</a></li>
+                      <li class="pagination__item"><a class="pagination__link" href="#">3</a></li>
+                      <li class="pagination__item"><a class="pagination__link" href="#">4</a></li>
+                      <li class="pagination__item"><a class="pagination__link" href="#">&raquo;</a></li>
+                    </ul>
+                  </nav> -->
+                  <nav class="navigation pagination" role="navigation">
+                    <div class="nav-links">
+                      <span aria-current="page" class="page-numbers current">1</span>
+                       <a class="page-numbers" href="https://electrikam/page/2/">2</a>
+                        <span class="page-numbers dots">…</span>
+                         <a class="page-numbers" href="https://electrikam/page/7/">7</a>
+                          <a class="page-numbers" href="https://electrikam/page/8/">8</a>
+                           <a class="next page-numbers" href="https://electrikam/page/2/">&raquo;</a>
+                          </div>
+                        </nav>
+        </section>
+    </div>
+</div>
 
+<footer>
+    <div class="container">
+        <div class="footer__content">
+                © electrikam.com 2020 – All Right Reserved
+                <a class="footer__link" href="#">О сайте</a>
+        </div>    
+        
+    </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+.footer{
+    &__content{
+        padding: 20px 15px 20px 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color:$main-color;
+        min-height: 40px;
+        font-size: 80%;
+        color: white;
+    }
+    &__link{
+            color: white;
+            text-decoration: none;
+            margin: 0 auto;
+            text-align: center;
+    }
+}
