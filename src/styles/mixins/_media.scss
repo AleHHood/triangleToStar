@@ -110,7 +110,7 @@
     .header{
         &__logo{
             background-color: #D44113;
-            height: 68px;
+            height:  $header-desktop;
         }
         &__menu{
             display: flex;
@@ -118,7 +118,7 @@
             margin-right: auto;
         }
         &__nav{
-            height: 68px;
+            height:  $header-desktop;
         }
         .menu__item{
             color: white;
@@ -153,7 +153,7 @@
             justify-content: center;
             flex-direction: column;
             position: absolute;
-            top: 68px;
+            top:  $header-desktop;
             background-color: $bg-color;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             animation: fadeInDown 0.4s;
@@ -200,10 +200,10 @@
         display: flex;
         flex-direction: column;
         width: 215px;
-        height: calc(100vh - 68px);
+        height: calc(100vh -  $header-desktop);
         position: sticky;
         overflow-y: hidden;
-        top: 68px; 
+        top:  $header-desktop; 
         border-right: 1px solid rgba(0,0,0,.1);
         font-size: 15px;
 
@@ -440,7 +440,7 @@ p {
     .search{
         &__form-desctop{
             position: absolute;
-            top: 68px;
+            top:  $header-desktop;
             right: 0px;
             display: none;
         }
@@ -632,7 +632,7 @@ p {
     .promo{
         display: block;
         position: sticky;
-        top: 68px;
+        top:  $header-desktop;
         height: calc(100vh - 69px);
         width: 160px;
         border-left: 1px solid rgba(0,0,0,.1);
@@ -702,7 +702,7 @@ p {
         }
         &__button{
             position: relative;
-            right: 68px;
+            right:  $header-desktop;
             top: 1px;
         }
     }

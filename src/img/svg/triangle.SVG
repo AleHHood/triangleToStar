@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with "sPlan" (http://www.abacom-online.de) -->
+<svg version="1.1" baseProfile="full"
+xmlns="http://www.w3.org/2000/svg"
+width="360" height="250">
+<title>triangle</title>
+<defs>
+<style type="text/css">
+<![CDATA[
+polyline {stroke-linecap:round; stroke-linejoin:round}
+polygon {stroke-linecap:round; stroke-linejoin:round}
+path {stroke-linecap:round; stroke-linejoin:round}
+circle {stroke-linecap:round; stroke-linejoin:round}
+]]>
+</style>
+</defs>
+<polyline points="139.50 110.50 180.00 70.00 210.00 100.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<path fill="rgb(255,255,255)" stroke="rgb(0,0,0)" stroke-width="3" style="stroke-linecap:square; stroke-linejoin:miter" d=" M 97 139 L 132 103 147 118 111 153 97 139" />
+<polyline points="90.00 160.00 104.14 145.86" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<polyline points="139.50 110.50 153.64 96.36" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<path fill="rgb(255,255,255)" stroke="rgb(0,0,0)" stroke-width="3" style="stroke-linecap:square; stroke-linejoin:miter" d=" M 231 107 L 267 142 252 157 217 121 231 107" />
+<polyline points="210.00 100.00 224.14 114.14" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<polyline points="259.50 149.50 273.64 163.64" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<polyline points="90.00 160.00 60.00 190.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<polyline points="273.64 163.64 300.00 190.00 60.00 190.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<path fill="rgb(255,255,255)" stroke="rgb(0,0,0)" stroke-width="3" style="stroke-linecap:square; stroke-linejoin:miter" d=" M 160 180 L 210 180 210 200 160 200 160 180" />
+<polyline points="140.00 190.00 160.00 190.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<polyline points="210.00 190.00 230.00 190.00" fill="none" stroke="rgb(0,0,0)" stroke-width="3" />
+<circle cx="180" cy="70" r="6" fill="rgb(255,0,0)" stroke="none" stroke-width="2" />
+<circle cx="60" cy="190" r="6" fill="rgb(255,255,0)" stroke="none" stroke-width="2" />
+<circle cx="300" cy="190" r="6" fill="rgb(0,255,0)" stroke="none" stroke-width="2" />
+<polyline points="180.00 70.00 180.00 40.00" fill="none" stroke="rgb(255,0,0)" stroke-width="3" />
+<polyline points="60.00 190.00 40.00 210.00" fill="none" stroke="rgb(255,255,0)" stroke-width="3" />
+<polyline points="300.00 190.00 320.00 210.00" fill="none" stroke="rgb(0,255,0)" stroke-width="3" />
+</svg>

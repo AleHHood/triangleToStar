@@ -1,9 +1,38 @@
 header{
-    position: sticky;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    transition: all .3s ease;
+/*     position: sticky;
     top: 0px;
     width: 100%;
-    z-index: 2;
+    z-index: 2; */
+
 }
+.hide{
+    top: -$header-mobile;
+}
+
+@media (min-width: 768px) {
+
+    .hide{
+        top: 0px;
+    }
+
+}
+
+@media (min-width: 768px) and (max-height: 425px){
+
+    .hide{
+        top: -$header-desktop;
+    }
+
+}
+
+
+
 
 //------------------------  wordpress class   --------------//
  
@@ -42,7 +71,7 @@ header{
     }
     &__nav{
         background-color:$main-color;
-        height: 55px;
+        height:  $header-mobile;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -52,7 +81,7 @@ header{
         font-size:22px;
         padding: 0px 20px;
         font-weight: 700;
-        height: 55px;
+        height:  $header-mobile;
         display: flex;
         justify-content: center;
         align-items: center;

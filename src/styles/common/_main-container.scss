@@ -1,0 +1,11 @@
+.main-container{
+    margin-top:  $header-mobile;
+}
+
+@media (min-width: 768px){
+
+    .main-container{
+        margin-top: $header-desktop;
+    }
+
+}

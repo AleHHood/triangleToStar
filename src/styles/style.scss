@@ -4,6 +4,7 @@
 
 @import "common/global";
 
+@import "common/main-container";
 @import "common/header";
 @import "common/sidebar";
 @import "common/paper";
@@ -13,5 +14,6 @@
 @import "common/search";
 @import "common/pagination";
 @import "common/footer";
+@import "common/resist";
 
 @import "mixins/media";
