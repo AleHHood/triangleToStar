@@ -111,7 +111,20 @@
         height: 30px;
         border: 1px solid #094b85;
         &-big{
-            max-width: 80px;
+            max-width: 101px;
         }
+    }
+    
+    &__btn {
+        background-color: #094b85;
+        text-transform: uppercase;
+        max-width: 285px;
+        width: 100%;
+        min-width: 200px;
+        height: 50px;
+        font-size: 18px;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
     }
 }

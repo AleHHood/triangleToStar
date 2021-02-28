@@ -1,4 +1,5 @@
 import ShowHideHeader from './modules/showHeader';
+import TreangleToY from './modules/treangleY';
 
 window.addEventListener('DOMContentLoaded', () => {
     const menu = document.querySelector('.nav'),
@@ -34,6 +35,12 @@ window.addEventListener('DOMContentLoaded', () => {
             menu.classList.toggle('nav_active');
         });
     });
+
+
+    TreangleToY();
+
+
+
 });
 
 

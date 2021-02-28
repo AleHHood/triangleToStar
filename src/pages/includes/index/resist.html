@@ -1,53 +1,70 @@
 <div class="resist">
     <div class="resist__container">
+
         <div class="resist__triangle">
             <div class="resist__triangle-img">
-                <span class="resist__name resist__name-R1">R1</span>
-                <span class="resist__name resist__name-R2">R2</span>
-                <span class="resist__name resist__name-R3">R3</span>
+                <span class="resist__name resist__name-R1 R0">R1</span>
+                <span class="resist__name resist__name-R2 R1">R2</span>
+                <span class="resist__name resist__name-R3 R2">R3</span>
             </div>
+
+
             <div class="resist__form">
                 <div class="resist__row">
-                    R <input placeholder="1" class="resist__input R1" type="text"></input>
+                    R <input maxlength="3" placeholder="1" class="resist__input resist__input-small" type="text"></input>
                      = 
-                    <input type="number" class="resist__input resist__input-big"> Ом
+                    <input data-R="0" type="number" placeholder="0" class="resist__input resist__input-big"> Ом
                 </div>
                 <div class="resist__row">
-                    R <input placeholder="2" class="resist__input R2" type="text"></input>
+                    R <input maxlength="3" placeholder="2" class="resist__input resist__input-small" type="text"></input>
                      = 
-                    <input type="text" class="resist__input resist__input-big"> Ом
+                    <input data-R="1" type="number" placeholder="0" class="resist__input resist__input-big"> Ом
                 </div>
                 <div class="resist__row">
-                    R <input placeholder="3" class="resist__input R3" type="text"></input>
+                    R <input maxlength="3" placeholder="3" class="resist__input resist__input-small" type="text"></input>
                      = 
-                    <input type="text" class="resist__input resist__input-big"> Ом
+                    <input data-R="2" type="number" placeholder="0" class="resist__input resist__input-big"> Ом
                 </div>
             </div>
         </div>
+
+
+
         <img class="resist__change" src="/img/svg/tab.svg" alt="поменять местами">
-            <div class="resist__star">
-                <div class="resist__star-img">
-                    <span class="resist__name resist__name-R1Y">R1</span>
-                    <span class="resist__name resist__name-R2Y">R2</span>
-                    <span class="resist__name resist__name-R3Y">R3</span>
+
+
+
+        <div class="resist__star">
+            <div class="resist__star-img">
+                <span class="resist__name resist__name-R1Y R3">R1</span>
+                <span class="resist__name resist__name-R2Y R4">R2</span>
+                <span class="resist__name resist__name-R3Y R5">R3</span>
+            </div>
+
+
+
+
+            <div class="resist__form">
+                <div class="resist__row">
+                    R <input maxlength="3" placeholder="1" class="resist__input resist__input-small" type="text"></input>
+                    = 
+                    <input data-R="3" type="number" placeholder="0" class="resist__input resist__input-big"> Ом
                 </div>
-                <div class="resist__form">
-                    <div class="resist__row">
-                        R <input maxlength="3" placeholder="1" class="resist__input R1" type="text"></input>
-                        = 
-                        <input type="number" class="resist__input resist__input-big"> Ом
-                    </div>
-                    <div class="resist__row">
-                        R <input placeholder="2" class="resist__input R2" type="text"></input>
-                        = 
-                        <input type="text" class="resist__input resist__input-big"> Ом
-                    </div>
-                    <div class="resist__row">
-                        R <input placeholder="3" class="resist__input R3" type="text"></input>
-                        = 
-                        <input type="text" class="resist__input resist__input-big"> Ом
-                    </div>
+                <div class="resist__row">
+                    R <input maxlength="3" placeholder="2" class="resist__input resist__input-small" type="text"></input>
+                    = 
+                    <input data-R="4" type="number" placeholder="0" class="resist__input resist__input-big"> Ом
                 </div>
+                <div class="resist__row">
+                    R <input maxlength="3" placeholder="3" class="resist__input resist__input-small" type="text"></input>
+                    = 
+                    <input data-R="5" type="number" placeholder="0" class="resist__input resist__input-big"> Ом
+                </div>
+            </div>
         </div>
+
+        <button id="calculate" type="submit" class="resist__btn">Рассчитать</button>
+
+        <div class="resist__answer"></div>
     </div>
 </div>

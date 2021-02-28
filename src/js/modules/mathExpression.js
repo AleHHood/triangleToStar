@@ -1,6 +1,7 @@
 // ~ начала дроби
 // tac добавляет class .tac данному p
 // notice добавляет class notice
+// `tac g${R[K].number} =~1/${resistance}~=`
 
 const getMath = (expression, appendBlock) => {
 
