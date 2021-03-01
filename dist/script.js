@@ -1904,6 +1904,53 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/string-repeat.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/internals/string-repeat.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var toInteger = __webpack_require__(/*! ../internals/to-integer */ "./node_modules/core-js/internals/to-integer.js");
+var requireObjectCoercible = __webpack_require__(/*! ../internals/require-object-coercible */ "./node_modules/core-js/internals/require-object-coercible.js");
+
+// `String.prototype.repeat` method implementation
+// https://tc39.github.io/ecma262/#sec-string.prototype.repeat
+module.exports = ''.repeat || function repeat(count) {
+  var str = String(requireObjectCoercible(this));
+  var result = '';
+  var n = toInteger(count);
+  if (n < 0 || n == Infinity) throw RangeError('Wrong number of repetitions');
+  for (;n > 0; (n >>>= 1) && (str += str)) if (n & 1) result += str;
+  return result;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/this-number-value.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/internals/this-number-value.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
+
+// `thisNumberValue` abstract operation
+// https://tc39.github.io/ecma262/#sec-thisnumbervalue
+module.exports = function (value) {
+  if (typeof value != 'number' && classof(value) != 'Number') {
+    throw TypeError('Incorrect invocation');
+  }
+  return +value;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/to-absolute-index.js":
 /*!*************************************************************!*\
   !*** ./node_modules/core-js/internals/to-absolute-index.js ***!
@@ -2252,6 +2299,144 @@ if (DESCRIPTORS && !(NAME in FunctionPrototype)) {
     }
   });
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.number.to-fixed.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/modules/es.number.to-fixed.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var toInteger = __webpack_require__(/*! ../internals/to-integer */ "./node_modules/core-js/internals/to-integer.js");
+var thisNumberValue = __webpack_require__(/*! ../internals/this-number-value */ "./node_modules/core-js/internals/this-number-value.js");
+var repeat = __webpack_require__(/*! ../internals/string-repeat */ "./node_modules/core-js/internals/string-repeat.js");
+var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
+
+var nativeToFixed = 1.0.toFixed;
+var floor = Math.floor;
+
+var pow = function (x, n, acc) {
+  return n === 0 ? acc : n % 2 === 1 ? pow(x, n - 1, acc * x) : pow(x * x, n / 2, acc);
+};
+
+var log = function (x) {
+  var n = 0;
+  var x2 = x;
+  while (x2 >= 4096) {
+    n += 12;
+    x2 /= 4096;
+  }
+  while (x2 >= 2) {
+    n += 1;
+    x2 /= 2;
+  } return n;
+};
+
+var FORCED = nativeToFixed && (
+  0.00008.toFixed(3) !== '0.000' ||
+  0.9.toFixed(0) !== '1' ||
+  1.255.toFixed(2) !== '1.25' ||
+  1000000000000000128.0.toFixed(0) !== '1000000000000000128'
+) || !fails(function () {
+  // V8 ~ Android 4.3-
+  nativeToFixed.call({});
+});
+
+// `Number.prototype.toFixed` method
+// https://tc39.github.io/ecma262/#sec-number.prototype.tofixed
+$({ target: 'Number', proto: true, forced: FORCED }, {
+  // eslint-disable-next-line max-statements
+  toFixed: function toFixed(fractionDigits) {
+    var number = thisNumberValue(this);
+    var fractDigits = toInteger(fractionDigits);
+    var data = [0, 0, 0, 0, 0, 0];
+    var sign = '';
+    var result = '0';
+    var e, z, j, k;
+
+    var multiply = function (n, c) {
+      var index = -1;
+      var c2 = c;
+      while (++index < 6) {
+        c2 += n * data[index];
+        data[index] = c2 % 1e7;
+        c2 = floor(c2 / 1e7);
+      }
+    };
+
+    var divide = function (n) {
+      var index = 6;
+      var c = 0;
+      while (--index >= 0) {
+        c += data[index];
+        data[index] = floor(c / n);
+        c = (c % n) * 1e7;
+      }
+    };
+
+    var dataToString = function () {
+      var index = 6;
+      var s = '';
+      while (--index >= 0) {
+        if (s !== '' || index === 0 || data[index] !== 0) {
+          var t = String(data[index]);
+          s = s === '' ? t : s + repeat.call('0', 7 - t.length) + t;
+        }
+      } return s;
+    };
+
+    if (fractDigits < 0 || fractDigits > 20) throw RangeError('Incorrect fraction digits');
+    // eslint-disable-next-line no-self-compare
+    if (number != number) return 'NaN';
+    if (number <= -1e21 || number >= 1e21) return String(number);
+    if (number < 0) {
+      sign = '-';
+      number = -number;
+    }
+    if (number > 1e-21) {
+      e = log(number * pow(2, 69, 1)) - 69;
+      z = e < 0 ? number * pow(2, -e, 1) : number / pow(2, e, 1);
+      z *= 0x10000000000000;
+      e = 52 - e;
+      if (e > 0) {
+        multiply(0, z);
+        j = fractDigits;
+        while (j >= 7) {
+          multiply(1e7, 0);
+          j -= 7;
+        }
+        multiply(pow(10, j, 1), 0);
+        j = e - 1;
+        while (j >= 23) {
+          divide(1 << 23);
+          j -= 23;
+        }
+        divide(1 << j);
+        multiply(1, 1);
+        divide(2);
+        result = dataToString();
+      } else {
+        multiply(0, z);
+        multiply(1 << -e, 0);
+        result = dataToString() + repeat.call('0', fractDigits);
+      }
+    }
+    if (fractDigits > 0) {
+      k = result.length;
+      result = sign + (k <= fractDigits
+        ? '0.' + repeat.call('0', fractDigits - k) + result
+        : result.slice(0, k - fractDigits) + '.' + result.slice(k - fractDigits));
+    } else {
+      result = sign + result;
+    } return result;
+  }
+});
 
 
 /***/ }),
@@ -2674,6 +2859,59 @@ var ShowHideHeader = function ShowHideHeader(headerClass) {
 
 /***/ }),
 
+/***/ "./src/js/modules/toFixed.js":
+/*!***********************************!*\
+  !*** ./src/js/modules/toFixed.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.slice */ "./node_modules/core-js/modules/es.array.slice.js");
+/* harmony import */ var core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_slice__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_number_to_fixed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.number.to-fixed */ "./node_modules/core-js/modules/es.number.to-fixed.js");
+/* harmony import */ var core_js_modules_es_number_to_fixed__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_number_to_fixed__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var toFixed3 = function toFixed3(num) {
+  var x = 0;
+
+  for (var n = 5; n >= 0; --n) {
+    num = +num;
+    num = num.toFixed(n);
+    x = num.length;
+    x = x - 1; //Исправляем ошибку с округлением 5
+
+    if (n > 3) {
+      if (num.slice(-1) == '5') {
+        num = num.slice(0, x) + "6";
+      }
+
+      continue;
+    }
+
+    if (num.slice(-1) == '0') {
+      num = num.slice(0, x);
+
+      if (num.slice(-1) == '0') {
+        continue;
+      } else {
+        num = +num;
+        return num;
+      }
+    } else {
+      num = +num;
+      return num;
+    }
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (toFixed3);
+
+/***/ }),
+
 /***/ "./src/js/modules/treangleY.js":
 /*!*************************************!*\
   !*** ./src/js/modules/treangleY.js ***!
@@ -2690,6 +2928,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom-collections.for-each */ "./node_modules/core-js/modules/web.dom-collections.for-each.js");
 /* harmony import */ var core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _mathExpression__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mathExpression */ "./src/js/modules/mathExpression.js");
+/* harmony import */ var _toFixed__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./toFixed */ "./src/js/modules/toFixed.js");
 
 
 
@@ -2698,12 +2937,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
+
 var TreangleToY = function TreangleToY() {
   var inputName = document.querySelectorAll(".resist__input-small"),
       inputResistence = document.querySelectorAll(".resist__input-big"),
-      form = document.querySelector(".resist__form"),
+      form = document.querySelector(".resist__form-triangle"),
+      formY = document.querySelector(".resist__form-star"),
       btn = document.querySelector("#calculate"),
       answer = document.querySelector(".resist__answer"),
+      changeBtn = document.querySelector(".resist__change"),
+      container = document.querySelector(".resist__container"),
+      triangle = document.querySelector(".resist__triangle"),
       name = document.querySelectorAll(".resist__name");
   var textArr = [];
   var resistors = [];
@@ -2720,32 +2964,49 @@ var TreangleToY = function TreangleToY() {
     resistors[i] = new Resistor();
     resistors[i].name = "".concat(i + 1);
     resistors[i].resistance = 0;
-  } //Собираем Данные из первой формы
+  }
 
-
-  form.addEventListener('input', function (event) {
-    var target = event.target;
-
-    if (target && target.classList.contains('resist__input-big')) {
-      //Валидация формы
-      inputCheck(target); //По дата атрибуту определяем к какому элеиенту относится Input
-      //и присваеваем сопротивление
-
-      var data = target.getAttribute('data-R');
-      resistors[data].resistance = target.value;
-    }
-
-    if (target && target.classList.contains('resist__input-small')) {
-      //перебираем все input для имени. номер класса элемента 
-      //на схеме совпадает с номером input 1 = .R1
-      inputName.forEach(function (element, i) {
-        if (target === element) {
-          document.querySelector(".R".concat(i)).textContent = "R".concat(target.value);
-          resistors[i].name = "".concat(target.value);
-        }
-      });
-    }
+  changeBtn.addEventListener('click', function (event) {
+    form.classList.toggle('resist__form-none');
+    formY.classList.toggle('resist__form-none');
+    container.classList.toggle('resist__container-revers');
   });
+
+  if (form.classList.contains('.resist__form-none')) {
+    getDataForm(formY);
+  } else {
+    getDataForm(form);
+  }
+
+  window.addEventListener('scroll', function () {
+    console.log(window.pageYOffset);
+  }); //Собираем Данные из первой формы
+
+  function getDataForm(form) {
+    form.addEventListener('input', function (event) {
+      var target = event.target;
+
+      if (target && target.classList.contains('resist__input-big')) {
+        //Валидация формы
+        inputCheck(target); //По дата атрибуту определяем к какому элеиенту относится Input
+        //и присваеваем сопротивление
+
+        var data = target.getAttribute('data-R');
+        resistors[data].resistance = target.value;
+      }
+
+      if (target && target.classList.contains('resist__input-small')) {
+        //перебираем все input для имени. номер класса элемента 
+        //на схеме совпадает с номером input 1 = .R1
+        inputName.forEach(function (element, i) {
+          if (target === element) {
+            document.querySelector(".R".concat(i)).textContent = "R".concat(target.value);
+            resistors[i].name = "".concat(target.value);
+          }
+        });
+      }
+    });
+  }
 
   function inputCheck(input) {
     if (input.value.length > 9) {
@@ -2757,38 +3018,52 @@ var TreangleToY = function TreangleToY() {
     } else {
       input.classList.remove('resist__input-error');
     }
-  }
+  } // ---------------------------КЛИК РАССЧИТАТЬ------------------------//
+
 
   btn.addEventListener('click', function () {
+    clearAnswer();
     calculate(0, 1);
     calculate(0, 2);
     calculate(1, 2);
-    console.log(11111551);
-    resistors.forEach(function (element) {
-      console.log(element.name);
-      console.log(element.resistance);
-    });
+    /*         console.log(11111551);
+            resistors.forEach(element => {
+                console.log(element.name);
+                console.log(element.resistance);
+            }); */
   });
 
   function calculate(a, b) {
-    var numerator, denominator;
-    numerator = "R".concat(resistors[a].name).concat(resistors[b].name);
+    var numeratorExp, denominatorExp, denominator, result;
+    numeratorExp = "R".concat(resistors[a].name).concat(resistors[b].name);
 
     if (a + b === 1) {
-      document.querySelector(".R".concat(3)).textContent = "".concat(numerator);
+      document.querySelector(".R".concat(3)).textContent = "".concat(numeratorExp);
     } else {
       if (a + b === 2) {
-        document.querySelector(".R".concat(4)).textContent = "".concat(numerator);
+        document.querySelector(".R".concat(4)).textContent = "".concat(numeratorExp);
       } else {
-        document.querySelector(".R".concat(5)).textContent = "".concat(numerator);
+        document.querySelector(".R".concat(5)).textContent = "".concat(numeratorExp);
       }
-    }
+    } //Составляем выражение
 
-    denominator = "R".concat(resistors[0].name, " +") + " R".concat(resistors[1].name, " + R").concat(resistors[2].name);
-    textArr.push("tac ".concat(numerator, " = ~R").concat(resistors[a].name, " ") + "\u22C5 R".concat(resistors[b].name, "/").concat(denominator, "~"));
+
+    denominatorExp = "R".concat(resistors[0].name, " +") + " R".concat(resistors[1].name, " + R").concat(resistors[2].name);
+    textArr.push("tac ".concat(numeratorExp, " = ~R").concat(resistors[a].name, " ") + "\u22C5 R".concat(resistors[b].name, "/").concat(denominatorExp, "~")); // Переводим значения сопротивления из string to Num
+
+    resistors[0].resistance = +resistors[0].resistance;
+    resistors[1].resistance = +resistors[1].resistance;
+    resistors[2].resistance = +resistors[2].resistance; //Подставляем значения в выражение
+
+    denominator = "".concat(resistors[0].resistance, " +") + " ".concat(resistors[1].resistance, " + ").concat(resistors[2].resistance);
+    result = resistors[a].resistance * resistors[b].resistance;
+    result = result / (resistors[0].resistance + resistors[1].resistance + resistors[2].resistance);
+    result = Object(_toFixed__WEBPACK_IMPORTED_MODULE_4__["default"])(result);
+    textArr.push("tac ".concat(numeratorExp, " = ~").concat(resistors[a].resistance, " ") + "\u22C5 ".concat(resistors[b].resistance, "/").concat(denominator, "~") + " = ".concat(result, " \u041E\u043C"));
     getAnswerBlock(textArr);
     textArr = [];
-  }
+  } //Отправляем мвссив textArr из строк для вывода <p> в answer
+
 
   function getAnswerBlock(textArr) {
     var answerP = document.createElement('p');
@@ -2797,9 +3072,15 @@ var TreangleToY = function TreangleToY() {
     textArr.forEach(function (element) {
       Object(_mathExpression__WEBPACK_IMPORTED_MODULE_3__["default"])(element, answerP);
     });
-  }
+  } //Функция удаления старых ответов из div answer
 
-  function getNumberToSheme() {}
+
+  function clearAnswer() {
+    var answerP = document.querySelectorAll('.resist__answerP');
+    answerP.forEach(function (element) {
+      element.remove();
+    });
+  }
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (TreangleToY);
