@@ -8,7 +8,7 @@
         flex-direction: column;
         align-items: center;
 
-        &-revers{
+        &-small-revers{
             flex-direction: column-reverse;
         }
 /*         justify-content: space-between; */
@@ -119,6 +119,9 @@
         border: 1px solid #094b85;
         &-big{
             max-width: 101px;
+        }
+        &-error{
+            background-color: rgb(233, 87, 87);
         }
     }
     

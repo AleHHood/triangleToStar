@@ -2946,41 +2946,68 @@ var TreangleToY = function TreangleToY() {
       btn = document.querySelector("#calculate"),
       answer = document.querySelector(".resist__answer"),
       changeBtn = document.querySelector(".resist__change"),
-      container = document.querySelector(".resist__container"),
+      container = document.querySelector(".resist__container-small"),
       triangle = document.querySelector(".resist__triangle"),
       name = document.querySelectorAll(".resist__name");
-  var textArr = [];
+  var textArr = [],
+      scrollY;
   var resistors = [];
 
-  var Resistor = function Resistor(name, resistance) {
+  var Resistor = function Resistor(name, resistance, schemaName) {
     _classCallCheck(this, Resistor);
 
     this.name = name;
     this.resistance = resistance;
+    this.schemaName = schemaName;
   }; //Default значения блоков
 
 
   for (var i = 0; i < 6; i++) {
     resistors[i] = new Resistor();
+
+    if (i <= 2) {
+      resistors[i].name = "".concat(i + 1);
+    } else {
+      resistors[i].name = "".concat(i - 2);
+    }
+
     resistors[i].name = "".concat(i + 1);
     resistors[i].resistance = 0;
-  }
+    resistors[i].schemaName = document.querySelector(".R".concat(i));
+  } //Отслеживаем прокрутку страницы ждля фикс бага с 
+  //прокруткой блока при изменении порядка сортировки блоков
 
-  changeBtn.addEventListener('click', function (event) {
-    form.classList.toggle('resist__form-none');
-    formY.classList.toggle('resist__form-none');
-    container.classList.toggle('resist__container-revers');
-  });
-
-  if (form.classList.contains('.resist__form-none')) {
-    getDataForm(formY);
-  } else {
-    getDataForm(form);
-  }
 
   window.addEventListener('scroll', function () {
-    console.log(window.pageYOffset);
-  }); //Собираем Данные из первой формы
+    scrollY = window.pageYOffset;
+  }); //----default значение рассчта для треугольника
+
+  getDataForm(form); //----------------Клик кнопка поменять---------------------//
+  //Выбор режима
+
+  changeBtn.addEventListener('click', function () {
+    clearAnswer();
+    form.classList.toggle('resist__form-none');
+    formY.classList.toggle('resist__form-none');
+    container.classList.toggle('resist__container-small-revers');
+    window.scrollTo({
+      top: scrollY
+    });
+
+    if (form.classList.contains('resist__form-none')) {
+      getDataForm(formY);
+      console.log("formY"); //Присваеваем не используемым значения default значения
+      //Default значения блоков
+
+      getResetName();
+    } else {
+      console.log("form");
+      getDataForm(form); //Присваеваем не используемым значения default значения
+      //Default значения блоков
+
+      getResetName();
+    }
+  }); //Собираем Данные из выбранной формы
 
   function getDataForm(form) {
     form.addEventListener('input', function (event) {
@@ -2988,7 +3015,7 @@ var TreangleToY = function TreangleToY() {
 
       if (target && target.classList.contains('resist__input-big')) {
         //Валидация формы
-        inputCheck(target); //По дата атрибуту определяем к какому элеиенту относится Input
+        inputCheck(target); //По дата атрибуту определяем к какому элементу относится Input
         //и присваеваем сопротивление
 
         var data = target.getAttribute('data-R');
@@ -3000,7 +3027,7 @@ var TreangleToY = function TreangleToY() {
         //на схеме совпадает с номером input 1 = .R1
         inputName.forEach(function (element, i) {
           if (target === element) {
-            document.querySelector(".R".concat(i)).textContent = "R".concat(target.value);
+            resistors[i].schemaName.textContent = "R".concat(target.value);
             resistors[i].name = "".concat(target.value);
           }
         });
@@ -3008,12 +3035,28 @@ var TreangleToY = function TreangleToY() {
     });
   }
 
+  function getResetName() {
+    //Присваеваем не используемым значения default значения
+    //Default значения блоков
+    for (var _i = 0; _i < 6; _i++) {
+      if (_i <= 2) {
+        resistors[_i].name = "".concat(_i + 1);
+        inputName[_i].value = _i + 1;
+      } else {
+        resistors[_i].name = "".concat(_i - 2);
+        inputName[_i].value = _i - 2;
+      }
+
+      resistors[_i].schemaName.textContent = "R".concat(inputName[_i].value);
+    }
+  }
+
   function inputCheck(input) {
     if (input.value.length > 9) {
       input.value = input.value.substring(0, 9);
     }
 
-    if (input.value < 0 || input.value.length > 9) {
+    if (input.value <= 0 || input.value.length > 9) {
       input.classList.add('resist__input-error');
     } else {
       input.classList.remove('resist__input-error');
@@ -3023,14 +3066,22 @@ var TreangleToY = function TreangleToY() {
 
   btn.addEventListener('click', function () {
     clearAnswer();
-    calculate(0, 1);
-    calculate(0, 2);
-    calculate(1, 2);
+
+    if (form.classList.contains('resist__form-none')) {
+      calculateStar(3, 4);
+      calculateStar(3, 5);
+      calculateStar(4, 5);
+    } else {
+      calculate(0, 1);
+      calculate(0, 2);
+      calculate(1, 2);
+    }
     /*         console.log(11111551);
             resistors.forEach(element => {
                 console.log(element.name);
                 console.log(element.resistance);
             }); */
+
   });
 
   function calculate(a, b) {
@@ -3038,12 +3089,12 @@ var TreangleToY = function TreangleToY() {
     numeratorExp = "R".concat(resistors[a].name).concat(resistors[b].name);
 
     if (a + b === 1) {
-      document.querySelector(".R".concat(3)).textContent = "".concat(numeratorExp);
+      resistors[3].schemaName.textContent = "".concat(numeratorExp);
     } else {
       if (a + b === 2) {
-        document.querySelector(".R".concat(4)).textContent = "".concat(numeratorExp);
+        resistors[4].schemaName.textContent = "".concat(numeratorExp);
       } else {
-        document.querySelector(".R".concat(5)).textContent = "".concat(numeratorExp);
+        resistors[5].schemaName.textContent = "".concat(numeratorExp);
       }
     } //Составляем выражение
 
@@ -3060,6 +3111,39 @@ var TreangleToY = function TreangleToY() {
     result = result / (resistors[0].resistance + resistors[1].resistance + resistors[2].resistance);
     result = Object(_toFixed__WEBPACK_IMPORTED_MODULE_4__["default"])(result);
     textArr.push("tac ".concat(numeratorExp, " = ~").concat(resistors[a].resistance, " ") + "\u22C5 ".concat(resistors[b].resistance, "/").concat(denominator, "~") + " = ".concat(result, " \u041E\u043C"));
+    getAnswerBlock(textArr);
+    textArr = [];
+  } // Расчет звезда в треугольник
+
+
+  function calculateStar(a, b) {
+    var numeratorExp, denominatorExp, denominator, sum, result;
+    numeratorExp = "R".concat(resistors[a].name).concat(resistors[b].name);
+
+    if (a + b === 7) {
+      resistors[0].schemaName.textContent = "".concat(numeratorExp);
+    } else {
+      if (a + b === 8) {
+        resistors[1].schemaName.textContent = "".concat(numeratorExp);
+      } else {
+        resistors[2].schemaName.textContent = "".concat(numeratorExp);
+      }
+    } //Составляем выражение
+
+
+    denominatorExp = "R".concat(resistors[12 - a - b].name);
+    sum = "R".concat(resistors[a].name, " + ") + "R".concat(resistors[b].name);
+    textArr.push("tac ".concat(numeratorExp, " = ").concat(sum, " + ~R").concat(resistors[a].name, " ") + "\u22C5 R".concat(resistors[b].name, "/").concat(denominatorExp, "~")); // Переводим значения сопротивления из string to Num
+
+    resistors[3].resistance = +resistors[3].resistance;
+    resistors[4].resistance = +resistors[4].resistance;
+    resistors[5].resistance = +resistors[5].resistance; //Подставляем значения в выражение
+
+    denominator = "".concat(resistors[12 - a - b].resistance);
+    result = resistors[a].resistance + resistors[b].resistance;
+    result = result + resistors[a].resistance * resistors[b].resistance / denominator;
+    result = Object(_toFixed__WEBPACK_IMPORTED_MODULE_4__["default"])(result);
+    textArr.push("tac ".concat(numeratorExp, " = ").concat(resistors[a].resistance, " +") + " ".concat(resistors[b].resistance, " ~").concat(resistors[a].resistance, " ") + "\u22C5 ".concat(resistors[b].resistance, "/").concat(denominator, "~") + " = ".concat(result, " \u041E\u043C"));
     getAnswerBlock(textArr);
     textArr = [];
   } //Отправляем мвссив textArr из строк для вывода <p> в answer
