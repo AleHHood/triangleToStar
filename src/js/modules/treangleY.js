@@ -7,7 +7,7 @@ const TreangleToY = () => {
           inputResistence = document.querySelectorAll(".resist__input-big"),
           form = document.querySelector(".resist__form-triangle"),
           formY = document.querySelector(".resist__form-star"),
-          btn = document.querySelector("#calculate"),
+          btn = document.querySelectorAll("#calculate"),
           answer = document.querySelector(".resist__answer"),
           changeBtn = document.querySelector(".resist__change"),
           container = document.querySelector(".resist__container-small"),
@@ -61,6 +61,7 @@ const TreangleToY = () => {
     changeBtn.addEventListener('click', () => {
         
         clearAnswer()
+        changeBtn.classList.toggle('resist__change-reverse');
         form.classList.toggle('resist__form-none');
         formY.classList.toggle('resist__form-none');
         container.classList.toggle('resist__container-small-revers');
@@ -149,25 +150,21 @@ const TreangleToY = () => {
 
     // ---------------------------КЛИК РАССЧИТАТЬ------------------------//
 
-    btn.addEventListener('click', () => {
-        clearAnswer();
-        if(form.classList.contains('resist__form-none')){
-            calculateStar(3, 4);
-            calculateStar(3, 5);
-            calculateStar(4, 5);
-        }else{
-            calculate(0, 1);
-            calculate(0, 2);
-            calculate(1, 2);
-        }
-
-        
-/*         console.log(11111551);
-        resistors.forEach(element => {
-            console.log(element.name);
-            console.log(element.resistance);
-        }); */
+    btn.forEach(element => {
+        element.addEventListener('click', () => {
+            clearAnswer();
+            if(form.classList.contains('resist__form-none')){
+                calculateStar(3, 4);
+                calculateStar(3, 5);
+                calculateStar(4, 5);
+            }else{
+                calculate(0, 1);
+                calculate(0, 2);
+                calculate(1, 2);
+            }
+        });
     });
+
 
 
     function calculate(a, b){
