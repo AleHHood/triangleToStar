@@ -1,5 +1,6 @@
 import getMath from './mathExpression';
 import toFixed3 from './toFixed';
+import validForm from './validForm';
 
 const TreangleToY = () => {
 
@@ -45,7 +46,7 @@ const TreangleToY = () => {
         resistors[i].schemaName = document.querySelector(`.R${i}`);
     }
 
-//Отслеживаем прокрутку страницы ждля фикс бага с 
+//Отслеживаем прокрутку страницы для фикс бага с 
 //прокруткой блока при изменении порядка сортировки блоков
 
     window.addEventListener('scroll', function() {
@@ -53,7 +54,7 @@ const TreangleToY = () => {
         });
 
 
-//----default значение рассчта для треугольника
+//----default значение рассчета для треугольника
     getDataForm(form);
 
 //----------------Клик кнопка поменять---------------------//
@@ -134,6 +135,9 @@ const TreangleToY = () => {
     
 
     function inputCheck(input) {
+
+        // Не позволяем пользователю ввести буквы и отрицательные значения
+        validForm(input);
 
         if(input.value.length > 9){
             input.value = input.value.substring(0, 9);
@@ -260,7 +264,7 @@ const TreangleToY = () => {
 
         textArr.push(
             `tac ${numeratorExp} = ${resistors[a].resistance} +` +
-            ` ${resistors[b].resistance} ~${resistors[a].resistance} ` +
+            ` ${resistors[b].resistance} + ~${resistors[a].resistance} ` +
             `⋅ ${resistors[b].resistance}/${denominator}~` + 
             ` = ${result} Ом`
         );

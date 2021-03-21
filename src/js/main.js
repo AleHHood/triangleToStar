@@ -1,6 +1,7 @@
 import ShowHideHeader from './modules/showHeader';
 import TreangleToY from './modules/treangleY';
 
+
 window.addEventListener('DOMContentLoaded', () => {
     const menu = document.querySelector('.nav'),
     menuItem = document.querySelectorAll('.menu-item'),
